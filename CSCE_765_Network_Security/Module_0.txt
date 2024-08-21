@@ -62,3 +62,112 @@ Network Attacks
         Final Notes on Passive Attacks
             - Passive attacks are VERY difficult to detect as there aren't any noticable consequences as it's passive in nature...
             - To avoid these, focus on prevention
+    
+    Active Attacks
+
+        1. Masquerade
+            Scenario:
+                Bob and Alice have an on-going conversation 
+                Darth sends Alice a message that appears to be from Bob 
+
+            Consequence:
+                Alice is decieved and they might release critical information to Darth thinking they're Bob
+            
+        2. Replay 
+            Scenario:
+                Bob sends Alice a message, however Darth intercepts 
+                Darth captures the message going from Bob to Alice; later replay message to Alice 
+
+            Consequence:
+                They messages are delayed 
+
+        3. Modification of Messages 
+            Scenario:
+                Bob sends Alice a message.
+                Darth not only captures, but modifies the message 
+
+            Consequence:
+                Bob's message is altered and changed.
+                Alice is thinking Bob is sending the message, however it's really Darth 
+
+        4. Denial of Service 
+            Scenario:
+                The server that is required for Alice and Bob to communicate is being attack by bots.
+
+                Darth is sending bots to overload the server Alice and Bob are using to communicate
+
+            Consequence:
+                Darth disrupts the service provided by the server. Thus Alice and Bob can not communicate.
+
+        Final Notes on Active Attacks 
+            - Active attacks are more powerful, yet are easier to spot than passive 
+
+Network Security
+    Basically, a class of security techniques that help address the different vulnerabilities of network communications 
+
+    There are other issues that arise in the design of secure systems besides confidentiality, availablitity, and integrity
+        - Accountablity
+        - Reliability 
+        - Access Control 
+        - Authentication 
+        - Non-repudiation 
+        - Privacy and Anonymity 
+
+    A security policy is a statement of what is, and is not, allowed 
+        - Expressed mathematically 
+        - List of allowed and disallowed actions 
+    
+    A security mechanism is a procedure, tool, or method of enforcing security policy 
+
+    Security Policy 
+        A security policy is a set of rules stating which actions are permitted and which are not
+        Can be informatl or highly mathematical
+        If we consider a computer system to be a finite state automaton with state transitions then 
+            A security policy is a statement that partitions the states of a system into a set of authorized or secure states and a set of unauthorized or non-secure states 
+            A secure system is a ssstem that starts in an authorized stae and cannot enter an unauthorized state 
+            A breach of security occurs when a system enters an unauthorized state 
+
+        We ecpect a trusted system to enforce the required security policies 
+
+        Elements of a Security Policy
+            - A security policy considers all relevant aspects of confidentiality, integrity, and availablitity
+                
+                Confidentiality policy:
+                    Identifies information leakage and controls information flow 
+                
+                Integrity Policy:
+                    Identifies authorized ways in which information may be altered. Enforces separation of duties 
+
+                Availablitity Policy:
+                    Describes what services must be provided
+                        Example: A browser may download pages but no Java applets 
+
+    Security Mechanism 
+        A security mechanism is a procedure that enforces some part of a security policy 
+        We will learn many netowrk security mechanisms
+
+        Goals of Security Mechanism
+            Given a policy that specifies what is "secure" and what is "non-secure" goal of security is to put in place mechanism that provide:
+                
+                Prevention 
+                    Involves implementing mechanisms that users cannot override and are trusted to be implemented in correct and unalterable ways 
+                
+                Detection 
+                    Goal is to determine that an atack is underway, or has occurred and report it 
+
+                Recovery 
+                    Resumign correct operation either after an attack or even while an attack is underway 
+
+    Trust 
+        Security policies and mechanisms are based on assumptions and one trusts that these assumptions hold. 
+
+        Other real-world examples:
+            Aspirin from drugstore is considered trustworth. 
+                The basis of trust is:
+                    - Testing and certification by FDA
+                    - Manufacturing standard of company and regulatory mechanism that ensures it. 
+                    - Safety seal on the bottle 
+
+        Similarly, for a secury system to achieve trust, specific steps need to be taken and specific parties need to be trusted 
+
+
