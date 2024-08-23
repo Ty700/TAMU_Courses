@@ -1,176 +1,181 @@
-Dynamic Programming?
-    Let's recall "Divide and Conquer" first 
-        Big Problem is split into subproblems.
-            Subproblems are split into more subproblems if solution is not clear
-                Continue until we decompose the big problem into a smaller problems so the solution is easier to see 
+1 Define Dynamic Programming
+    Dynamic Programming?
+        Let's recall "Divide and Conquer" first 
+            Big Problem is split into subproblems.
+                Subproblems are split into more subproblems if solution is not clear
+                    Continue until we decompose the big problem into a smaller problems so the solution is easier to see 
 
-        Once we get to a level of a problem where the solution is "simple" we can then combine solutions up the tree
+            Once we get to a level of a problem where the solution is "simple" we can then combine solutions up the tree
 
-                                                  Big Problem
-                                               /              \  
-                                              /                \
-                                         Subproblem             Subproblem
-                                        /           \           /          \
-                                     Subproblem   Subproblem Subproblem    Subproblem
-                                    
-                                    Going down the tree it's decomposing the problem
-                                    Going back up the tree from the leaf we can combine the solutions of each Subproblem to solve the big problem 
-                        Question:
-                            What happens if a Subproblem has the same solution?
-                        
-                        Answer:
-                            In Divde and Conquer we'd still have to compute it as there is not a memorization aspect of previous solutions
+                                                    Big Problem
+                                                /              \  
+                                                /                \
+                                            Subproblem             Subproblem
+                                            /           \           /          \
+                                        Subproblem   Subproblem Subproblem    Subproblem
+                                        
+                                        Going down the tree it's decomposing the problem
+                                        Going back up the tree from the leaf we can combine the solutions of each Subproblem to solve the big problem 
+                            Question:
+                                What happens if a Subproblem has the same solution?
+                            
+                            Answer:
+                                In Divde and Conquer we'd still have to compute it as there is not a memorization aspect of previous solutions
 
-Dynamic Programming
-    Difference: 
-        -The solution to a smaller problem can be used more than once by bigger problems.
-        - Dynamic Programming (DP) is the action of memorizing all the smaller solutions and reusing them if need be. 
-        - This way we would not compute the same answer twice, saving us in the time and space complexity.
+    Dynamic Programming
+        Difference: 
+            -The solution to a smaller problem can be used more than once by bigger problems.
+            - Dynamic Programming (DP) is the action of memorizing all the smaller solutions and reusing them if need be. 
+            - This way we would not compute the same answer twice, saving us in the time and space complexity.
 
-    As a result, dunamic programming can be more efficient than "divide and conquer."
+        As a result, dunamic programming can be more efficient than "divide and conquer."
 
-Rod Cutting Problem 
-    Input:
-        A rod of length n.
-            For i = 1,2,3 ... n, a rod of length i has price P(i) >= 0
+2. Understand DP by solving the "Rod Cutting Problem"
 
-    Output:
-        How to cut the rod to maximize the total price?
+    2.1 Define the "Rod Cutting Problem"
+    Rod Cutting Problem 
+        Input:
+            A rod of length n.
+                For i = 1,2,3 ... n, a rod of length i has price P(i) >= 0
 
-        Which  price is maximized? P(1)? P(2)? P(3)? 
+        Output:
+            How to cut the rod to maximize the total price?
 
-    Example:
-        n = 4 
+            Which  price is maximized? P(1)? P(2)? P(3)? 
 
-        i | 1 | 2 | 3 | 4
-        ------------------
-      P(i)| 1 | 5 | 8 | 9
+        Example:
+            n = 4 
 
-    Solution:
-        Cut it in half such that we have 2 rods of length 2, which can be sold for $5 each resulting in $10
+            i | 1 | 2 | 3 | 4
+            ------------------
+        P(i)| 1 | 5 | 8 | 9
 
-        Leave it whole? $9
-        Cut it 3 and 1? $9
-        Cut it in half? 2 and 2? $10
+        Solution:
+            Cut it in half such that we have 2 rods of length 2, which can be sold for $5 each resulting in $10
 
-        Should we use exhaustive search?
-            No, time complexity too high: O(2^(n-1))
-    
-    Rod Cutting Problem with DP 
-        R(i) -> Maximum price for cutting a rof of length i 
-    
-        No matter how you cut the rod, there must be a left most cut 
+            Leave it whole? $9
+            Cut it 3 and 1? $9
+            Cut it in half? 2 and 2? $10
 
-        The left most side of the rod will have length: i 
-        The right most side of the rod will have length: n - i
+            Should we use exhaustive search?
+                No, time complexity too high: O(2^(n-1))
+        
+        2.2 Use recurion to decomposethe problem
+            R(i) -> Maximum price for cutting a rof of length i 
+        
+            No matter how you cut the rod, there must be a left most cut 
 
-        n = total length
+            The left most side of the rod will have length: i 
+            The right most side of the rod will have length: n - i
+
+            n = total length
 
 
-            i             n - i
-        |--------|---------------------|
-                 |
-        +========|=====================+
-        |        |                     |
-        |        |                     |
-        +========|=====================+
-           P(i)  |      R(n-i)
-                 |
-            left most cut 
+                i             n - i
+            |--------|---------------------|
+                    |
+            +========|=====================+
+            |        |                     |
+            |        |                     |
+            +========|=====================+
+            P(i)  |      R(n-i)
+                    |
+                left most cut 
 
-        Why is the left side P(i)?
-            - We are not making anymore cuts to it 
-            - Thus it is assumed to be P(i) 
-            - However, for R(i), we are either going to make more cuts, or not 
+            Why is the left side P(i)?
+                - We are not making anymore cuts to it 
+                - Thus it is assumed to be P(i) 
+                - However, for R(i), we are either going to make more cuts, or not 
 
-        Total Price = P(i) + R(n-i)
+            Total Price = P(i) + R(n-i)
 
-        Question:
-            We do not know where the left most cut is
-            The left most piece might have length 1, 2, 3, 4, .... n
-                Note: n being we don't cut it at all 
-            
-            Thus, we have to test each of these conditions and then pick the best one 
+            Question:
+                We do not know where the left most cut is
+                The left most piece might have length 1, 2, 3, 4, .... n
+                    Note: n being we don't cut it at all 
+                
+                Thus, we have to test each of these conditions and then pick the best one 
 
-        Recursion:
-            R(n) = max{P(i) + R(n-1)}
-                1 <= i <= n 
+            Recursion:
+                R(n) = max{P(i) + R(n-1)}
+                    1 <= i <= n 
 
-            R(n) -> Bigger Problem 
-            max{P(i) + R(n-1)} -> Smaller Problem 
+                R(n) -> Bigger Problem 
+                max{P(i) + R(n-1)} -> Smaller Problem 
 
-            The "Smaller solution" will be re-used multiple times 
+                The "Smaller solution" will be re-used multiple times 
 
-    Computing the solution to the Rod Cutting Problem
-        R(0) = 0
-        R(1) = P(1)
+        2.3 Use recursion to compute the result 
+            R(0) = 0
+            R(1) = P(1)
 
-        R(2) = max{P(1) + R(1), P(2) + R(0)}
-        R(3) = max{P(1) + R(2), P(2) + R(1), P(3) + R(0)}
-        R(4) = max{P(1) + R(3), P(2) + R(2), P(3) + R(1), P(4) + R(0)}  
-        .
-        .
-        .
-        R(n) = max{P(1) + R(n-1), P(2) + R(n-2), + P(3) + R(n-3), ... + P(n) + R(0)}
-
-        NOTE: See how we are using P(1), P(2), P(3), R(1), R(2), R(3) again and again? 
-            We DON'T WANT TO RECOMPUTE THIS EVERYTIME, THUS WE WILL MEMORIZE THE SOLUTION TO THE PROBLEM SO IT'S A PLUG-IN FROM MEMORY RATHER THAN COMPUTATION 
-
-        R(n) will be the maximum profit that is able to be made off a rod with length n
-
-        However, R(n) is not our entire solution... we need to know where to cut the rod 
-
-        Let's say we have:
-            R(n) = P(i*) + R(n-i*)
-                Where i* is the optimal left most cut 
-            
-            Example:
-                n = 10 
-
-                R(10) = P(3) + R(7)
-                    Then the left most cut is at length 3 
-
-    Time Complexity of the Rod Cutting Problem 
-        Review: 
-            Time Complexity of an Algorithm 
-                How long it takes to run the algorithm as a function of the input size: n 
-                In addition to the input size, n, we have to always assume the worst case
-
-                Simplicification:
-                    1. Every basic operation has complexity of 1. 
-                    2. We consider only the order of the total number of basic operations 
-                        - This removes the factor of hardware. 
-                        - One computer might be faster than the other
-                    
-                    3. Worst case of input size n 
-
-                    Explanation of 2. 
-                        n + 3n^2            -> O(n^2)
-                        nlog(n) + n^3       -> O(n^3)
-                        2^n + 100^(99)*n^2  -> O(2^n)
-
-                        Why? As n -> +inf, the biggest order will majorly overrule the others
-
-        Now back to the Rod Cutting Problem
-
-            We can easily see the R(n) is the most complex problem in the worst case 
-
+            R(2) = max{P(1) + R(1), P(2) + R(0)}
+            R(3) = max{P(1) + R(2), P(2) + R(1), P(3) + R(0)}
+            R(4) = max{P(1) + R(3), P(2) + R(2), P(3) + R(1), P(4) + R(0)}  
+            .
+            .
+            .
             R(n) = max{P(1) + R(n-1), P(2) + R(n-2), + P(3) + R(n-3), ... + P(n) + R(0)}
 
-                Both of these values we have already computed already 
-                P(1)    -> 1 
-                R(n-1)  -> 1
-                P(1) + R(n-1) -> 1
+            NOTE: See how we are using P(1), P(2), P(3), R(1), R(2), R(3) again and again? 
+                We DON'T WANT TO RECOMPUTE THIS EVERYTIME, THUS WE WILL MEMORIZE THE SOLUTION TO THE PROBLEM SO IT'S A PLUG-IN FROM MEMORY RATHER THAN COMPUTATION 
 
-                P(2)    -> 1
-                R(n-2)  -> 1
-                P(2) + R(n-2) -> 1
+            R(n) will be the maximum profit that is able to be made off a rod with length n
 
-                Pattern of 3 operations for each computation in R(n) to then compare them.
+            However, R(n) is not our entire solution... we need to know where to cut the rod 
 
-                Watch a video on this, not sure how to explain it.
+            Let's say we have:
+                R(n) = P(i*) + R(n-i*)
+                    Where i* is the optimal left most cut 
+                
+                Example:
+                    n = 10 
 
-                Time Complexity: O(n^2)
+                    R(10) = P(3) + R(7)
+                        Then the left most cut is at length 3 
+
+        2.4 Time complexity of the algorithm
+            Time Complexity of the Rod Cutting Problem 
+                Review: 
+                    Time Complexity of an Algorithm 
+                        How long it takes to run the algorithm as a function of the input size: n 
+                        In addition to the input size, n, we have to always assume the worst case
+
+                        Simplicification:
+                            1. Every basic operation has complexity of 1. 
+                            2. We consider only the order of the total number of basic operations 
+                                - This removes the factor of hardware. 
+                                - One computer might be faster than the other
+                            
+                            3. Worst case of input size n 
+
+                            Explanation of 2. 
+                                n + 3n^2            -> O(n^2)
+                                nlog(n) + n^3       -> O(n^3)
+                                2^n + 100^(99)*n^2  -> O(2^n)
+
+                                Why? As n -> +inf, the biggest order will majorly overrule the others
+
+                Now back to the Rod Cutting Problem
+
+                    We can easily see the R(n) is the most complex problem in the worst case 
+
+                    R(n) = max{P(1) + R(n-1), P(2) + R(n-2), + P(3) + R(n-3), ... + P(n) + R(0)}
+
+                        Both of these values we have already computed already 
+                        P(1)    -> 1 
+                        R(n-1)  -> 1
+                        P(1) + R(n-1) -> 1
+
+                        P(2)    -> 1
+                        R(n-2)  -> 1
+                        P(2) + R(n-2) -> 1
+
+                        Pattern of 3 operations for each computation in R(n) to then compare them.
+
+                        Watch a video on this, not sure how to explain it.
+
+                        Time Complexity: O(n^2)
 
 Four Essential Steps for Presenting an Algorithm
     1. Explain the idea of your algorithm   

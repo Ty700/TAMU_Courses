@@ -1,0 +1,166 @@
+Understand DP by solving the "Matrix Chain Multiplication Problem"
+    4.1 Define the "Matrix Chain Multiplication Problem"
+        Review of Matrix Multiplication
+            M1       M2 
+            [1 2 3] [0 1 2 1]
+            [4 5 6] [3 5 1 2]
+                    [6 2 8 0]
+            2x3     3x4 
+            
+            Since # of cols in M1 = # of rows M2, we can multiply them 
+
+            Result: 2x4
+            [0 + 6 + 18,    1 + 10 + 6,    2 + 2 + 24,  1 + 4 + 0]
+            [0 + 15 + 36,   4 + 25 + 12,  8 + 5 + 48,   4 + 10 + 0 ]
+
+            Result:
+            [24, 17, 28, 5]
+            [51, 41, 61, 14]
+
+            Cost of multiplying 2 matricies:
+                Note:  
+                    p = rows in M1
+                    q = cols in M1 and rows in M2
+                    r = rows in M2
+
+                1. Scalar multiplications p*q*r -> Dominate term
+                2. Additions: p(q-1)r
+
+                O(pqr) -> Time complexity for computing multiplication
+
+            Example:
+                A is a 10x100 Matrix
+                B is a 100x5 Matrix
+                C is a 5x50 Matrix 
+
+                What is the computing cost?
+
+                We can do it 2 ways (AxB)xC or Ax(BxC)
+
+                Example (AxB)xC:
+                    AxB -> 10 * 100 * 5 -> 5000
+                    Results in a 10x5 matrix 
+
+                    AxB -> D 
+
+                    DxC -> 10 * 5 * 50 -> 2500
+
+                    7,500 would be my guess 
+                        - Correct 
+
+                Example Ax(BxC)
+                    BxC -> 100 * 5 * 50 -> 25,000
+                    BxC -> D -> 100x50 
+
+                    AxC -> 10 * 100 * 50 -> 50,000
+
+                    75,000 
+
+                Thus, Ax(BxC) is 10x more expensive than (AxB)xC
+
+        Matrix Chain Multiplication 
+            Input:
+                A chain of n matricies A1A2A3...An 
+                    For i = 1,2,3....,n, the matrix Ai has size p(i-1) x pi
+
+                    A1 = 0 x 1 
+                    A2 = 1 x 2
+                    A3 = 2 x 3 
+                        Thus we can multiply A1 x A2
+                        Then we can multiply A2 x A3 
+
+            Output:
+                How to parenthesize the matrix chain such that the total cost is minimized?
+                Essentially, from the previous example, where should the parenthesis go so it minimizes the computations 
+
+            Chain:
+                A1 A2 A3 .... An 
+
+            Size: 
+                A1: 0 x 1
+                A2: 1 x 2
+                A3: 2 x 3
+                .
+                .
+                .
+                A(n-1): (n-2) x (n-1)
+                An: (n-1) x n
+
+            Shoudl we use exhaustive search? No. Time complexity way too high 
+
+            Say we have:
+                A1A2A3A4A5A6...A(n-2)A(n-1)A(n)
+
+                We can do:
+                    (A1A2A3) x (A4A5A6) x ... x (A(n-2)xA(n-1)xA(n)) -> 2^(n/3) computations
+
+                    This is why we do not use exhaustive search... 2^n is the worst time complexity
+
+    4.2 Use recursion to decompose the problem 
+        For 1 <= i <= j <= n, let m[i,j],
+        be the minimum cost of computing the sub-chain: AiA(i+1)...Aj
+
+        No matter what order we multiply the matricies, there will always be a final multiplication
+            (Ai x A(i+1)x ... x Ak) x (A(k+1) x ... x Aj)
+                                   / \
+                                    |
+                                    |
+                                    +-----  Final Multiplication is between Ak and A(k+1)
+
+            Total cost of (Ai x A(i+1)x ... x Ak) x (A(k+1) x ... x Aj):
+                Final Multiplication Size:
+                    A[i,k] x A[k+1, j] -> p(i-1) * pk * pj
+                
+            Total cost = m[i,l] + m[k+1, j] + (p(i-1) * pk * pj)
+
+            Since we don't know where the final multiplication will happen, we try all possible cases and take the minimum 
+
+            Thus we can use recurion for:
+                m[i,j] = {
+                            0, i = j
+                            min( min[i,k] + m[k+1, j] + (p(i-1) * pk * pj)), i < j where i <= k < j 
+                        }
+
+            This recursion decomposes the big problem into smaller ones.
+            
+            Why? 
+                Because we have to compute size of m[i,j] which is a long chain
+                However, in solving for that, we break it down by computing the size of p(m[i.k]) which is a shorter chain
+                    in addition we are also solving for the size of p(m[k+1, j]) which again is a shorter chain
+
+                Thus we are taking this big chain, breaking it, solving for the size, and continuing to do so until i=j 
+
+    4.3 Use recursion to compute the result 
+        Compute bottom-up (from smaller to bigger):
+            In DP, we decompose the big problem into smaller ones from top down, then when we compute solutions we go bottom up 
+                - Thus we compute small problem solutions before computing big problem solutions
+
+            In DP, what is small problem, what is big problem?
+                For this example: 
+                    if we are multiplying a few matricies, we can say this is a small problem 
+                    If we are multiplying a lot of matricies, we can say this is a big problem
+            
+        Sub-chains of length 1: m[1,1], m[2,2], m[3,3] ... m[n,n] = 0 computations 
+
+        Sub-chains of length 2: m[1,2], m[2,3], m[3,4] ... m[n-1, n] 
+                                  |       |      |            |
+                                  V       V      V            V 
+                                A1A2     A2A3   A3A4         A(n-1)An 
+        
+        Sub-chains of length 3: m[1,3], m[2,4], m[3,5], ... , m[n-2, n]
+                                  |       |       |             |
+                                  V       V       V             V 
+                                A1A2A3   A2A3A4  A3A4A5        A(n-2)A(n-1)An 
+        .
+        .
+        .
+
+        Sub-chains of length n: m[1,n]
+
+    4.4 Time Complexity of this Algorithm
+        Main part of the algoirthm is to compute the recurion
+            min(m[i,k] + m[k+1, j] + (p(i-1) * pk * pj)), i < j where i <= k < j 
+
+            The min comparison is O(n), the computations for m[i,k] + m[k+1, j] + (p(i-1) * pk * pj) is O(1)
+            
+            
