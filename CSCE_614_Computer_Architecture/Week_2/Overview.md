@@ -20,8 +20,8 @@ At the end of this module, you will be expected to:
 ## Watch:
 Chapter 1 and Appendix A, continued:
 - ~~Instruction Set Architecture (ISA) 3~~ 8/27
-- Performance
-- Power/Reliability
+- ~~Performance~~ 8/28
+- ~~Power/Reliability~~8/28
 
 ## Assignments:
 - Reading Assignment: Chapter 1
