@@ -163,4 +163,8 @@ Understand DP by solving the "Matrix Chain Multiplication Problem"
 
             The min comparison is O(n), the computations for m[i,k] + m[k+1, j] + (p(i-1) * pk * pj) is O(1)
             
-            
+            Thus the complexity of computing each m[i,j]: O(n)
+
+            Since 1 <= i <= j <= n, we have O(n^2) such m[i,j]
+
+            Time Complexity: n^3
