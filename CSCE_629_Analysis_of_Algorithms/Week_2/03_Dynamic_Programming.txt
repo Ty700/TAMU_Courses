@@ -1,0 +1,10 @@
+Understanding DP by solving the "Longest Common Subsequence Problem"
+
+5.1 Define the "Longest Common Subsequence Problem"
+    Consider two DNA sequences:
+        S1 = ACCGGTCGAGTGCGCGGAAGCCGGCCGAA
+        S2 = GTCGTTCGGAATGCCGTTGCTCTGTAAA
+
+    How similar are they? How to define "similarity"?
+
+    
