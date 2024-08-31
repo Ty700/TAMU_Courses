@@ -1,0 +1,305 @@
+1.1 Introduction
+    Computer technology has increased exponentially
+    
+    1993 - $50 Million for a computer
+    Today - $500 for a smartphone with the same computational power as the $50 million in 1993
+
+    Improvment has come from the technology used to build computers and the computer's design 
+
+    Today's tech improvments have been pretty much steady, today's progress is much less consistent.
+
+    Late 1970s = rise of the microprocessor -> roughly 35% growth every year
+
+    Growth rate + cost to mass-produce microprocessors lead to more computer businesses focusing on microprocessors
+
+    Also two more significant changes that made it "easier than ever" to succeed as a computer business:
+        1. Elimination of assembly language given the development of higher abstraction level languages
+        2. Creation of a standardized, vendor-independent operating systems -> UNIX and its clone Linux, lowered the cost and risk of brining out a new computer arch
+
+    These changes made it possible to develop a new set of arch with simpler instructions called RISC
+        RISC -> Reduced Instrcution Set Computer 
+
+    RISC -> Released in early 1980s
+
+    RISC-based machines allowed engineers to focus on two critical performance techniques:
+        1. Instruction-level Parallelism
+            - Initally through pipelines and later through multiple instruction issue 
+        2. Use of caches 
+
+    RISC was a gamebreaker forcing older archs to either catch up or die out.
+
+    Intel rose to the challenge and translated 80x86 instructions to RISC allowing it to adopt many of the innovations first pioneered in the RISC designs.
+
+    As transistor count increased, the hardware overhead of translating the more complex x86 arch became negligible
+    The cost in power and silicon area of the x86 translation overhead helped lead to a RISC arch, ARM, becoming dominant 
+
+    Due to these advances, there were 17 years of improvements where every year there was a roughly 52% increase... compared to the 3.5% improvements now.
+
+    This had a few effects:
+        1. Allowing computers to be avaliable to mostly everyone
+            - since the cost for computing was also being halved
+        2. The improvement in cost to performance allowed for new classes of computers  
+            - PCs
+            - Cell phones
+            - Tablet computers 
+        3. Improvements made to semiconductor manufactoring, as perdicted by Moore's law, led to the dominance of microprocessors.
+            - Mini comptuers, prior to, were made by logic gates
+            - After which were replaced by servers created by microprocessors
+    
+    These hardware innovations led to a fourth impact: Software Development 
+
+    The gigantic performance imporvement since 1978 allowed modern programmers to trade performance for producitivity.
+        - Instead of programming in performance-oriented languages like C/C++, we can program in Java, Scala, Python, Javascript and more 
+        
+    To maintain producitivity, the gap between interpreters wiht just-in-time compilers and trace-based compiling are replacing the traditional compiler and linker of C.
+
+    Software development is changing as well with Software as a Service (SaaS) used over the internet replacing shrink-wrapped Software that must be installed and run on a local PC
+
+    However, the 17-year hardware renaissance is over... as now we are getting only a 3.5% increase in performance every year. 
+        Why? The fundamental reason is that two characteristics of semiconductor processes that were true for decades no longer are true.
+
+    In 1974, Robert Dennard observed that
+        Power density was constant for a given area of silicon even as you increased the number of transistors
+            Why? Smaller dimensions of each transistor 
+        - Transistors could go faster but use less power. 
+
+        This was called "Denard Scaling."
+
+    *IMPORTANT*
+    This ended in 2004 due to current and voltage couldn't keep dropping and still maintain the dependabiltiy of ICs.
+        - This forced microprocessor industry to use multiple efficient processors or "cores" instead of a single inefficient processor. 
+
+    This milestone signaled a historic switicch from relying solely on instruction-level parallelism (ILP) to data-level parallelism (DLP), 
+                                                                                                        thread-level parallelism (TLP), and request-level parallelism (RLP)
+                                                                                                    
+    Difference between ILP and the rest?
+        Compiler and hardware conspire to exploit ILP implicitly without programmer's attention.
+        DLP, TLP, and RLP are explicitly parallel which requires the restructuring of the application so it can exploit explicit parallelism
+
+    *IMPORTANT*
+    
+    Two Observations:
+        1. Amdahl's law
+            - Explains practical limits to the number of useful cores per chip.
+
+            Example:
+                If 10% of the task is serial... then the maximum performance benefit from parallelism is 10 no matter how many cores you put on the chip.
+    
+        2. Moore's Law 
+            - Founded by Gorden Moore
+            - Predicted that the number of transistors per chip would double every year (amended in 1975 to every 2 years)
+                - This prediction lasted roughly 50 years 
+            - Ended recently
+
+            Example:
+                In 2010, Intel's lastest processor had 1,170,000,000 transistors...
+
+                If 2016, according to Moore's law, the core would have 18,720,000,000 transistors... instead it still had 1,170,000,000
+    
+    *IMPORTANT*
+    The comboniation of 4 factors led to the improvements to slow down:
+        1. Transistors no longer getting much better because of the slowing of Moore's law at the end of Dinnard scaling 
+        2. The unchanging power budgets for microprocessors
+        3. The replacement of the single power-hungry processor with several energy-efficient processors 
+        4. The limits to multiprocessing to achieve Amdahl's law 
+
+    Future microprocessors would have several "domain-specific cores" that perform only one class of computations well, in addition to the general-purpose cores.
+
+1.2 Classes of Computers 
+    The above 4 changes set the stage for five classes of computers, computing applications, and computer market.
+
+    Classes
+        1. IoT/Embedded Computers 
+            Overview:
+                - Found in everyday machines 
+                    - Microwaves, washing pachines, printers, network switches, etc 
+                
+                - IoT devices collect useful data and interact with the physical world, leading to a wide of "smart" devices.
+                - Embedded computers have the widest spread of processing power and cost. 
+                    - Include 8-bit to 32-bit processors (which are very cheap) to a full 64-bit processor for cars and network switches 
+                - Price is a key factor in design of computers for this space
+                - Performance requirements do exist, but the primiary goal is to meet the performance at minimum cost 
+                    - rather than more performance at a higher cost 
+
+            Summary of IoT/Embedded Computers 
+                Price of system:
+                    $100 - $100,000
+                
+                Price of microprocessor:
+                    $0.01 - $100 
+                
+                Critical design issues:
+                    - Price 
+                    - Energy 
+                    - Application-specific performance
+
+        2. Personal Mobile Devices (PMD)
+            Overview:
+                - Collection of wireless devices with multimedia UIs
+                    Example:
+                        - Cell phones
+                        - Tablets 
+                - Cost is the prime concern give the connsumer price for the whole market is only a few hundred dollars 
+                - Focus on battery life
+                - Need to use less expensive packaging (plastic vs ceramic) and absence of a fan for cooling is to limit energy and power 
+                - Applications are often web-based to limit the computations processors have to do on PMDs limiting power consumption
+                - Responsiveness and predictability are key charactersistics for media applications.
+                    - Real-time performance requirement
+                        - a segment of the application has an absolute maximum execution time 
+                            Example:
+                                - Playing a video on a PMD
+                                    - the time it takes to process each video fram is limited
+
+                    - Soft real-time performance 
+                        - possible to miss the time constraint on an event occasionally, as long as not too mnay are missed.
+
+                - Minimuze memory
+                    - Can be the majority of system cost, thus best to optimize memory size
+                - Use energy efficiently
+                    - Battery power and heat dissipation 
+                
+            Summary of PMDs:
+                Price of a system:
+                    $100 - $1000
+                
+                Price of microprocessor:
+                    $10 - $100
+                
+                Critical system design issues:
+                    Cost, energy, media performance, responsivness 
+        
+        3. Desktops 
+            Overview:
+                - Largest market 
+                - Span from low-end netbooks to heavily configure workstations that may sell to $2,500 
+                - More than half of the desktop computers made each year have been battery operated laptops
+                - Desktop computing sales are declining 
+                - Optimize price-performance 
+                    - The combinatation of performance (computational and graphics perfomance) and price of a system is what matters most to customers 
+                - As a result of the price-performance optimziation
+                    - newest, highest-performance microprocessors and cost-reduced microprocessors often appear in desktop-systems first 
+            
+            Summary of Desktops:
+                Prices of system:
+                    $300 - $2500
+                
+                Price of microprocessor:
+                    $50 - $500
+                
+                Critical system design issues:
+                    Price-performance 
+                    Energy 
+                    Graphics performance 
+            
+        4. Servers 
+            Overview:
+                - Provide larger-scale and more reliable file and computing services 
+                - Backbone of large-scale enterprise computing, replacing the traditional mainframe 
+                - Availability is the most critical characteristic
+                    - Example:
+                        The server ATM machines are running off of.
+                        Failure to this server is catastrophic compared to the failure of a single desktop. 
+                - Since these servers must operate 24/7, the cost of a downtime for server applications is insane
+                    Example:
+                        For every hour a manufactoring server goes down, the company loses roughly 1 million dollars. 
+                        If it goes down for 1% of the year, that is close to 88 million dollars lost 
+
+                - Scalability is also another key characteristic
+                    - Servers often need to grow due to increase demand for the services they support or an expansion in functional requirements
+                - Servers also need an efficient throughput. 
+                    - I.e overall performance of the server needs to be high 
+                        - High throughput -> low response time 
+                        - Low throughput -> high response time 
+
+            Summary of Servers:
+                Price of system:
+                    $5000 - $10,000,000 
+                
+                Price of microprocessor:
+                    $200 - $2500
+
+                Critical system and design issues:
+                    - Throughput 
+                    - Availability
+                    - Scalability
+                    - Energy 
+        
+        5. Clusters/Warehouse-scale Computers 
+            Overview:
+                Cluster:
+                    - Growth of SaaS for applications like search, social networking, video viewing, multiplayer games, etc has led to this class 
+                    - Clusters are collections of desktop computers or servers connected by a LAN to act as a single larger computer 
+                    - Each node runs its own OS, and nodes comunicate using a networking protocol.
+
+                Warehouse-Scale Computers (WSCs):
+                    - Largest of the cluster group
+                    - Tens of thousands of servers can act as one 
+                    - Price-perfomance and power are critical to WSCs since they are so large 
+                    - Majority of WSCs come from power and colling of the computers inside the warehouse 
+                    - Related to servers, thus need a high availability 
+                
+                Supercomputers
+                    - Related to WSCs 
+                    - Differ from WSCs in that they focus on FP performance
+                    - Running large, communication-intensive batch programs that can run for weeks at a time
+                        - WSCs emphasize interactive applications, large-scale storeage, dependability, and high Internet bandwidth 
+                
+            Summary of Clusters/Warehouse-scale Computers
+                Price of system:
+                    $100,000 - $2,500,000 
+                
+                Price of microprocessor:
+                    $50 - 250
+                
+                Critical system and design issues:
+                    - Price-performance
+                    - Throughput
+                    - Energy 
+                    - Proportionality 
+
+*IMPORTANT*    
+Classes of Parallelism and Parallel Architecctures 
+    Parallelism at multiple level si sn ow the driving force of computer design across all classes of computers, with energy and cost being the primary constraints 
+
+    There are two kids of parallelism in applications:
+        1. Data-level parallelism (DLP) 
+            - arises due to the many data items that can be operated on at the same time 
+        
+        2. Task-level parallelism
+            - arises due to the tasks of work are created that can operate independently and largely in parallel
+
+    Computer hardware in turn can exploit these two kinds of aplication parallelism in 4 major ways:
+        1. Instruction-level parallelism
+            - exploits DLP at modest levels with compiler help using ideas like pipelining and at medium levels using ideas like speculative execution 
+
+        2. Vector Architectures, graphic processor units (GPUs)
+            - exploit data-level parallelism by applying a single instruction to a collection of data in parallel
+
+        3. Thread-level parallelism
+            - exploit either data-level or task-level parallelism in a tightly coipled hardware model that allows for interaction between parallel threads 
+
+        4. Request-level parallelism
+            - largely decoupled tasks specifie by the programmer or the OS 
+
+*IMPORTANT*
+Simple classification for parallel computing efforts
+    1. Single Instruction Stream, Single Data Stream (SISD)
+        - Uniprocessor 
+        - Standard sequential computer that can exploit ILP 
+            - Superscalar and speculative execution 
+    
+    2. Single Instruction, Multi-data stream (SIMD)
+        - Same instruction is executed by multiple processors using different data streams
+        - SIMD computers exploit DLP by applying the same operations to multiple items of data in parallel
+        - Each processor has its own data memory however there are is only a single instruction memory and control processor that fetches and dispatches instructions 
+
+    3. Multiple Instruction Streams, single data stream (MISD)
+        - No commerical multiprocessor of this type has been built to date
+
+    4. Multiple instructioon streams, multiple data streams (MIMD)
+        - Each processor fetches its on instruction and operates on its own data 
+        - Targets TLP 
+        - MIMD is more flexible than SIMD, thus more generally applicable, but is more expensive
+
+1.3 Defining Computer Architeccture
+    

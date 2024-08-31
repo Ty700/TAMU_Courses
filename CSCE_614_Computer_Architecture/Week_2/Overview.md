@@ -26,6 +26,6 @@ Chapter 1 and Appendix A, continued:
 ## Assignments:
 - Reading Assignment: Chapter 1
 - ~~Quiz 3~~ 8/27
-- Quiz 4
-- Quiz 5
+- ~~Quiz 4~~ 8/30
+- ~~Quiz 5~~ 8/30
 - Continue working on HW1, due Week 3
