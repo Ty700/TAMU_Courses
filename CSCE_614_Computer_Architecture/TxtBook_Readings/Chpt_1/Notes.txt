@@ -302,4 +302,180 @@ Simple classification for parallel computing efforts
         - MIMD is more flexible than SIMD, thus more generally applicable, but is more expensive
 
 1.3 Defining Computer Architeccture
+    Computer designers face a complex task:
+        Determine what attributes are important for a new computer, then design a computer to maximoze performance and energy efficiently while staying within cost, power, 
+        and availability constraints.
     
+    Task has many aspects:
+        - Instruction set design 
+        - functional organzation 
+        - logic design 
+        - implementation
+            - also includes IC design, packaging, power, and cooling 
+
+        
+        A few decades ago, "computer architecture" generally referred to only instruction set design. 
+        Other aspects were called "implementation"
+
+
+        Instruction Set Architeccture refers to the actual programmer-visible instruction set. 
+        ISA servers as the boundary between software and hardware 
+
+        ARM -> Advance RISC Machine 
+        RISC-V -> Modern RISC instruction set developed at Berkely 
+
+    1. Classes of ISA 
+        Nearly all ISAs today are classified as general-purpose register architectures where all operands are either registers or memory locations. 
+
+        RISC-V has 32 general purpose registers and 32 floating-point registers 
+
+    2. Memory Addressing 
+        Virtually all desktop and servers use "byte addressing" to access memory operands 
+        Some architectures require that objects must be aligned 
+    
+    3. Addressing Modes 
+        Specify the address of a memory object 
+        RISC-V addressing modes are Register, Immediate, and Displacement
+            Register - Accessing registers 
+            Immediate - Adding constants 
+            Displacement - Jumping 
+
+    4. Types and Sizes of operands 
+        8 bits (ASCII), 16 bits (Uni-code), 32 bits (interger or word), 64 bit (double word)
+    
+    5. Operations 
+        General categories 
+            - Data Transfer 
+            - Arithmetic 
+            - Logical
+            - Control 
+            - Floating Point 
+    
+    6. Control flow instructions
+        Conditional jumps, unconditional jumps, procedure calls, and returns 
+
+        All 3 use PC-relative addressing, where the branch address is specified by an adress field that is added to the PC 
+
+        RISC-V uses conditional branches (BE -> Branch equal, BNE -> Branch not equal) test the contents of registers
+
+    7. Encoding an ISA 
+        Two choices:
+            Variable length -> 80x86  
+                - 1 to 18 bytes in length 
+            Fixed length -> RISC-V and ARMv8 
+
+            All RISC-V instructions are 32 bits 
+                - simplifies instruction decoding 
+
+    Implemenation of a computer has two components:
+        1. Organization
+            - High-level aspects of a computer's design 
+                - Memory system, and interconnections
+                - Design of internal CPU 
+                
+                AKA: "Microarchitecture"
+                    Example:
+                        Two processors with the same ISA but different organizations are the AMD Opteron and Intel's i7 
+                        Both processors use 80x86 instruction set, but they have very differnt pipeline and cache organizations
+
+        2. Hardware 
+            - specifics of a computer, including the logic design and packaging tech of the computer 
+            - A family of computers involves identical ISAs, and very similar organizations, but differ in the details of the hardware implemenation 
+                Example:
+                    Intel's I7 and the Intel Xeon E7 
+                        - Xeon has a different memory system and clock rate making it more effective for server use 
+
+**IMPORTANT**
+Instruction for RISC-V:
+    ** INSERT PHOTO OF INSTRUCTION1, INSTRUCTION 2 and INSTRUCTION_DECODING HERE **
+
+1.4 Trends in Tech 
+    IC logic tech 
+        - In the past, transistor density increased by 35%/yr 
+            Now it's roguhly 10 to 20% 
+
+    Semiconductor DRAM 
+        - foundation of main memory 
+        - growth of DRAM has been reduced dramatically 
+            - 8GB (2014) -> 16GB (2019) -> 32GB (Never? No. 2024)
+        
+    Semiconductor Flash
+        Flash is electronically erasable programmable read-only memory 
+        - Standard storage device in PMDs and its rapidly increasing in popularity 
+            -> Fueled its rapid growth 
+        - Capacity per year has increased 50 - 60% per year
+        - 8 to 10x cheaper than DRAM 
+
+    Magnetic Disk Technology   
+        Density increased by 30% per year (1990), and rose to 60% per year, then to 100%(1996), then back down to 40%(2004 to 2011), now is at 5%
+    
+    The rapid changin technologies shape the design of a computer that have a lifetime of 3 to 5 years
+
+    Bandwidth vs Latency 
+        Bandwidth -> Total work done in a given time 
+            Example:
+                Megabytes per second 
+
+        Lantency -> Time between the start and completion of an event 
+            Example:
+                Response time 
+                    - Took the server 100ms to respond
+
+        Performance is the primary differentiator for microprocessors and networks... so they have the greatest gains 
+            32,000 to 40,000x in bandwidth 
+            50 to 90x in latency 
+
+        Generally, capacity is more important than performance for memory and disks
+            400 to 2400x in bandwidth
+            8 to 9x in latency 
+
+        Bandwidth has outpaced latency and will continue to do so (since bandwidth is easier to improve)
+
+    Scaling of Transitor Performance and Wires  
+        IC processes are characterized by the feature size 
+            - means the minimum size of a transistor or a wire in either the x or y dimension 
+        
+        Feature size decreased from 10um in 1971 to 0.016um in 2017 
+            - decreased so much so that we had to change units to nanometer instead of micrometer 
+            
+            Now, 0.016um is 16nm.
+
+        *IMPORTANT*
+        Since the transistor count per square millimeter of silicon is determined by the surface area of a transistor
+            the density of transistors increases quadratically with a linear descrease in feature size
+
+        Transistor performance is more complex 
+            - Transistors shrink in both horizontal and vertical dimensions with smaller feature sizes 
+            - Vertical dimension reduction requires lower operating voltage for reliability 
+            - Historically, transistor performance improved linearly with decreasing feature size 
+            - Transistor count increases quadratically with a linerar increase in performance
+        
+        Impact on microprocessor developement
+            - Early microprocessor advanced rapidly rom 4 to 64bit due to density improvements 
+            - Modern improvements include:
+                - Multiple processors per chip
+                - Wider SIMD units 
+                - Innovation in speculative execution and caches 
+            
+        Challenges with wire performance 
+            - Unlike transistors, wires in ICs do not improve as feature size shrinks 
+            - SIgnal delay in wires increases with resistance and capacitance 
+            - Resistance and capacitance per unti length worsen as wires got shorter 
+        
+        Process Enhancements
+            - Occasional improvements, like the use of copper, can reduce wire delay, but these are limited 
+        
+        Design Challenges 
+            Wire delay is increasingly critical, often more problematic than transistor siwtching delay 
+            - Larger portions of the clock cycle are consumed by signal propagation on wires 
+            - Power dissipation now plays a significant role in design alongside wire delay 
+        
+        
+
+
+
+    
+
+    
+        
+

@@ -1,0 +1,176 @@
+Chapter 14 Dynamic Programming
+    
+    Dynamic programming, like divide-and-conquer method, solves problems by combining the solutions to subproblems. 
+        Divide-and-conquer algorithms partition the problem into disjoint subproblems, solve the subproblems recursively, and then combine their solutions to solve the original problem.
+    
+    In contrast, dynamic programming applies when the subproblems overlap, ie when the subproblems share subproblems
+        - Divide-and-conquer method won't work in this aspect since it will recompute the same subproblem more than once
+    
+    A dynamic programming algorithm saves the result, and refers to the saved problem/answer set, determines if the current subproblem and its answer is in that set
+        If so -> Extract the answer without recomputing it 
+        If not -> Compute the answer and save it in the set 
+
+    DP usually is to optimize problems. 
+        - These problems have many possilbe solutions, in which each has a value, and you want to find the optimal (minimum or maximum) value. 
+            -> We call a solution " an optimal solution" as oppose to "the optimal solution," since there may be several solutions that achieve the optimal value.
+
+    To develop a DP algorithm:
+        1. Characterize the structure of an optimal solution
+        2. Recursively define the value of an optimal solution 
+        3. Compute the value of an optimal solution, typically bottom-up fashion 
+        4. Construct an optimal soltion from computed information 
+
+14.1 Rod Cutting Example
+
+    First example: 
+        Solve a simple problem in deciding where to cut steel rods. 
+        A company buys long steel rods and cuts them into shorter rods, which then sells them.
+
+        Problem statment:
+            Given a rod of length n inches and a table of prices (Pi) for i = 1, 2, 3, ... n
+                determine the maximum revenue rn obtainable by cutting the rod and selling the pieces. 
+            
+            If the price Pn for a rod of length n is large enough, an optimal solution might require no cutting at all.
+
+        Consider the case when n = 4.   
+
+        A few notes before working the problem out:
+            - A pipe can be cut into 2^(n-1) ways
+                thus a lenght of 4 can be cut into 8 different ways
+            
+            - Using big O notation 2^(n-1) is simplified to 2^n... which is a horrible time complexity.
+
+            - We denote a decomposition into pieces using addition
+                Example:
+                    2 + 3 + 3 = 7 
+                    We have a rod of length 7 currently cut into 3 pieces: 2, 3, and 3 
+
+        Example worked out
+
+            length i | 1 | 2 | 3 | 4 | 5  | 6  | 7  | 8  | 9  | 10 |
+            ---------+---+---+---+---+----+----+----+----+----+----+
+            price Pi | 1 | 5 | 8 | 9 | 10 | 17 | 17 | 20 | 24 | 30 |
+
+            We can do exhaustive search...
+            
+            1. We can check 0 and 4 resulting in: $9 
+                +===================================+
+                |                                   |
+                +===================================+
+            
+            2. We can then check 1 and 3 resulting: $1 + $8 = $9
+                +=====+ | +===========================+
+                |     + | |                           |
+                +=====+ | +===========================+
+                
+                
+            3. We can then check 2 and 2 resulting in: $5 + $5 = $10 
+            +==========+  | +==========+   
+            |          |  | |          |  
+            +==========+  | +==========+     
+
+            4. We can then check 3 and 1 resulting: $8 + $1 = $9
+                +===========================+ | +=====+
+                |                           | | |     |
+                +===========================+ | +=====+ 
+                
+            5. We can then check 1, 1, and 2, resulting in $1 + $1 + 5 = $7
+                +=====+ | +=====+ | +==========+
+                |     | | |     | | |          |
+                +=====+ | +=====+ | +==========+
+
+            6. We can then check 1, 2, and 1, resulting in $1 + $5 + 1 = $7
+                +=====+ |  +==========+ | +=====+
+                |     | |  |          | | |     |
+                +=====+ |  +==========+ | +=====+
+
+            7. We can then check 1, 2, and 1, resulting in $1 + $5 + 1 = $7
+                +=====+ | +=====+ | +==========+
+                |     | | |     | | |          |
+                +=====+ | +=====+ | +==========+
+
+            8. We can then check 1, 1, 1, and 1, resulting in $1 + $1 + $1 + $1 = $4 
+                +=====+ |  +=====+ |  +=====+ |  +=====+ | 
+                |     | |  |     | |  |     | |  |     | | 
+                +=====+ |  +=====+ |  +=====+ |  +=====+ |    
+    
+        If an optimal solution cuts the rod into k pieces, for some 1 <= k <= n, then an optimal decomposition
+            n = I1 + I2 + ... + Ik
+        
+        of the rod into pieces of lengths I1, I2, ..., Ik provides the maximum revenue
+            Rn = Pi,1 + Pi,2 + ... + Pi,k 
+
+        We can determine the optimal revenus Ri for 1, 2, 3, ..., 10 by inspecton with the corresponding optimal decomposition:
+            R1 = $1 (no cuts)
+            R2 = $5 (no cuts)
+            R3 = $8 (no cuts)
+                - 3 can be split into 1 and 2 ($6) or 0 and 3 ($8)
+            R4 = $10 (2 and 2)
+                - See example above 
+            R5 = $13 (2 and 3)
+                - 5 can be split into 0 and 5 ($10), 1 and 4 ($10), 2 and 3 ($13), 1, 2, and 2 ($11), 1, 1, 1, 1, and 1 ($5)
+                    The other ways of splitting the rod (like 4 first and then 1) are not neccessary to list out but are still ways to cut the rod
+
+                As we can see with 5
+                    - it's  5 and 0 
+                            4 and 1 
+                            3 and 2 
+                            1, 1 and 2 
+                    To solve 5 we need to first find the maximum profit of the rods 1, 2, 3 and 4 before we can determine the max of 5 effciently 
+
+                    We can do this by having a table of:
+                        R(5,0) -> $10
+                            - which would be the max since it's the only the only computation we have made thus far 
+
+                        R(1,4) 
+                            - which we would the need to find the best way to cut a rod length of 4 for maximum profit before determining if we should cut the rod or keep it whole 
+
+                            n = 4 can be split into:
+                                4 and 0 
+                                1 and 3 
+                                2 and 2 
+                                1, 1, 1 and 1 
+
+                                We would then say the max of R(4) would first be R(4,0) -> $9
+                            
+                            Then we would say which is greater? R(4,0) or R(3,1)
+                                To solve R(3,1) we would need to find R(3) 
+
+                    This goes on until we get to R(2) which gets broken into two pieces of 1 or remain whole.
+
+                    If we store (the whole point of dynamic programming) the result of the maximum rod lengths we already have calculated... then finding smaller length rods would be O(1) rather than O(2^n)
+
+
+    More generally.... we can express finding R(n) to be:
+        Rn = max{pn, (R1 + R(n-1), R2 + R(n-2), ..., R(n-1) + R1)}
+
+            The first arguement (Pn), corresponds to making no cuts at all
+            
+            The other n-1 arguements to max corresponds to the maximum revenue obtained by making an initail cut of the rod into two pieces: i and n-i, for each i = 1, 2, 3... n - 1
+                and then optimally cutting up those pieces further obtaining revenues Ri and R(n-1) from those two pieces. Since we don't know ahead of time whcih value of i optimizes revenue, you have 
+                to consider all possible values for i and pick the one that maximizes revenue. (Which i could be 0 if the max revenue is from not cutting the rod)
+
+    To solve the original problem of size n, you solve smaller problems of the same type. 
+    Once you make the first cut, the two resulting pieces form independent instances of the rod-cutting problem. 
+    The overall optimal solution incorporates optimal solutions to the two resulting sub rod-cutting problems.
+
+    The rod-cutting problem exhibits optimal substructure: optimal solutions to a problem incorporate optimal solutions to related subproblems, whcih you may solve independently.
+
+    In a related, but slightly simpler way to arrange a recursive structure for rod-cutting problem, let's view a decomposition as consisting of a 
+    length i cut off the left-hadn end, and then a right-hand remainder of length n-i. 
+
+    Only the remainder can be divided further.
+
+    Think of every decomposition of a length-n rod in this way: as a first piece followed by some decoposition of the remainder.
+    
+    Then we can expres the solution with no cuts at all by saying that the first piece has size i = n and revenue Pn that the remainder has size 0 with corresponding with R0 = 0.
+
+    Thus we obtain the following simpler version of the above equation: Rn = max{pn, (R1 + R(n-1), R2 + R(n-2), ..., R(n-1) + R1)}
+        -> Rn = max{Pi + r(n-1); 1 <= i <= n}
+
+        In this formulation, an optimal solution emboedies the solution t only one related subproblem - the remainder - rather than two.
+
+
+    Recursive top-down implementation 
+        
+            
