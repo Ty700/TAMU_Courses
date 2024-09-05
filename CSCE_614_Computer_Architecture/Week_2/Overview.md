@@ -13,7 +13,7 @@ At the end of this module, you will be expected to:
 - Calculate the timeline of execution for code on a pipelined datapath considering dependencies.
 
 ## Read:
-- Chapter 1
+- ~~Chapter 1~~
 - Begin reading Appendix C
   - The reading assignment will be due in Week 3.
 
@@ -24,8 +24,8 @@ Chapter 1 and Appendix A, continued:
 - ~~Power/Reliability~~8/28
 
 ## Assignments:
-- Reading Assignment: Chapter 1
+- ~~Reading Assignment: Chapter 1~~8/30
 - ~~Quiz 3~~ 8/27
 - ~~Quiz 4~~ 8/30
 - ~~Quiz 5~~ 8/30
-- Continue working on HW1, due Week 3
+- Continue working on HW1, due ~~Week 3~~ Week 4. Professor moved it back a week
