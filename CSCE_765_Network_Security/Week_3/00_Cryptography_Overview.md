@@ -18,10 +18,16 @@ To complete this module:
 - Complete Module 1 Practice Quizzes.
 
 ## Overview of the module
-- 1.1 Cryptography Overview
-- 1.2 Private Key Cryptography: Encryption 
-- 1.3 Classical Ciphers
-- 1.4 Block Cipher - DES Functioning
+- ~~1.1 Cryptography Overview~~ 9/4
+    - ~~Lecture 1 Quiz~~ 9/4
+- ~~1.2 Private Key Cryptography: Encryption ~~ 9/4
+    - ~~Lecture 2 Quiz~~ 9/5
+- ~~1.3 Classical Ciphers~~ 9/5
+    - ~~Lecture 3 Quiz~~ 9/5
+- ~~1.4 Block Cipher - DES Functioning~~9/5
+    - ~~Lecture 4 Quiz~~9/5
 - 1.5 DES Security 
-    - DES -> Data Encryption Standard
+    - Lecture 5 Quiz
+
+> Note: DES -> Data Encryption Standard
         
