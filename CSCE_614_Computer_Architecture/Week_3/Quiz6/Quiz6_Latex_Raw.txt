@@ -1,0 +1,62 @@
+\documentclass{article}
+\usepackage{amsmath}
+\usepackage{fancyhdr}
+
+\setlength{\parindent}{0.0in}
+\setlength{\parskip}{0.05in}
+
+% Edit these as appropriate
+\newcommand\course{CSCE 614}
+\newcommand\hwnumber{6}                  % <-- homework number
+\newcommand\NetIDa{Tyler Scotti/335009542}           % <-- NetID of person #1
+
+
+\thispagestyle{fancyplain}
+\headheight 35pt
+\lhead{\NetIDa}
+% \lhead{\NetIDa\\\NetIDb}                 % <-- Comment this line out for problem sets (make sure you are person #1)
+\chead{\textbf{\Large Quiz \hwnumber}}
+\rhead{\course \\ \today}
+\lfoot{}
+\cfoot{}
+\rfoot{\small\thepage}
+\headsep 1.5em
+
+\begin{document}
+
+\textbf{Question:} What is the speedup of Machine A over Machine B?
+
+\textbf{Note:} 
+\begin{itemize}
+    \item Ideal CPI = 1 for both.
+    \item Loads are 40\% of instructions executed.
+    \item Machine A: Dual ported memory (``Harvard Architecture'') without the structural hazard.
+    \item Machine B: Single ported memory, but its pipelined implementation has 1.05 times faster clock rate with the hazard.
+\end{itemize}
+
+\textbf{Answer:}
+
+The general speedup equation is given by:
+
+\[
+\text{Speedup} = \left( \frac{\text{Pipeline Depth}}{1 + \text{Pipeline stall CPI}} \right) \times \left( \frac{\text{CycleTime(unpipelined)}}{\text{CycleTime(pipelined)}} \right)
+\]
+
+\textbf{Speedup of Machine A:}
+\[
+\frac{\text{Pipeline Depth}}{1 + 0} \times \left( \frac{1}{1} \right) = \frac{\text{Pipeline Depth}}{1} \times 1 = \text{Pipeline Depth}
+\]
+
+\textbf{Speedup of Machine B:}
+\[
+\frac{\text{Pipeline Depth}}{1 + 0.4} \times 1.05 = \frac{\text{Pipeline Depth}}{1.4} \times 1.05 = 0.75 \times \text{Pipeline Depth}
+\]
+
+\textbf{Speedup of A over B:}
+\[
+\frac{\text{Speedup(A)}}{\text{Speedup(B)}} = \frac{\text{Pipeline Depth}}{0.75 \times \text{Pipeline Depth}} = 1.33
+\]
+
+\textbf{Conclusion:} Machine A is faster by 33\% or 1.33 times faster.
+
+\end{document}

@@ -1,0 +1,84 @@
+DES Security
+    - In the last lecture, we argued that the security for DES was high
+        - 1.5% in plaintext results in 45% change
+
+    - However, the key size is 56bits, thus it is possible to bruteforce the key
+
+    Overview:
+        - S-Box Design not well understood
+        - Has survived some recent sophisticated attaks (differential cryptanalysis)
+        - Key is too short. Hence is vulnerable to brute force 
+        - 1998 distributed attack took 3 minutes 
+        
+        Estimates in 1997:
+            - $1,000,000 machine will crack DES in 35 minutes 
+            - $10,000 in 2.5 days 
+            - Now-a-days, a laptop could brute force it 
+    
+    How to improve DES?
+    
+    Idea 1: Super-encryption (Double encryption)
+        ** INSERT DOUBLE DES PICTURE **
+
+        - If key length is a concern, then instead of encrypting once, encrypt twice 
+            C = E(K2)(EK1(P))
+            P = D(K1)(D(K2)(C))
+
+            Note: 
+                - Ciphertext = Encrypt(Key2)[Encrypt(Key1(plaintext))]
+                - Plaintext = Decrypt(Key1)[Decrypt(Key2(Ciphertext))]
+            
+            - Does htis result in a larger key space?
+            - Encrypting with multiple keys is known as super-encryption
+            - May not always be a good idea
+        
+            Idea is that you would have to brute-force two keys, thus 2^56 * 2^56 resulting in 2^112 operations 
+
+            Does it work? Not really.
+                - Gives roughly the same encryption strength as non-super-encryption DES 
+                    - However what it does need is double the space...
+
+            The reason why it's not more secure is:
+                Meet-in-the-middle Attak (due to Diffie-Hellman)
+                
+                Based on:
+                    C = E(K2)(EK1(P))
+                
+                We can turn it into 
+                    X = EK1(P) = DK2(C) 
+                    Thus they will meet in the middle...
+
+                - Given a known (P,C) pairm encrypt P with all possible values of K and store result in table T 
+                - Next, decrypt C with all possible keys K and check result
+                    - If match occurs then check key pair with new know (P,C) pair.
+                        - If match occurs, keys are found.
+                
+            Explanation:
+                If we know the double-encoded cipher, we can decrypt it with all 2^56 keys.
+                    - The outputs of this will result in the single-encoded cipher 
+                
+                If we know the plaintext, we can encode it with all 2^56 keys 
+                    - The output of this will result in the single-encoded cipher
+                
+                We can look for the outputs that are the same, thus finding out the two keys.
+
+                We aren't really guessing the keys twice, we are running two independent functions and looking for the same output.
+                    - Thus we are running 2 * 2^56 operations rather than 2^112 operations 
+
+                In the grand scheme, 2 * 2^56 is the same as 2^56 operations 
+    
+    Idea 2: Triple DES 
+        ** INSERT TRIPLE DES PICTURE **
+        - Still only using two keys, however, you encrypt the plaintext with K1. Then encrypt that result with K2. Then encrypt that with K1.
+
+        C = [Enc(Key1)(Enc(Key2[Enc(Key1(P))]))]
+
+        Triple DES does actually improve the security to 2^112 
+        
+        You can use still use all unique keys, however 2 keys is better for key management.
+            Both 2 key triple DES is the same security level as 3 key DES 
+        
+        This is the DES that is used in practice 
+
+        However, 2^128 is the minimum now-a-days so still triple DES doesn't meet that standard.
+        
