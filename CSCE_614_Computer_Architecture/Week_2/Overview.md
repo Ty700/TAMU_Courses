@@ -13,8 +13,8 @@ At the end of this module, you will be expected to:
 - Calculate the timeline of execution for code on a pipelined datapath considering dependencies.
 
 ## Read:
-- ~~Chapter 1~~
-- Begin reading Appendix C
+- ~~Chapter 1~~ 9/1
+- ~~Begin reading Appendix C~~ 9/1
   - The reading assignment will be due in Week 3.
 
 ## Watch:

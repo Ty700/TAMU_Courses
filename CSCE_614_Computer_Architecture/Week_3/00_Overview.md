@@ -19,21 +19,21 @@ You will learn how to:
 ---
 
 ### Read:
-- **Reading Assignment**: Appendix C.
-- **Begin reading Chapter 3**. (Assignment due at the beginning of Week 4)
+- ~~**Reading Assignment**: Appendix C.~~ 9/8
+- ~~**Begin reading Chapter 3**. (Assignment due at the beginning of Week 4)~~ 9/7
 
 ### Watch:
 - **Appendix C Videos**:
   - ~~Appendix C: RISC-V Pipeline.~~ 9/7
-  - ~~Appendix C: Data and Structural Hazards.~~
-  - Appendix C: Control Hazard.
+  - ~~Appendix C: Data and Structural Hazards.~~ 9/7
+  - ~~Appendix C: Control Hazard.~~ 9/8
 
 ---
 
 ### Assignments:
-- **Reading Assignment**: Appendix C.
-- **Quiz 6**.
-- **Quiz 7**.
+- ~~Reading Assignment: Appendix C.~~ 9/8
+- ~~Quiz 6.~~ 9/7
+- ~~Quiz 7.~~ 9/8
 - **Homework 1** (Due: Sept 13).
 - **Begin working on Homework 2** (Due: End of Week 5).
 

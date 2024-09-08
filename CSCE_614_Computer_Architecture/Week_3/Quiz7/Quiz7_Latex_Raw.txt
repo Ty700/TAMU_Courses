@@ -1,0 +1,63 @@
+\documentclass{article}
+\usepackage{amsmath}
+\usepackage{fancyhdr}
+\usepackage{booktabs}
+
+\setlength{\parindent}{0.0in}
+\setlength{\parskip}{0.05in}
+
+\newcommand\course{CSCE 614}
+\newcommand\hwnumber{7}                 
+\newcommand\NetIDa{Tyler Scotti/335009542}
+
+
+\thispagestyle{fancyplain}
+\headheight 35pt
+\lhead{\NetIDa}
+\chead{\textbf{\Large Quiz \hwnumber}}
+\rhead{\course \\ \today}
+\lfoot{}
+\cfoot{}
+\rfoot{\small\thepage}
+\headsep 1.5em
+
+\begin{document}
+
+\textbf{Question:} 
+
+Fill out the table. Assume 4\% unconditional branch, 6\% conditional branch-untaken, 10\% conditional branch-taken \\
+
+\begin{tabular}{|l|c|c|c|c|}
+\hline
+\textbf{Scheduling scheme} & \textbf{Branch penalty} & \textbf{CPI} & \textbf{Speedup v. unpipelined} & \textbf{Speedup v. stall} \\ 
+\hline
+Stall pipeline        & 3   & 1.60  & 3.1  & 1.0  \\ 
+Predict taken         & 1   &       &      &  \\ 
+Predict not taken     & 1   &       &      &  \\ 
+Delayed branch        & 0.5 &       &      &  \\ 
+\hline
+\end{tabular} \\
+
+\textbf{Answer:} \\
+
+Using the formula:
+
+\[
+\text{Pipeline Speedup =} 
+\frac{\text{Pipeline Depth}}{1 + (Branch Freq * Branch Penality)}
+\]
+
+We can derive the values needed. \\
+
+\begin{tabular}{|l|c|c|c|c|}
+\hline
+\textbf{Scheduling scheme} & \textbf{Branch penalty} & \textbf{CPI} & \textbf{Speedup v. unpipelined} & \textbf{Speedup v. stall} \\ 
+\hline
+Stall pipeline        & 3   & 1.60  & 3.1  & 1.0  \\ 
+Predict taken         & 1   & 1.20  & 4.2  & 1.33 \\ 
+Predict not taken     & 1   & 1.14  & 4.4  & 1.40 \\ 
+Delayed branch        & 0.5 & 1.10  & 4.5  & 1.45 \\ 
+\hline
+\end{tabular}
+
+\end{document}
