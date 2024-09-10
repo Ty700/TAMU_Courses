@@ -1,0 +1,8 @@
+Greedy Algorithms 
+    Algorithms for optimization problems will go through a sequence of steps, with a set of choices at each step. 
+
+    For many optimization problems, using dynamic programming is overkill
+
+    A simpler, more efficent algorithm will do... introducing greedy algorithms
+
+    That is, it makes a locally optimal choice in the hope that this choice leads to a globally optimal solution 

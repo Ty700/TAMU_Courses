@@ -1,6 +1,8 @@
-Understanding DP by solving the "Longest Common Subsequence Problem"
 
-5.1 Define the "Longest Common Subsequence Problem"
+# Understanding DP by solving the "Longest Common Subsequence Problem"
+
+### 5.1 Define the "Longest Common Subsequence Problem"
+```plaintext
     Consider two DNA sequences:
         S1 = ACCGGTCGAGTGCGCGGAAGCCGGCCGAA
         S2 = GTCGTTCGGAATGCCGTTGCTCTGTAAA
@@ -50,8 +52,9 @@ Understanding DP by solving the "Longest Common Subsequence Problem"
 
         Longest Common Subsequence (LCS) 
             {B,D,A,B} and {B,C,B,A} are these sequences LCS 
-    
-LCS Problem
+```
+### LCS Problem
+```plaintext
     Input: Two sequences X = {X1, X2, ..., Xn} and Y = {Y1, Y2, ..., Ym}
 
     Output: A LCS of X and Y -> {Z1, Z2, ..., Zk} 
@@ -158,3 +161,4 @@ LCS Problem
                         Our goal: compute c[m,n]
 
 This professor makes absoulte no sense in the explanations... Watching the lecture multiple times without understanding. Going to try and just read the textbook to understand :/
+```
