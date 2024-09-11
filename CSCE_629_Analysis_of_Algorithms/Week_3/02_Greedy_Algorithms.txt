@@ -1,0 +1,261 @@
+3 Understand "Greed Algorithm" by solving the "Huffman Code Problem"
+    3.1 Define the "Huffman Code Problem"
+
+        -How to represent the symobls using bits, to minimuze the average number of bits needed?
+        - If a symbol comes up more often, we use a smaller sequence of bits to represent it 
+        - The symbol that comes up less often will need a longer sequence of bits 
+        - We hope the numbers of bits needed to represent the file is around the average mark 
+        - Huffman code is one way to do this 
+        - It's a data compression problem 
+
+        Symbol      |  a   |   b  |   c  |   d  |   e  |  f  
+        ------------+------+------+------+------+------+------
+        Probability | 0.45 | 0.13 | 0.12 | 0.16 | 0.09 | 0.05
+
+        45% of the symbols in the file are 'a'
+        13% is 'b'
+        so on 
+
+        Assume: 
+            We use "Fixed Length Code (FLC)"
+                1-bit codewords: 0,1 (not enough)
+                2-bit codewords: 000, 01, 10, 11 (Not enough)
+                3-bit codewords: 000, 001, 010, 011, 100, 101, 110, 111 (Enough)
+
+                000 -> a 
+                001 -> b 
+                010 -> c 
+                ...
+
+            We will need log(2)(n) bits to represent all possibilities 
+                - Where n is the lenght of the array
+
+                    Symbol      |  a   |   b  |   c  |   d  |   e  |  f  
+                    ------------+------+------+------+------+------+------
+                    Probability | 0.45 | 0.13 | 0.12 | 0.16 | 0.09 | 0.05
+                    ------------+------+------+------+------+------+------
+                    FLC         | 000  | 001  |  010 | 011  | 100  | 101
+
+                Compression 
+                    - AKA: Encoding 
+                    Turn a text to bits 
+                
+                Decompression: 
+                    - AKA: Decoding 
+                    - turn bits into text 
+
+            Example:
+                Text: a a b f e d c a ...
+
+                Compression:
+
+                Using the FLC key:
+                    000 000 001 101 100 011 010 000
+
+                Decompression:
+                    Since we know the FLC is 3, we look at 3 bits at a time 
+                    000 000 001 101 100 011 010 000
+                     a   a   b   f   e   d   c   a  
+
+        Variable Length Code (VLC)
+            - the codewords are of variable length 
+        
+        Prefix Code:
+            - no codeword is the prefix of another codeword
+
+        Let's study Variable Length Prefic Code (VLPC)
+
+        Symbol      |  a   |   b  |   c  |   d  |   e  |  f  
+        ------------+------+------+------+------+------+------
+        Probability | 0.45 | 0.13 | 0.12 | 0.16 | 0.09 | 0.05
+        ------------+------+------+------+------+------+------
+        FLC         | 000  | 001  |  010 | 011  | 100  | 101    3 bits per symbol
+        ------------+------+------+------+------+------+------
+        VLPC        |  0   | 101  | 100  | 111  | 1101 | 1100   2.24 bits per symbol 
+
+
+        Text: a a b f e d c a 
+
+        Compression:
+            0 0 101 1100 1101 111 100 0
+
+        Decompresion:
+            a a b f e d c a 
+
+            - How do we know why 0 isn't a part of a later symbol's VLPC?
+                - Because of the "no codewords is the prefix of another codeword" rule
+
+                - Once it gets to b, it has looks at: 1 and 10
+                    - Neither of which are in the VLPC thus it gets 101 and sees it corresponds to 'b'       
+        
+        Average codeword length for VLPC:
+            1 * 0.45 + 3 * 0.13 + 0.12 * 3 + 0.16 * 3 + 0.09 * 4 + 0.05 * 4 
+        
+        2.24 bits per symbol >>>> 3 bits per symbol 
+
+        Thus, it's worth the tradeoff 
+
+        So the question is:
+            How can we design the VLPC so that the average codeword length is minimized?
+
+            This is called the Huffman Code 
+
+        Input: n symbols S1, S2, ..., Sn 
+            For i = 1, 2, 3, ..., n, the symbol Si has Probability Fi 
+
+        Output: Design a prefix code for the n symbols such that the average codeword length is minimized 
+
+        Assume the code word for symbols Si has Li bits
+
+        Average Codeword Length = Sum of (FiLi) for i = 1, 2, 3, ..., n 
+
+    3.2 Represent a prefix code by a binary tree 
+
+        ** INSERT PICTURE @ 19:37 ** 
+
+        Every codeword of the VLPC can correspond to a node in the binary tree 
+            Example:
+                Any VLPC is a sequence of bits 
+                If you follow the VLPC, you will arrive at a node.
+                That singular node represents the symbol the VLPC corresponds to 
+
+        Property of Huffman Code Binary Tree 
+            - The decendants of a node that represents a symbol can't be a valid node 
+                b/c of the prefix rule 
+
+        ** INSERT PICTURE @ 20:18 ** 
+
+            - Why? Because if a node below A was valid, that means A would be a prefix of that symbol's VLPC which can't be possible 
+
+        ** INSERT PICTURE @ 21:09 ** 
+
+        Do this for every node, and we get:
+
+        ** INSERT PICTURE @ 22:01 ** 
+
+        Thus mapping all the symbol's VLPC to a tree, then getting rid of the decendants of the nodes with symbols, we get a new entirely different tree 
+
+        ** INSERT PICTURE @ 21:58 **
+        
+        The leaves of this tree are the symbols of the VLPC 
+
+        Depth of a symbol in tree = code word length of that symbol 
+
+        Example:
+            A is 1 in depth, thus A's codeword length is 1 
+            C is 3 in depth, thus C's codeword length is 3 
+            F is 4 in depth, thus F;s codeword length is 4 
+
+        Thus, if we want to create an output where the codeword length is minimized... it's the same as saying the depth of the leaves of the tree are minimized 
+
+    3.3 Properties of an optimal prefix code 
+        
+        Property Optimal code:
+            1. The symbol of lowest probability has the longest codeword 
+                - Our Example:
+                    F has the lowest probability 0.05 and does have the longest codeword of 4
+                    F is also the lowest node 
+
+                Proof:
+                    Prove it by contradiction
+
+                    If not, then we can switch its codeword with another symbol, and get a better code.
+                    This will be a contradiction.
+
+                    Example:
+                        Assume f does not ahve the longest codeword 
+                        
+                        Say we replace f with the VLPC of C's 
+
+                        Computing the average codeword length:
+                            1 * 0.45 + 3 * 0.13 + 4 * 0.12 + 3 * 0.16 + 4 * 0.09 + 3 * 0.05 = 2.31 
+                                                |-C TERM-|                        |-F TERM-| 
+                        Now, let's switch it back:
+                            1 * 0.45 + 3 * 0.13 + 3 * 0.12 + 3 * 0.16 + 4 * 0.09 + 4 * 0.05 = 2.24
+
+                        Thus, we can see by making F's codeword length shorter it made the codelength larger which is worse 
+                        Switching it back to the original makes the average codeword length better, thus contradicting since we assumed that we had the optimal solution to begin with.
+
+            2. The symbol of lowest probability and longest codeword has a sibling leaf node.
+
+                This make sense since if i is the lowest probability node, then that implies there is another node that is more likely that that node...
+
+                Proof:
+                    If the node doesn't exist, meaning the lowest probability node's parent has only one child, then we can move the node up and reduce the codeword length by 1 bit 
+
+                    This is impossible.
+                    
+            3. There exists an optimal code where the two symbols of lowest probabilities are sibilings
+                
+            
+        So, we can take the two symbols with the lowest probability and make them sibilings and figure the rest of the tree out from there 
+
+        This is really good for a greedy algorithm as we only need to know a little bit about a optimal solution to get to it 
+
+        As soon as we can figure out a small part of the solution, we have already reduced the problem to a smaller Problem 
+            thus the solution space to a smaller solution space 
+
+        We know it's an okay choice to make as we know from the proof the two lowest probabilities are, in fact, sibilings
+
+        Idea:
+            Once we put the two symbols are sibilings, see them as one symbol (node) and combine their probabilities
+
+            Then, we will have again two probabilities that are sibilings that are of the lowest degree 
+
+        ** INSERT PHOTO @ 35:01 ** 
+
+        If we optimize the new code, we also optimze the old code 
+
+        If we sum up the average codeword length of the original and new trees we see that the two differ by Fe + Ff
+
+        Idea of Greedy Algorithm:
+            1. Make the two symbols of lowest probabilities sibilings
+            2. Combine them into one symbol, and repeat the above process 
+    
+### 3.4 Example of the Huffman Code algorithm
+
+        Symbol      |  a   |   b  |   c  |   d  |   e  |  f  
+        ------------+------+------+------+------+------+------
+        Probability | 0.45 | 0.13 | 0.12 | 0.16 | 0.09 | 0.05
+
+        Pick e and f, combine them into ef 
+
+
+        Symbol      |  a   |   b  |   c  |   d  |  ef    
+        ------------+------+------+------+------+------
+        Probability | 0.45 | 0.13 | 0.12 | 0.16 | 0.14 
+
+        ** INSERT PICTURE @ 41:20 **
+
+        These should be the lowest on the final binary tree 
+
+        Now, pick b and c and make them into sibilings 
+
+        Symbol      |  a   |  bc  |   d  |  ef  |
+        ------------+------+------+------+------+
+        Probability | 0.45 | 0.25 | 0.16 | 0.14 |
+
+        ** INSERT PICTURE @ 41:50 ** 
+
+        Now, select d and EF sibilings 
+
+        Symbol      |  a   |  bc  |  def |
+        ------------+------+------+------+
+        Probability | 0.45 | 0.25 | 0.30 |
+
+        ** INSERT PHOTO @ 42:18 ** 
+
+        Grab bc and def and make them sibling
+
+        ** INSERT PICTURE @ 42:40 ** 
+
+        Symbol      |  a   |  bcdef |
+        ------------+------+--------+
+        Probability | 0.45 |  0.55  |
+
+        Grab a and bcdef and make them sibilings 
+
+        **INSERT PHOTO @ 42:54 ** 
+
+
+
