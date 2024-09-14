@@ -1,0 +1,108 @@
+Dynamic Branch Prediction 
+    - Why does prediction work?
+        - Underlying algorithm has regularities 
+        - Data that is being operated on has regularities
+        - Instruction sequence has redundancies that are artifacts of way that humans/compilers think about problems 
+    
+    - Is dynamic branch prediction better than static branch prediction
+        - Seems to be 
+        - There are a small number of important branches in programs whcih have dynamic behavior 
+
+Dynamic Branch Prediction
+    Performance = f(accuracym cost of misprediction)
+    
+    - Branch histroy table: Lower bits of PC address index table of 1-bit values 
+        - Says whether or not branch taken last tiem 
+        - no address check 
+
+    Essentially, we will have a table that keeps track of if we took a branch last time or not
+        - If we keep taking a branch, its going to keep assuming we will be taking that branch again and again 
+            - The reverse is also true 
+            - How do we know what we took last time?
+                - Table 
+
+        Problem:
+            In a loop, 1-bit Branch History Table (BHT) will cause two mispredictions:
+                1. End of the loop 
+                    - When the loop exits instead of looping 
+                2. First time through loop on next time through code it predicts exit instead of looping 
+
+                Example:
+                    n = 0
+                    while(n < 100):
+                        //do something
+                        n++
+                    
+                    - BHT is filled with all 0s at first
+                    - Once the program reaches the while instruction, it's going to assume not taken
+                        - However, we know that it since n < 100, it will be taken.
+                        - Thus a misprediction
+
+                    - Now, once it takes the branch, it will fill in the BHT for the while instruction to be a 1. 
+                    - Thus, from now on it will continue to take branch for 100 times
+
+                    - However, once it n gets to 100, it's going to predict to keep taking the branch, but it's wrong 
+                        - Another misprediction
+    
+    Solution: 
+        - Instead of flipping the bit each time we mispredict, what if we use a 2-bit scheme where change prediction only if get misprediction twice 
+
+    ** INSERT PHOTO @ 5:45 ** 
+
+        Essentially:
+            Upon any branch starts 00
+                - Predicts not taken 
+                    - If branch is taken -> Updates to 01 
+                    - If not taken -> remains 00
+                
+                - For the next iteration of branch:
+                    - Predicts not taken 
+                        - If branch is taken -> Updates to 11
+                            - If it comes across the same branch, it will now predict taken 
+                        - If branch isn't taken -> Updates to 00 
+
+                - For the next iteration of branch:
+                    - Predicts taken
+                        - If branch is taken -> Remains 11
+                        - If branch is not taken -> Updates to 10
+                            - Still predicts taken 
+                
+                - For next iteration of branch:
+                    - Predicts taken 
+                        - If branch is taken -> Updates to 11
+                        - If branch is not taken -> Updates to 0 0 
+                            - Will now predict not taken 
+                
+        Another way to represent it:
+
+            Not Taken                                                Taken 
+             +--+                                                     +--+
+             |  |                                                     |  |
+             |  v     Taken              Taken              Taken     |  v
+            +====+ ----------> +====+ ----------> +====+ ----------> +====+  
+            | 00 |             | 01 |             | 10 |             | 11 |   
+            +====+ <---------- +====+ <---------- +====+ <---------- +====+ 
+                    Not Taken          Not Taken          Not Taken 
+
+BHT Accuracy 
+    - Mispredict because either:
+        - Wrong guess for that branch
+        - Got branch histroy of wrong branch when index the table 
+            - What does this mean?
+
+            - Well since the BHT stores the history only using the last two bits of the PC address
+                We can this scenairo:
+ 
+                       +============+
+                       |            |
+                    00 |            |
+                       |            |
+                       +============+
+                    
+                    - This box is storing the branch history of the PC address: x1000
+                    - Once it gets passed the loop/branch/whatever else of x1000, it will leave a residue of the last stored value being 1 or 0
+
+                    - Well, what happens if we have a branch on x2000? 
+                        - It will be stored in the same place 
+                        
+            - This is a hardware limitation... we usually have a 4096 entry table so it limits this issue

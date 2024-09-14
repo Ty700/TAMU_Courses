@@ -1,0 +1,44 @@
+Security of RSA: RSA Assumption
+    - Suppose Eve intercepts the encrypted message y that Bob has sent to Alice 
+    - Eve can look up (e,n) in the public directory
+        - Just as bob did when he wanted to encrypt a message 
+    - If Eve can compute d = e^-1 mod Euler's totient then he can use D(y) = y^d mod n = x to recover the plaintext 
+    - If Oscar can computer the Euler's totient, he can computer d 
+        - The same way Alice did
+
+Security of RSA: Factoring
+    - Oscar knows that n is the product of two primes 
+    - If he can factor n, he can computer Euler's totient 
+    - But factoring large numbers is VERY difficult 
+        - Grade school method take O(sqrt(n)) divisions
+        - Prohibitive for large n, such as 160 bits 
+        - Better factorization algorithms exist, but they are still too slow for large n 
+        - Lower bound for factorization is an open problem 
+
+How big should n be then?
+    Today we need n to be at least 1024 bits 
+        - But most times 2048 bits 
+        - This is equivalent to security provided by 80-bit longs keys in private-key crypto 
+    - No other attack on RSA function known 
+        - Except some side channel attacks, based on timing, power analysis etc. But these exploit certain physical analysis, not a theoretical weakness in the cryptosystem 
+    
+Efficiency (Even with a really large n)
+    During key generation:
+        - Select large primes 
+            - Primes are dense so choosen randomly 
+            - Probabilistic primality testing methods known.
+                - Works in log time 
+        
+        - Compute multiplicative inverse 
+            - Efficient algorithm (Extended Euclidean algorithms) exists 
+        
+    During encryption and decryption
+        - Require modular multiplication (use Square and Mutliply)
+
+RSA in Practice
+    - Textbook RSA is insecure 
+        - Since it is deterministic 
+    
+    - In practice, we use a "randomized" version of RSA, called RSA-OAEP
+        - Use PKCS#1 standard for RSA encryption 
+        

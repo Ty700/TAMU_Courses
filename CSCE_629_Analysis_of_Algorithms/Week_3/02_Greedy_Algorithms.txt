@@ -131,6 +131,7 @@
 
         Do this for every node, and we get:
 
+
         ** INSERT PICTURE @ 22:01 ** 
 
         Thus mapping all the symbol's VLPC to a tree, then getting rid of the decendants of the nodes with symbols, we get a new entirely different tree 

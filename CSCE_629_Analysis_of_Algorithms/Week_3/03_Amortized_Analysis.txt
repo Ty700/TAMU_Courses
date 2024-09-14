@@ -1,0 +1,275 @@
+Amortized Analysis 
+    1. Define "Amortized Analysis"
+        - Essentially, a way to analysis algorithms in a more efficent way 
+
+        Example:
+            for i from 1 to x
+                {
+                    Operations      -> O(xy) ?
+                        O(y)
+                }
+
+                Essentially, to get the time complexity, we say that its order of "xy"
+
+                Can we get something better?
+                    - Sometimes it is of order xy
+                
+                Howver, sometimes its actually much smaller than xy 
+
+    2. Amortized analysis by the "Aggregate Analysis" technique 
+        2.1 "Stack Operations" Problem 
+
+            Example:
+                Stack Operations 
+
+                inititally, stack is empty 
+
+                Size of Stack: |S| = 0
+
+                Two operations:
+                    Push -> +1 to stack size 
+                    Pop -> -1 to stack size 
+
+                push(3) -> |S| = 1
+                push(2) -> |S| = 2
+                push(100) -> |S| = 3
+                pop()   -> -> |S| = 2
+
+                What if we had these two operations:
+                    push 
+                    pop(k) -> where you pop the first k elements 
+                        - What if k > |S|, then pop everything the stack has 
+
+                    Cost:
+                        push
+                            O(1)
+                        
+                        pop(k)
+                            O(min{k, |S|})
+                                - it will be either the size of the stack if k is greater than |S|, or k 
+
+                    Consider a sequence of n stack operations.
+                    What is a tight upper bound on its total cost?
+                        - We can argue it's O(n^2)
+                            - It could be if the case it to push n-1 times, and the last operation is to pop(n-1)
+                                - We could need to push n-1 onto stack, and then go right back over them by poping them off 
+                                    - This actually would be O(n^2) time complexity
+                        
+                        - However, it's actually O(n)
+
+                We are going to think about the big picture and think what happened over the entire n operations togeher
+                    - This is aggregate analysis
+
+                Observation:
+                    Stack is inititally empty. To pop a number, we first need to push it to the stack 
+                        - Therefore, the number of pop operations can't be greater than the number of push operations 
+                        
+                        - Thus: Total cost of PUSH operations <= N
+                        - Also: Total cost of POP operations <= N 
+
+                        Total cost of n operations <= 2n -> O(n)
+
+        2.2 "Counter Incrementation" Problem 
+            Example:
+                Counter Incrementation
+                    Counter: 0, 1, 2, 3, ...
+
+                Large Binary Counter:
+                    0:  0000000000
+                    1:  0000000001
+                    2:  0000000010
+                    3:  0000000011
+                    4:  0000000100
+                    5:  0000000101
+                    6:  0000000110
+                    7:  0000000111
+                    8:  0000001000
+                    9:  0000001001
+                    10: 0000001010
+                    11: 0000001011
+
+                Cost of incrementing counter: 
+                    - When counter goes to 0 -> 1 
+                        - Bits changed: 1
+                    - When counter goes to 1 -> 2
+                        - Bits changed: 2
+                    - When counter goes to 2 -> 3 
+                        - Bits changed: 1
+                    - When counter goes from 3 -> 4
+                        - Bits changed: 4
+                    - When counter goes from 4 -> 5
+                        - Bits changed: 1
+                    - When counter goes from 5 -> 6 
+                        - Bits changed: 2 
+                    - When counter goes from 6 -> 7
+                        - Bits changed: 1
+                    - When counter goes from 7 -> 8 
+                        - Bits changed: 4
+
+                    What is the total cost of n operations:
+                        We can say it's O(n^2) 
+                            - We have n increments, and it won't change more than n bits.
+                            - whcih would be n*n operations 
+                        
+                        We can say it's O(nlogn)
+                            - n operations that can only change up to log(n) bits for that number 
+                        
+                        Still not a tight enough upperbound 
+                            - The cost is really O(n)
+                    
+                    How is it O(n)?
+                        Let's to aggregate analysis again 
+
+                        Let's look at each bit for each operation 
+
+                            Bit 0 always flips for every iterations   thus: n times 
+                            Bit 1 always flips for every 2 operations thus: 1/2n
+                            Bit 2 always flips for every 4 operations thus: 1/4n
+                            Bit 3 always flips for every 8 operations thus: 1/8n 
+
+                            ...
+
+                            There is a pattern:
+                                n + 1/2n + 1/4n + 1/8n + 1/16n + 1/32n + 1/64n + ... <= 2n 
+
+                                Thus we can say the big O is O(n)
+    
+    3. Amortized analysis by the "Accounting Method" technique
+        3.1 Define "Accounting Method" 
+
+            Consider n operations 
+            For i = 1, 2, ..., n 
+            Let Ci be the real cost of the i-th operation 
+            Let anti-Ci by the amortized cost of the i-th operation 
+
+            such that 
+
+            The sum of anti-Ci     will always     the sum of Ci 
+              from i to n            be >=          from i to n
+
+            What is the benefit of having such property?
+                Benefit is that the total amortized cost is the upper bound for the total real cost
+
+                Thus if we can get a upperbound for the total amortized cost, we get one for the real cost 
+
+                Maybe the real cost is hard to compute, but if we can get one for the (maybe) easier to computer amortized cost
+                 we can use that 
+
+        3.2 "Stack Operations" Problem
+            Example: Stack Operations
+
+            Operations:
+                1. Push 
+                    Cost: 1
+                2. Pop(k) 
+                    Cost: min{k,|S|}
+
+            Consider a sequence of n stack operations 
+                What is a tight upper bound for these operations?
+
+            Operations:
+                1. Push 
+                    Cost: 1 
+                    Amortized Cost: 2
+                        Note: Even though the real cost is 1, we will assign it 2
+
+                2. Pop(k)
+                    Cost: min{k, |S|}
+                    Amortized Cost: 0 
+
+                For the push, the amortized cost is more
+                For the pop, the amortized cost is less 
+
+                Is
+                    The sum of anti-Ci     will always     the sum of Ci 
+                    from i to n            be >=          from i to n
+
+                True?
+
+                push(8)           Total real: 1 
+                                        amortized: 2
+
+                push(10)          Total real: 2
+                                        amortized: 4
+
+                push(12)          Total real: 3
+                                        amortized: 6
+
+                pop(3)            Total real: 6
+                                        amortized: 6
+                        
+                Yes
+
+
+        3.3 "Counter Incrementation" Problem 
+
+                Lifecycle of a bit:
+                    
+                    Amortized Cost: 2
+                    Real Cost: 1
+                    +------+
+                    |      v
+                    0      1
+                   / \     |
+                    +------+     
+                    Real Cost: 1
+                    Amortized Cost: 0
+
+                So:
+                    - When a bit changes from 0 -> 1
+                        - Real cost += 1
+                        - Amortized Cost += 2
+
+                    - When a bit changes from 1 -> 0 
+                        - Real Cost += 1
+                        - Amortized Cost += 0 
+
+                IDK, this method is stupid 
+
+4 Amortized analysis by the "Potential Method" technique
+    4.1 Define "Potential Method"
+        Starting with an initial data structure D0, a sequence of n operations occur. 
+
+        For each i = 1, 2, 3, ... n, let Ci be the actual cost of the i-th operation, and Di be the data structure that results after applying the i-th operation to data structure D(i-1)
+
+        A potential function (func()) maps each data structure Di to a real number func(Di) which is the potential associated with Di
+
+        The amortized cost anti-Ci of the ith operation with the respect to potential function func() is defined by:
+            anti-Ci = Ci + Func(Di) - Func(D(i-1))
+
+            Anti-Ci = Amortized cost 
+            Ci = Real cost 
+            Func(Di) - Func(D(i-1)) = Change in potential
+        
+        Consider the cost of n operations:
+            Total anti-Ci cost = sum of Ci + change in potential = Sum of Ci + Func(Dn) - Func(D0)
+
+            Properties:
+                Func(Dn) >= Func(D0)
+                    - The potential after any n operations will always be greater or equal to that before any operations 
+
+                    Thus:
+                        sum of anti-Ci >= sum of Ci 
+
+    4.2 Stack Problem 
+        Size of stack: |S|
+
+        Operations:
+            Push
+                Real Cost: 1
+            Pop(k)
+                Real Cost: min{k, |S|}
+        
+        Let Q be the number of objects in the stack after the i-th operation 
+
+        Thus Qi >= Q0 = 0
+            Essentially, this is saying that the Q after any i-th operation will always be greater than Q0 
+                - The stack is initally 0, thus Q0 = 0 
+
+                Thus:
+                    Qi >= Q0 
+
+        initally
+            Qi = Q0 = 0
+
+        Don't care about this. I don't care to understand it.

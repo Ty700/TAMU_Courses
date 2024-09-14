@@ -24,10 +24,10 @@ To complete this module:
 2. **Complete Module 2 Practice Quizzes**.
 
 ### Lectures
-1.1 **Block Cipher Modes of Encryption**
-1.2 **Other ciphers**
-1.3 **Public Key Crypto Overview**
-1.4 **Math Background** 
-1.5 **Public Key Encryption (RSA)**
-1.6 **RSA Security**
+1.1 ~~**Block Cipher Modes of Encryption**~~
+1.2 ~~**Other ciphers**~~
+1.3 ~~**Public Key Crypto Overview**~~
+1.4 ~~**Math Background** ~~
+1.5 ~~**Public Key Encryption (RSA)**~~
+1.6 ~~**RSA Security**~~
 1.7 **Digital Signatures**

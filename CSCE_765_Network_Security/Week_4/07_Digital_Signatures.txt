@@ -1,0 +1,46 @@
+Digital Signature Goals:
+    - Authentication
+    - Integrity
+    - Non-repudiation 
+
+    If Bob sent a message to Alice, how can Alice be sure that the message she recieved was from Bob?
+    
+    Notice: Digital Signatures don't achieve confidentiality
+        - You can combine digital signatures and cryptology to get the full shebang
+    
+Public Key Signatures
+    - Signer has public key, private key pair 
+    - Signer signs using its private key 
+    - Verifier verifies using public key of the signer 
+
+
+    Alice sends Bob a message 
+        - Alice signs it with a private key 
+    
+    Bob recieves message 
+        - Bob takes the message and signature along with the public key to see if the message is valid 
+        - If signature is valid:
+            - Message can be trusted as untampered with
+        - If signature is not valid:
+            - Message can not be trusted 
+        
+        - Alice can then not say she didn't send this message since Bob can take the signature and public key to verify she did send it. 
+            - It is inrefutable
+
+Security Notion / Models for Signatures 
+    - Existential Forgery under (adaptively) chosen message attack (CMA)
+        - Adversary (adaptively) chooses messages (Mi) of its choice
+        - Obtains the signature (Si) on each Mi 
+        - Outputs any message m, which does not equal Mi, and a signature S on M 
+    
+RSA Signatures 
+    - Key Generation: Same as encryption 
+    - Sign (m): s = m^d mod N 
+    - Verify(m,s):(S^e == m mod (N))
+
+    - The above text-book version is insecure, why?
+    - In practice, we use a randomized version of RSA (implemented in PKCS#1)
+    
+        - Hash the message and then sign the hash 
+     
+    
