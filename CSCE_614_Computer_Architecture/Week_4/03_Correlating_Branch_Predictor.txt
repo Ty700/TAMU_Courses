@@ -1,0 +1,74 @@
+Correlating Branch Predictor 
+    - It may possible to improve the accuracy if we look at the behavior of the other branches 
+
+    Example:
+        if (aa == 2)
+            aa = 0;
+        if (bb == 0)
+            bb = 0;
+        if (aa != bb)
+
+            The behavior of b3 is correlated with the behavior of b1 and b2 
+
+    - Two-level predictors 
+        Example:
+            if (d == 0) -> B1
+                d = 1;
+            if (d == 1) -> B2 
+
+            B1: BNEQ x1, B2 
+                add x1, x0, #1 
+            B2: BNEQ x1, XXX 
+
+            Inital Value of D:  B1 Action   Value of D Before D2    D2 Action 
+                    0              NT               0                   NT 
+                    1              NT               1                    T 
+                    2              NT               2                   NT 
+
+    1-bit Predictor (Initialzied to NT)
+        D Value | B1 Predic | B1 Action | New B1 Pred | B2 Predic | B2 Action | New B2 Pred |             
+           0    |     NT    |     T     |      T      |     NT    |     T     |      T      |
+           2    |     T     |     NT    |      NT     |     T     |     NT    |     NT      |
+           0    |     NT    |     T     |      T      |     NT    |     T     |      T      |
+           2    |     T     |     NT    |      NT     |     T     |     NT    |     NT      |
+
+    (1,1) Predictor 
+        - Every branch has two separate prediction bits 
+            - First Bit: the prediction if the last branch in the program is not taken 
+            - Second Bit: The prediction if the last branch in the program is taken 
+        - Write the pair of prediction bits together 
+
+        We can imagine:
+            (1,1) -> Two tables 
+            and a history register 
+            If the history register is 1 -> Take second bit table 
+            If the history register is 0 -> Take first bit table 
+    
+        Example:
+            Prediction Bits |   Prediction if not taken | Prediction if taken   
+                NT/NT       |       NT                  |       NT 
+                NT/T        |       NT                  |       T 
+                T/NT        |       T                   |       NT 
+                T/T         |       T                   |       T
+
+
+    (1,1) Predictor Example:
+        D Value | B1 Pred   | B1 Action | New B1 Pred | B2 Predic | B2 Action | New B2 Pred |             
+           0    |   NT/NT   |     T     |    T/NT     |   NT/NT   |     T     |    NT/T     |
+           2    |    T/NT   |     NT    |    T/NT     |   NT/T    |     NT    |    NT/T     |
+           0    |    T/NT   |     T     |    T/NT     |   NT/T    |     T     |    NT/T     |
+           2    |    T/NT   |     NT    |    T/NT     |   NT/T    |     NT    |     NT      |
+
+    Idea:
+        Record m most recently executed branches as taken or not taken, and use that pattern to select the proper n-bit branch history table 
+
+    In general, (m,n), predictor means record last m branches to select between 2^m history tables, each with n-bit counters 
+        - Thus ,old 2-bit BHT is a (0,2) predictor
+    
+    Global Branch Histroy: m-bit shift register keeping T/NT status of last m branches
+
+    Each entry in table has m n-bit predictors 
+
+    (2,2) Predictor 
+        - Behavior of recent branches selects between four predictions of net branch, updating just that branch 
+

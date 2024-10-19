@@ -1,0 +1,70 @@
+1. Representation of Graphs
+    1.1 Define Graphs 
+             a
+            /  \
+            b---c
+            | / | \
+            e---d  f
+
+    Graph (G) = (V,E)
+    Verticies (V)   = {a,b,c,d,e,f}
+    Edges (E)       = {(a,b),(a,c),(b,c),(b,e),(c,d),(c,e),(c,f),(d,e)}
+
+    Path can be:
+        a -> b -> e -> d 
+
+    Cycle:
+        If we start at a node, and are able to come back to the original start node 
+
+    Edges can be either directed or undirected
+
+    Tree
+        Connected acyclic graph 
+        Number of edges: Number of nodes - 1
+    
+1.2 Represent graphs by "Adjacenycy List" and "Adjacenycy Matrix"
+    Representation of Graphs 
+        
+        Adjacenycy List:
+            a: b, c
+            b: a, c, e 
+            c: a, b, c, d, e, f 
+            d: c, e
+            e: b, c, d 
+            f: c 
+
+            Size: O(|V| + |E|)  
+                O(V + E)
+
+
+        Adjacenycy Matrix:
+              | a  b  c  d  e  f
+            +-+------------------
+            a | 0  1  1  0  0  0
+            b | 1  0  1  0  1  0
+            c | 1  1  0  1  1  1
+            d | 0  0  1  0  1  0
+            e | 0  1  1  1  0  0
+            f | 0  0  1  0  0  0
+
+        If an edge exists between two nodes: 1 
+        If not: 0
+
+        Size: O(|V|^2)
+            O(V^2)
+
+2. Breadth First Search (BFS)
+    Basic Idea:
+        1. Starting at a node 
+        2. We first check its 1-hop neighbors 
+        3. Then check its 2-hop neighbors (neighbors of 1-hop neighbors)
+        4. Then check its 3-hop neighbors (neighbors of 2-hop neighbors)
+        5. Then check its 4-hop neighbors (neighbors of 3-hop neighbors)
+        ...
+        ..
+        .
+        N. Then all of its neights have been checked 
+
+
+3. Depth First Search (DFS)
+    

@@ -1,0 +1,60 @@
+Hash Functions 
+    Cryptographic Hash Function 
+        - Requirements of cryptographic hash function:
+            - Can be applied to data of any length
+            - Output is fixed length, usually very short 
+            - Relatively easy to compute H(x), given x 
+            - Function i sdeterministic
+            - Infeasibe to get x, given h(x). One-wayness property
+                - Given the hash, we can't recieve the input 
+            - Infeasible to find any pair x and y (x != y) such that h(x) = h(y). Collision resistance property
+                - Avoiding hash collision 
+                - Collisions are possible since the input space is much larger than the output space.
+                    - Collisions are not good for security 
+    
+    Some applications of hash functions 
+        - In general, can be used as a checksum for large amounts of data 
+        - Password hashing 
+        - Digital signatures 
+        - Message Authentication codes 
+        - Used also in RSA-OAEP, and many other cryptographic constructions 
+
+    Hash Output Lenght
+        - How long should be the output of a crpytographic hash function?
+            - For example, a hash of lenght 10 bits would be very bad
+            - To find collision - randomly select messages and check if hash matches any that we know
+            - Throwing k balls in N = 2^n bits. How large should k be, before probability of landing two balls in the same becomes greater than 1/2
+
+        - Birthday paradox
+            - a collision can be found in roughly sqrt(N) = 2^(n/2) trials for an n bit hash 
+                - In a group of 23 (sqrt(365))people, at least two of them would have the same birthday 
+        
+        Thus we should set n to be 160, then attacker would have to do 2^80 operations which is a ton 
+
+        If a hash has n bits, an attacker would generate a hash in sqrt(2^n) tries 
+
+    Generic Hash Function - Merkle-Damgard Construction 
+        - So to avoid collisions in 2^n/2 attempts, we need a has function that doesn't generate hash collisions on its own
+        - This design for H() is collision-resistant given that H() is collision resistant 
+        - Intuitively, this is because there is an avalanche effect - even if the inputs differ in 1 bit the outputs will be completely different  
+        - IV is a known public constant
+        - Like the CBC encryption
+        
+        ** INSERT PHOTO @ 14:00 ** 
+
+Practical Example:
+    SHA-1
+        - Output is 160 bits 
+        - B'day attack requires 2^80 calls 
+    
+    MD5
+        - Output is 128 bits 
+        - B'day attack requires 2^64 calls 
+        - Not secure anymore since output is 128 bits 
+    
+    Better use stronger verson such as SHA-256 
+        - B'day attack requires 2^128 calls 
+
+    
+    
+

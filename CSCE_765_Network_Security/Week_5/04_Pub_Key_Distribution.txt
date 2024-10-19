@@ -1,0 +1,115 @@
+Key Distribution
+    Cryptographic primitives seen so far assume:
+        - In private key setting: Alice and Bob share a secret key which is unknown to Oscar 
+        - In public key setting: Alice has a "trusted" or authenticated cop of Bob's public key 
+
+    - But how does this happen in the first place?
+    - Alice and Bob meet and exchange key(s)
+    - Not always practical or possible 
+    - We need key distribution, first and foremost! 
+    - Idea: Make use of a TTP 
+
+Public Key Distribution
+    - Public announcements (such as email)
+        - Can be forged 
+    
+    - Public Directory 
+        - Can be tampered with 
+
+    - Public-key certification authority (CA) 
+        - such as verisign 
+        - This is what we use in practice 
+        - CA issues certificates to the users 
+
+    Note: Even though the keys are public, we don't post them online for everyone. We use a CA (a TTP) that binds the identity to the corresponding public key 
+
+    CA Function
+
+        We first create the Pub/Priv key pair 
+
+        Alice approches CA with her Pub Key 
+
+        CA certifies the Alice's Pub Key
+            - Tying her to the public key 
+
+        CA creates and returns a ceritficate saying:
+            Alice has a public key (PKA) value of: Blah Blah 
+            Creates a signature on the binding between the identity and public key using Alice's private key 
+
+            CA Certificate:
+                +===================+
+                |                   |
+                |      Alice        |
+                |                   |
+                +===================+
+                |                   |
+                |      PKA Value    |
+                |                   |
+                +===================+
+                |                   |
+                |      Signature    |
+                | from Private Key  |
+                +===================+
+
+        Bob can verify the certificate has been signed by a CA and thus is trustable to use for secure comms with Alice 
+
+    Naming and Certificates 
+        Certification authoritys vouch for the identiy of an entity - Distinguished Names (DN)
+    
+    Types of certificates
+        CA's vouch at some level the identity of the principal 
+            Example:
+                Verising:
+                    Class 1 - Email Address 
+                    Class 2 - Name and adress verified through database 
+                    Cass 3 - Background check 
+
+    Public Key Certificate
+        - Public Key Certificate 
+            - Signed messages specifying a name and the corresponding public key 
+
+        - Signed by whom 
+            - Certification authority (CA)
+                - an organization that issues public key certificates
+
+        - We assume that everyone is in possession of a trusted copy of the CA's pub key 
+
+    Certificate Verification 
+        Start -> Trusted? ---Yes--> Signature OK? ---Yes---> Dates Valid? ---Yes---> Revoked ---No---> Name OK? ---Yes---> Allowed
+                    |                   |                         |                     |                 |   
+                    No                  No                        No                   Yes                No
+                    |                   |                         |                     |                 |
+                    +-------------------+-------------------------+---------------------+-----------------+--------------> Don't Allow    
+    
+    Certicate Revocation
+        - CA also needs some mechanism to revoke certificates 
+            - Private Key compromised 
+            - CA mistake in issuing certificate
+            - Particular service the certificate grants access to may no longer exist 
+            - CA compromised
+
+        - Expiration time solves the problems only partially 
+        - Certification Revocation List (CRL) - a list of every certificate that has been revoked but not expired 
+            - CRL's grow quickly
+            - Distributed periodically 
+        - Other mechanisms
+            - OSCP (Online certificate status protocol)
+                - Queries a certificate in real-time to see if cert is revoked or not 
+        
+    X.509 - Standard the manages these practices    
+        - Clearly, there is a need for standardization - Enter X.509
+        - Originally 1988, revised 93 and 95
+        - X.509 is part of X.500 series taht defines a directory service 
+        - Defines a framework for authentication services by X.500 directory to its user 
+        - Used in S/MIME, IPSEC, SSL, etc 
+        - Does not dictate use of specific algorithm (Although RSA is recommended)
+    
+    Advantages of CA over KDC 
+        - CA does not need to be online all the time 
+        - CA can be very simple computing device 
+        - If CA crashes, life goes on (Except CRL)
+        - Certificates can be stored in an insecure manner
+        - Compromised CA cannot decrype messages
+        - Scales well 
+
+        

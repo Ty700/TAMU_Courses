@@ -1,0 +1,25 @@
+Tournament Predictors 
+    - Multilevel branch predictor 
+    - Use n-bit saturating counter to choose between predictors 
+    - Usual choice between global and local predictors 
+
+    BHT 
+        - Local address 
+        - Based on history, predict the future branches 
+        - Used for loops
+
+    Correlating 
+        - Used to determine if a branch is correlated to another 
+        - Nested if statements 
+
+    - Each different type of branch you can choose different type of branch predictors 
+
+    Tournament predictor using, say, 4k 2-bit counters indexed by local branch address.
+    Choose between:
+        Global Predictor
+            - 4k entries index by history of last 12 branches 
+            - Each entry is a standard 2-bit predictor
+        
+        Local Predictor 
+            - Local history table: 1024 10-bit entries recording last 10 branches, index by branch address 
+            - The pattern of the last 10 occurrences of that particular branch used to index table of 1k entries with 3-bit saturating co 

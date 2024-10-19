@@ -1,0 +1,9 @@
+Objectives 
+    At the end of this module, you will be expected to:
+        - Identify stalls, determine the number of stall cycles for each stall and determine which instruction cases a stall and how much execution time of a loop body for a processor with in-order execution implementation.
+        - Determine the number of unrolls that its sufficient to schedule without a stall for a single-issue pipeline
+        - Identify and classify data hazards in a code fragment 
+        - Map instruction status, reservation status, register status and clock cycle for a given code sequence 
+        - Draw a (1,3) predictor and indicate the state of the buffer after execution of a given set of branch instructions 
+        - Draw a (2,2) predictor and indicate the state of the buffer after execution of a given branch instruction
+        

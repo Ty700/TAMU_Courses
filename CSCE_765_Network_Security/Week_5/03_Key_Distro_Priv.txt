@@ -1,0 +1,50 @@
+Key Distribution
+
+
+Private 
+
+    Cryptographic primitives seen so far assume
+        - In private key setting:
+            - Alice and Bob share a secret key which is unknown to Oscar 
+        
+        - In public key setting:
+            - Alice has a "trusted" (or authenticated) copy of Bob's public key 
+        
+        - But how does this happen in the first place?
+        - Alice and Bob meet and exchange key(s)
+            - Not always practical or possible
+        - We need key distribution, first and foremost! 
+        - All of this security is based off on the security of the keys 
+        - If the keys are leaked, the security is none.
+
+    Idea: Make use of a trusted third party (TTP)
+
+    Key Distribution Center (KDC) - Trusted Third Party 
+        - Protocol assumes that Alice and Bob share a session key K(A) and K(B) with a KDC 
+            - Alice calls Trent (Trusted KDC) and requests a session key to communicate with Bob.
+            - Trent generates random session keys K and sends E(K(A))(K) to Alice and E(K(B))(K) to Bob.
+            - Alice and Bob decrypt with K(A) and K(B) respectively to get K. 
+        
+        - This is a key distribution Protocol
+        - Susceptible to replay attack 
+            - Attacker can observe one-session between Alice, Bob, and the TTP. 
+            - Attacker can easedrop the session to get the encrypted keys.
+            - Attacker can replay those keys on the next session.
+            - Thus tricking Alice and Bob to agreeing on the same keys for the next session 
+            - Problem:
+                - Say keys were leaked and the first session was compromised.
+                - Any other succeeding sessions are now compromised since the attacker is fooling Alice and Bob to agree to the same key 
+                    over and over. Thus the attacker can see the communication everytime 
+
+                - compromise of one session leads to the compromise other sessions 
+            
+    Session Key exchange with KDC - Needham - Schroeder Protocol 
+        - Fix to the session key replay attack 
+        - Alice picks a random number N1 and sends it to the KDC 
+            - N1 -> Nonce identifying the request 
+        - KDC sends here a key 
+        - The N1 will stop the replay attack as the number will be random for each session, however 
+            the attacker will still only have the first N1. 
+        - A new session will have number N2 
+
+

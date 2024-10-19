@@ -1,0 +1,36 @@
+1. Branch Prediction Basics:
+
+    Earlier types of predictors, like the Branch History Table, use local history (based on address) and predict future behavior based on past outcomes. These work well for loops and regular patterns.
+    The Correlating Branch Predictor uses global history and is effective for handling complex control flows like nested if-statements and switch cases.
+
+2. Tournament Predictors:
+
+    The Tournament Predictor combines multiple branch predictors, allowing the system to choose the best predictor for a given situation. It uses an n-bit saturation counter to select between predictors.
+    For example, if you have two predictors, the first bit of the state determines which one to use. A 2-bit counter could represent four states (00, 01, 10, 11), and the system transitions between these states based on the accuracy of the predictors.
+        If predictor 1 is correct and predictor 2 is incorrect, the system remains in the same state.
+        If predictor 1 is wrong and predictor 2 is correct, the system shifts to use predictor 2.
+
+3. How It Works:
+
+    The predictor starts with an initial state (e.g., 00), using predictor 1.
+    If predictor 1 makes correct predictions, the system remains in that state.
+    If predictor 1 makes wrong predictions while predictor 2 is correct, the system transitions toward using predictor 2, eventually reaching the state where predictor 2 is dominant (e.g., 11).
+
+4. Application in Systems:
+
+    In systems like the ARPA system, branch prediction is done using both global history (e.g., 4K entries tracking 12-bit history) and local history (e.g., 1K entries with 10-bit history).
+    The tournament predictor selects which prediction source (global or local) to use, typically through a multiplexer (MUX).
+    The selection depends on branch address and the history stored in the system.
+
+5. Comparing Predictors:
+
+    Tournament predictors are advantageous in selecting the correct predictor for varying branch behaviors. For instance, in integer benchmarks, they might use global predictors around 40% of the time, while floating point benchmarks tend to have more predictable behavior and rely less on these predictors.
+
+6. Pentium 4 Example:
+
+    The Pentium 4 processor used a 1K branch history table with a branch target buffer. It showed clear differences in prediction accuracy between integer and floating point operations, with floating point benchmarks being easier to predict due to their regularity.
+
+7. Tagged Hybrid Predictors:
+
+    The most advanced predictors discussed are Tagged Hybrid Predictors, which use a hash function based on branch address and history. These predictors help reduce hashing collisions and work more efficiently by utilizing multiple tables.
+    These predictors outperform traditional gshare correlating predictors, offering better accuracy by matching branch behavior with appropriate prediction mechanisms.

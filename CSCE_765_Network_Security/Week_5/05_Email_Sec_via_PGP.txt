@@ -1,0 +1,76 @@
+Email Security 
+    - Email is one of the most widely used and regarded network services 
+    - By default, email communication is NOT "secure"
+        - Maybe inspected either in transit, or by suitably privileged users on destination system 
+        - Maybe impersonated/spoofed 
+    
+    Properties
+        - Confidentiality 
+            - Protection from disclosure 
+        
+        - Authentication 
+            - Of sender of message 
+
+        - Message integrity 
+            - Protection from modification 
+
+        - Non-repudiation of origin 
+            - Protection from denial by sender 
+
+Pretty Good Privacy (PGP)
+    - Open source, freely available software package for secure e-mail 
+    - De facto standar for secure email 
+    - Developed by Phil Zimmermann 
+    - Selected best available crypto algorithms to use 
+    - Runs on a variety of platforms like Unix, PC, Macintosh and other systems 
+    - Originally free  
+
+    PGP Operation - Authentication 
+        - Just use digital signatures 
+            1. Sender creates message 
+            2. Generates a igital signature for the message 
+            3. Use SHA-1 to generate 160-bit hash of message 
+            4. Signed hash with RSA using sender's private key, and is attached to message 
+            5. Receiver uses RSA with sender's public key to decrypt and recover hash code 
+            6. Receiver verifies reeceived message using hash of it and compares with decrypted hash code 
+
+    PGP Operation - Confidentiality
+        1. Sender generates a message 
+        2. Generates a 128 bit random numbers as session key 
+        3. Encrypts the message using CAST-128 / IDEA / 3DES / in CBC mode with session key 
+        4. Session key encrypted using RSA with recipient's public key and attached to the message 
+        5. Receiver uses RSA with private key to decrpyt and recover session key 
+        6. Session key is used to decrypt message 
+
+    PGP Operation - Confidentiality and Authentication
+        - Can use both sevices on the same message 
+            - Create signature and attach it to the message 
+            - Encrypt both message and signature
+            - Attach RSA encrypted session key 
+
+        This sequence is preferred because 
+            - one can store the plaintext message/file and its signature
+            - no need to store the ciphertext for future signature verification 
+
+    PGP Operation - Compression 
+        - PGP compresses messages to save space for e-mail transmission and storage 
+        - By default, PGP compresses message after signing but before encryption 
+            - So can store uncompressed message and signautre for later verification
+            - Encryption after compression strengthens security 
+        - Uses ZIP compression algorithm 
+
+    PGP Session Keys 
+        - Need a session key for each message 
+            - Of varying sizes: 56-bit DES, 128-bit CAST or IDEA, 168-bit Triple-DES 
+
+        - Uses random inputs taken from 
+            - actual keys hit 
+            - Keystroke timing of a user 
+            - Mouse movement 
+
+    PGP Key Distribution
+        - PGP adopts a trust model called the "Web of Trust"
+        - No centralized authority 
+        - Individuals sign one another's public keys, these "certificates" are stored along with keys
+        - PGP computes a trust level for each public key in key ring 
+        - Users interpret turst level for themselves 

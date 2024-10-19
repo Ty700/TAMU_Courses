@@ -1,0 +1,139 @@
+introduction 
+    - Piplining become universal technique in 1985 
+        - Overlaps execution of instructions 
+        - Exploits "instruction Level Parallelism"
+    
+    - Beyond this, there are two main approaches:
+        - Hardware-based dynamic approaches
+            - Used in server and desktop processors
+            - Not used as extensively in PMP processors
+        
+        - Compiler based static approaches
+            - Not as successful outside of scientific applciatons 
+
+Compiler Techniques for Exposing ILP
+    - Pipeline scheduing 
+        - Seperate dependent instruction from source instruction by pipeline latency of the source instruction 
+
+    Example:
+        for(i = 999; i >= 0; i--){
+            x[i] = x[i] + s;
+        }
+
+        Stall Table:
+
+        Instruction Producing Result        Instruction Using Result    Latency in Clock Cycles
+            FP ALU OP                           Another FP ALU OP           3 
+            FP ALU OP                           Store double                2
+            Load Double                         FP ALU OP                   1
+            Load Double                         Store double                0 
+    
+    Instead of one cycle for execution stage, there are multiple.
+    
+    Int-branch: 1 , after branch 1 stall 
+        Example:
+            add R1, R4, R5 
+            beq R1, R2  Loop 
+
+            - This will warrant a wall stall 
+
+Pipeline Stalls Quiz 
+    Loop:
+        1. fld     f0, 0(x1)
+        2. fadd.d  f4, f0, f2
+        3. fsd     f4, 0(x1)
+        4. addi    x1, x1, -8
+        5. bne     x1, x2, loop 
+
+        Note:   
+            fadd.d  = FP Operation 
+            addi    = Int Operation 
+
+    Hazards:
+        1. RAW with instruction 4 and 5 (x1)
+        2. RAW with instruction 3 and 2 (f4) -> Reading f4 value and writing it at x1. F4 gets written to in instruction 2 
+        3. RAW with instruction 2 and 1 (f0)
+        4. Int-Branch with instruction 4 and 5 (x1)
+        5. Stall with branch instruction 
+
+        - We would then resort to the stall table (above) to add stalls 
+        - Example would take 10 CCs to complete 
+
+    Code after adding all the stalls:
+        Loop:
+            fld f0, 0(x1)
+            stall 
+            fadd.d f4, f0, f2 
+            stall 
+            stall 
+            fsd f4, 0(x1)
+            addi x1, x1, -8
+            stall 
+            bne x1, x2, Loop 
+            stall
+
+Instruction Scheduling:
+    1. Moving addi instruction to replace a stall 
+
+        Loop:
+            fld f0, 0(x1)
+            addi x1, x1, -8 <- Replaced a stall 
+            fadd.d f4, f0, f2 
+            stall 
+            stall 
+            fsd f4, 8(x1) <- The addi instruction replaced a stall, thus it removed the stall the addi caused for bne 
+                                However, since we -8 from x1, we have to add 8 to x1. So 0(x1) -> 8(x1)
+            bne x1, x2, Loop 
+            stall
+
+    2. Since there is always a stall after a BNE, we can swap fsd and bne
+
+        Thus the CPU will determine if it needs to branch, while also completing store instruction which is independent of the branch instruction 
+
+
+            fld f0, 0(x1)
+            addi x1, x1, -8
+            fadd.d f4, f0, f2 
+            stall 
+            stall 
+            bne x1, x2, Loop 
+            fsd f4, 8(x1) 
+    
+Loop Unrolling 
+    - Unroll by a factor of 4 (assume # elements is divisible by 4)
+    - Eliminate unnecessary instructions 
+
+    Loop:
+        fld f0, 0(x1)
+        fadd.d f4, f0, f2 
+        fsd f4, 0(x1)
+        fld f6, -8(x1)
+        fadd.d f8, f6, f2
+        fsd f8, -8(x1)
+        fld f10, -16(x1)
+        fadd.d f12, -16(x1)
+        fld f14, -24(x1)
+        fadd.d f16, -24(x1)
+        addi x1, x1, -32
+        bne x1, x2, loop 
+
+    Note:
+        See how we are using f0 for the first iteration, then f4 for the next, then f8.
+
+
+5 Loop Unrolling Decisions 
+    - Requires understanding how one instruction depends on another and how the instructions can be changed or reordered given the dependencies:
+        1. Determine loop unrolling useful by finding that loop iterations were independent
+        2. User different registers to avoid unnecessary constraints forced by using same registers for different computations 
+        3. Eliminate the extra test and branch instructions and adjst the loop termination and iteration code 
+        4. Determine that loads and stores in unrilled loop can be interchanged by observing that loads and stores form different iterations are independent
+        5. Schedule the code, preserving any dependencies needed to yield the same reuslt as the original code 
+
+Strip Mining 
+    - Unknown number of loop iterations 
+        - Number of iterations = n 
+        - Goal: Make k copies of the loop body 
+        - Generate pair of loops:
+            - First execute n mod k times 
+            - Second executres n / k times 
+            - "Strip mining"

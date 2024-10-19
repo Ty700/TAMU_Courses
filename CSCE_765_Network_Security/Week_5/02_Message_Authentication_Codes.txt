@@ -1,0 +1,49 @@
+Message Authentication Codes 
+    - Provide integeriy as well as authentication
+    - Send (m, MAC); MAC is created on m using the key shared between two parties 
+        - Requires sender to attack a MAC to the message and send it with the message
+        - The reciever will verify if the MAC is the right MAC
+    - Has to be deterministic to enable verification 
+        - Unlike encryption schemes 
+        - Everytime you create a MAC on the same message, it will create the same MAC value
+        - Works with a key, message, and then create a MAC that way 
+        - Reciever will use the same key and determine if the MAC is correct 
+    - We want MAC to be as small and as secure as possible 
+        - Fixed size 
+    - Can not provide non-repudiation
+        - Why not?
+            - Since MACs are made by shared-keys, we don't know who made the MAC. 
+            - Unlike digital signatures 
+
+MAC - Functions 
+    - KeyGen
+        - outputs a key 
+    - MAC 
+        - Creates a checksum on m using key K 
+    - Verify 
+        - Validates whether the checksum on m is computed correctly 
+        - Just create MAC and compare 
+
+Security Notion for MAC 
+    - Very similar to the secuirty notion for a digital signature scheme 
+    - Existential forgery under adaptively choosen mmessage attack 
+
+MAC Based on Block Cipher in the CBC mode 
+    - CBC-MAC 
+
+    ** INSERT PHOTO @ 7:20 ** 
+
+    Encryption could be AES or Triple-DES
+
+CBC-MAC 
+    - IV = [0]
+        - Unlike CBC Encryption
+
+    - Only the last block of the output is used as a MAC 
+    - This is secure under CMA Attack 
+
+HMAC: MAC using hash functions 
+    - Key based hash but almost as fast as non-key based hash functions 
+    - AVoids export restrictions unlike DES based MAC 
+    - Provable security
+    - Can be used wiht idfferent hash functions like SHA-1, MD5, etc 
