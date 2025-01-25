@@ -1,0 +1,131 @@
+System on Chip (SoC)   
+    - An integrated circuit that incorporates all components of an electronic system, including processors, memory, and interfaces, onto a single chip 
+
+Within a SoC you have:
+    A Subsystem 
+        - A major functional block within an SoC that performs a specific high-level function, composed of multiple IP blocks working together
+
+Example:
+    Smartphone Processor 
+        - CPU 
+        - GPU
+        - memory
+        - Display 
+        - Inputs (volume up/down, power, etc)
+
+        A Subsystem can be the graphics rendering subsystem that includes the dedicated GPU, memory and its controllers 
+            - the subsystem is the functional block inside the SoC that focuses on a specific function 
+        
+
+Intellectual Property 
+    - A reusable unit of logic, cell, or chip layout design that is the intellectual property of one party, often licesen for use in complex chip
+        designs. IP blocks and can be used in different subsystems and SoC designs.
+    
+    Common IPs
+        - Processor cores (CPU, GPU)
+        - Memory Controllers 
+        - Standard Interfaces (AMBA, USB, PCIe, SATA, Ethernet)
+        - Wireless communication modules (Wifi, Bluetooth, 5G)
+        - Security modules
+        - Analog/Mixed-signal blocks 
+
+IP Integration in SoC Design 
+    You have different providers that provide different IPs 
+
+    Say ARM supplied the CPU, Sympsys providedd the memory controller 
+
+    Every IP is supposed to be preverified.
+        - proven to work within those providers 
+        - don't need expertise in each areas, when developing a product
+    
+    1. System Architecture Defintion 
+        - Define SoC requirements and high-level block diagram 
+        - Identify IP blocks and their integration 
+
+    2. IP selection and acquistion 
+        - Choose and license appropriate IPs
+        - Consider performance, power, area, and cost 
+    
+    3. Interface Standardization 
+        - Adopt industry-standard interfaces (e.g., AMBA)
+        - Ensure compatibilty between IP blocks
+
+AMBA Overview 
+    - Advanced Microcontroller Bus Architecture (AMBA)
+        - AHB, AHI, etc 
+    
+    APB3 -> Advanced Periphral Bus Version 3
+        - Fits in system level and block level of the SoC 
+        - Part of the interconnecting architecture
+        - Used for low speed devices 
+        - Used to connect and allow different IPs to talk to each other 
+
+        Diagram:
+
+            +============================================+
+            |       High Performance (CPU, Memory)       |
+            |                   |                        |
+            |                   |                        |
+            |                   v                        |           
+            |       AXI Bus (Main System Bus)            |
+            |                   |                        |
+            |                   |                        |
+            |                   v                        |
+            |           AXI to APB3 Bridge               |
+            |                   |                        |
+            |                   |                        |
+            |                   v                        |
+            |         APB3 Bus (Peripheral Bus)          |
+            |                   |                        |
+            |                   |                        |
+            |                   v                        |
+            |       Devices that are low in speed        |
+            |           (UART, Timers, etc)              |
+            +============================================+
+
+Evolution to IP-Based SoC Design 
+    Early SoC Development 
+        - Characterized by full-custom, monolithic designs 
+        - In-house development of all components 
+        - Limited reusability across projects 
+        - Increased complexity and longer time-to-market for advance chips
+
+    IP-based Design (early 2000s - mid 2010s)
+        - Introduction of pre-designed, pre-verified IP blocks 
+        - ARM's CPU IP (e.g., Cortex cores) revolutionized SoC Designs 
+        - Shift from in-house development to IP integration 
+        - Emergence of specialized IP vendors 
+
+    Modern IP-centeric SoC Design (Mid 2010s - Present)
+        - Wide availabilty of complex, domain-specific IPs 
+        - Standardization of interfaces (e.g., AMBA protocols)
+        - Ecosystem of IP marketplaces and platforms 
+        - Significant reduction in time-to-market and development costs 
+        - Motivated by "One company can't do it all"
+            - One company will specicalize in AI applications, another will do graphics, another will do security 
+
+            Example:
+                - Apple M1's chips uses a lot of different IPs 
+                    - M1 uses a lot of Standardization interfaces from different companies 
+                    - All of them together combine to provide a new standard of chip
+
+Verification IP: (VIP)
+    - Prepackaged set of code that is used for verification 
+    - A set of assertions that we can use to verify the design 
+        - To verify a bus protocol for example 
+    - As IPs became popular, VIPs became popular 
+    - Contains stimulus sequence that will check a specific block in the IP 
+
+    APB Peripheral VIP:
+        - Model simple peripheral devices on the APB bus 
+        For example, we might be interested in the read and write transfers 
+            - Ensuring proper setup and timing 
+            - These VIPs will have the registers that will check the states of read and write registers and make sure they hold their values 
+    
+    On the verification test bench, you will have:
+        Requester VIP Agent 
+    
+        and a 
+
+        Completer Agent 
+        

@@ -1,0 +1,40 @@
+IP Address Spoofing 
+    - Attacker doesn't want actions traced back 
+    - Simply re-configure IP address in Windows or Unix 
+    - Or enter spoofed address in an application 
+
+    Simple:
+        Change local host's IP address to some other IP 
+        Send packet 
+    
+    - Attacker cannot interact with victim 
+        - When attacker communicates with victim, victim will send packets to spoofed IP 
+        - Thus it's only a one-sided conversation 
+        - Unless attacker is on the path of the spoofed IP 
+    
+IP Soofing with TCP?
+    - Can an attacker make a TCP connnection to server with spoofed IP address?
+    - Not easy: SYNACK and any subsequent packets are sent to spoofed address 
+    - If attacker can guess initial sequence number, can attempt to send commands 
+        - Send ACK with spoofed IP and correct seq #
+    - But TCP uses random inital seq numbers 
+
+Defense: ngress and Egress filtering
+    - Egress filtering
+        - firewall which will analyze all source packet IP addresses that are leaving the network 
+
+    - Ingress Filtering 
+        - Firewall whcih will analyze all source packet IP addresses that are entering the network 
+
+    - Ingress is more effective 
+
+Ingress Filtering: Upstream ISP 
+    - Collab between ISPs 
+    
+Ingress Filtering Summary   
+    - Effectiveness depends on widespread deployment at ISPs 
+    - Deployment in upstream ISPs helps, but does not eliminate IP spoofing 
+        - Filtering can impact router forwarding performance 
+    - Even if universally deployed at access, hacker can still spoof another addres in its access network 
+
+

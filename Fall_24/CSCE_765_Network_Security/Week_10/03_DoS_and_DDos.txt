@@ -1,0 +1,53 @@
+Denial-of-Service Attack 
+    - Prevent access by legitimate users or stop cirtical system processes 
+    - Implementation
+        - Vulnerability Attack:
+            - send a few crafted messages to target app that has vulnerability
+            - Malicious messages called the "exploit"
+            - Remotely stopping or crashing services 
+        
+        - Connection Flooding Attack:
+            - Overwhelming queue with SYN flood 
+
+        - Bandwidth Flooding Attack
+            - Overwhelming communications link with packets 
+            - Strength in flooding attack lies in volume rather than content 
+
+DoS and DDoS 
+    - Dos 
+        - source of attack small # of nodes
+        - source IP typically spoofed 
+
+    - DDos 
+        - From thousands of nodes 
+        - IP addresses often not spoofed 
+        - Use of bots 
+
+DoS: Examples of Vulnerability Attacks 
+
+    Land: 
+        - sends spoofed packet with source and dest address/port as the same 
+        - Local Area Network Denial 
+        - Spoofed SYN packet with source and destination both being the victim 
+        - On receipt, victim's machine keep on responding to itself in a  loop 
+            - Causes the victim to crash 
+            - Many old OSes were vulnerable 
+
+    Ping of Death 
+        - Sends oversized ping packet
+        - ICMP Echo Request (Ping) is 56 bytes 
+        - If a ping message is more than 65,536 bytes, this can cause some machines to crash 
+        - Older windows systems 
+
+    Jolt2 
+        - Sends a stream of fragments, none of which have offset of 0. Rebuilding consumes all processor capacity 
+        - TCP/IP fragments contain Offest field to:
+            - Overlappig values 
+                - Bad/old implementation of TCP/IP stack crashes when attempting to re-assemble the fragments 
+            - Or very large values 
+                - Target system crashes 
+
+    Teardrop, Newtear, Bonk, Syndrop
+        - Tools send overllaping segments, that is, fragment offsets incorrect 
+
+    

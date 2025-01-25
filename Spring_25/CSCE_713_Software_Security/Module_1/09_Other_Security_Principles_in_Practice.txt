@@ -1,0 +1,25 @@
+Other Security Priniciples in Practice
+    - Security by Obscurity
+        - Hiding the technical details of your implementation 
+        - Increasing the difficulty of reverse engineering 
+            - Orogram ibfuscation 
+            - Noises added into code or binary 
+        
+        - Contrats security by open design 
+        - hiding details to make it more difficult for attackers to compromise a system 
+        - increasingly common as a means of security 
+        - One technique is Address Space Layout Randomization (ASLR) 
+            - randomizies memory address spaces, making it harder for attackers to predict and exploit memory locations 
+
+    - Security by Deception 
+        - The use of honeypots 
+        - Set a trap for attackers by creating a network with decoy machines that appear to be legitimate users 
+        - when attacker direct their efforts at the machines, their behavior can be monitored and analyzed 
+        - helps developers understand how an attacker would attack their system and then can defend against it 
+
+    - Security by Depth 
+        - layer your system with multiple barriers of defenses 
+        - each barrier will increase the difficulty for the attacker to intrude the system, eventually mounting to enormous efforts that render the attack unprofitable 
+        - slows down the attack in real-time, thus allowing an attack to be spotted easier 
+
+

@@ -1,0 +1,101 @@
+Security Isolation 
+    - design to contain bugs 
+    
+    Monolithic Software vs Modularized Design 
+        - Monolithic system
+            - likened to a large main funciton contains all the processes, presents a broad attack surface 
+            - Example
+                - Linux kernel
+                    - Size is very large and if compromised can threaten the Confidentiality, and/or integrity of the system 
+        
+        - Modular System 
+            - a system composed of small modules that communicate to make a larger system 
+            - Vulnerabilties in one module of a well-designed system typcially can only affec tthat module, making it more difficult to attack 
+
+        Defining the attack surface is critical to this discussion. 
+        
+        In the context of a large system, the attack surface comprises all the functions and memory access within that system. A vulnerabilty here could have widespread effects. 
+        In contrast, with a modular system all the modules are contained, each represetning a narrower potential of attack 
+
+        However, attack surface is more complex that a simple quantative measure that requires qualitative analysis to understand the security implications fully 
+
+    Analyzing the attack surface of a software system is more nuanced than simply tallying potential entry points for attack 
+        - it involves examination of the system's components and their interatctions 
+        - One example is the Chromium Browser because of its robust security architecture, attributed to a solid process-based isolation mechanism 
+    
+    Chromium Browser Example 
+        - strategy is encapsulated in its implementation of the same-origin policy, which restricts how documents or scripts loaded form one origin can interact with resources from another origin.
+        - Thsi policy is designed to prevent issues that could arise if a malicious website were to embed a legitimate page, such as one from a banking website, in a frame. 
+        - The danger here is that this embedded fram could potentially siiphon off sensitive data unbeknownst to the user 
+
+        - Thsi is distinct from cross-site scripting, which involves injecting malicious code into webpages, often through input fields, to execute uninteded actions on behalf of the user 
+        - In contrast, Chromium's approach to isolation ensures that even if a page is allowed to contain another via an HTML frame, the ccontent from different domains remains segregated, effectively preventing data leakage between them. 
+        - Chromium achieves this by using separate renderer processes for different elements   
+            - each rendere process is responsible for parsing HTML code and creating the visual output for a page 
+            - by isolating the renderes, Chromium ensures that a vulnerabilty in one renderer does not compromise the security of another. 
+            - the process is akin to placing each components in a 'sandbox' with strict limitations on what the process can access or affect 
+        
+        - Same-origin policy is rigorously applied within the context of page frames but also different tabs and application that utilize the Chromium engine. 
+
+    This level of isolation provides a roboust defense against a wide range of security threats 
+
+    Benefits of Security Isolation
+        - reducint the interface between the attacker and victim 
+        - reducing the complexity of securing each components
+        - reducing the impact or affect domains when an exploitation happens 
+
+Privilege Separation
+    - Split the key to multiple peoples 
+    - similar to secure isolation 
+    - approach of dividing the system permissions into distinct segments to limit the scope of acces for any single process or user 
+    - suggests that if a particular privilege is to broad or crtiical, it should be distributed among several smaller, less powerful permissions 
+
+    - rationale is risk minimizing
+        - by only allocating necessary privileges for a component or user to perform their specific function, the potential damage from any one point of compromise is reduced 
+    - insures no one individual has complete contorl over a critical operation 
+    - multiple keys divided among different individuals serves as a safeguard against unilateral actions, particulary when those actions ahve serious comsequences. 
+        Example:
+            3 people need to enter a key for a specific function to happen 
+    
+    Example:
+        Super permission
+            - one permission to perform all system admin tasks
+            - think sudo for linux 
+                - very danergous to allow one user all permissions to alter a system  
+
+        Seperated Permissions 
+            - break up the permission by process
+            - Process 1 can:
+                - CAP_CHOWN
+
+            - Process 2 can: 
+                - CAP_KILL
+                - CAP_NET_ADMIN 
+
+            - If Process 1 needs to kill a process, they must ask Process 2 to do it 
+            - If Process 2 needs to change ownership of a file, must ask Process 1
+
+    Assigning specific permissions to processes rather than users allows for a more refined security model 
+    Processes can only be given privileges they need to perform their task. This limits the damage if one process is compromised 
+
+Least Privileges    
+    - only grant the "minimum" privileges needed for a specific user to perform his/her/its role 
+    - fundamental concept in computer security and is strongly tied to the idea of priveilege separation
+    - reduces the risk of malicious exploitation by limiting access rights
+
+    Example:
+        - Don't give master key to everyone 
+            - Break down big privileges into small ones 
+            - Set time limit 
+            - Revoke unnecessary keys 
+        
+    Problems
+        - user and group managagement
+            - assigning indiviudal permissions can become a complex and exhaustive task 
+                - espically in environments with many users or where permissions need to be frequently changed or updated 
+            - Grousp can simplfy this by granting access to a set of users
+                - but if the group permissions are too broad, this goes against least priveileges policy 
+            - Creating more refinded groups can help, but it add layers of complexity in terms of administration and management 
+            
+            - balance between practicality and usabilty of the system is imporatant 
+            

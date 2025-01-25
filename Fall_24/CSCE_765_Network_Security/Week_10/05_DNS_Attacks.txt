@@ -1,0 +1,39 @@
+DNS Attacks 
+    - Reflection attacks 
+        - Leverage DNS for attacks on arbitrary targets 
+    - Denying DNS service 
+        - Stop DNS root servers 
+        - Stop TLD servers 
+        - Stop local server
+
+    Two attacks discussed:
+        - Use fake DNS replies to redirect user 
+        - Poisoning DNS:    
+            - Insert false resource records into various DNS caches 
+            - False records contain IP addresses operated by attackers
+
+DNS Attack: Redirection 
+    1. Client sends DNS query to its local DNS server; sniffed by attacker 
+    2. Attacker responds with bogus DNS reply 
+
+    Issues:
+        - Must spoof IP address: set to local DNS server 
+        - Must match reply ID with request ID 
+        - May need to stop reply from the local DNS server 
+
+Posisoining DNS Caches 
+    - Poisoning: Attempt to put bogus records into DNS name server caches 
+        - Bogus records could point to attacker nodes 
+        - Attacker nodes could phish 
+    
+    - But unsolicited replies are not accepted at a name server 
+        - Name servers use IDs in DNS messages to match replies to queries 
+        - So can't just insert a record into a name server by sending a DNS reply message 
+
+    - But can send a reply to a request 
+
+    Goal: Put bogus IP address for tamu.edu in local TAMU DNS Server 
+        1. Attacker queries local DNS server 
+        2. Local DNS makes iterative queries 
+        3. Attacker wiats for some time; sends a bogus reply, spoofing authoritative server for tamu.edu 
+        

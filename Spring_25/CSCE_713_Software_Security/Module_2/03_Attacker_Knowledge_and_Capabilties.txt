@@ -1,0 +1,88 @@
+Attack Knowledge 
+    - Step into the mind of the attacker 
+    - Challenging step 
+        - No experience with attacking so how do we know what they are thinking?
+    
+    - First, consider what knowledge they have:
+        - Access to the source code 
+            - Strongest case 
+            - With this in hand, they can perform extra steps to find vulernabilites and bugs 
+
+        - Knowledge of the software design
+            - Medium attack knowledge 
+            - Might be able to know the design of the software
+            - Many software with similar purposes will have the same pattern 
+            - Bribe employees to learn about insider design 
+
+        - Access to the compiled binaries
+            - Least knowledge, but still able to find attacks  
+            - Potentially reverse engineer the binaries and find the software design 
+
+    - If the attacker doesn't have access to the src code, design, or binary, this means it is a completely closed system 
+    - Attacker can only access it through a server, or network 
+    - Attacker can deduce only the behaviors of the software target by observing the interfaces 
+    - Attack is significantly more difficult and time consuming 
+        - needs a long time to study behaviors of system 
+
+    - If the attacker only has the binaries 
+        - "Close-source" software 
+        - Guarded by obscurity 
+        - Software developers rely on the attacker sneeding additional time to observe and learn the system patterns 
+            - Unrealistic since it must assume attacker can't reverse engineer the ompiled binaries to extract the software design or revert to src code 
+            - Risky to assume security by obscurity can prevent attackers from targeting system 
+    
+    - If the attacker has software design and compiled binaries
+        - Closer to "Close-source" software as it's very hard to hide software design from attackers 
+        - No access to src code means attackers cannot directly spot weaknessess and exploitations 
+        - Attackers can reverse engineer to attempt to generate src code from binaries 
+        - Developers can use obfuscation to reduce accuracy of reverse engineering 
+
+    - If the attacker has acccess to src code, software design 
+        - Doesn't matter if they have binaries 
+        - Can perform analysis of src code to find exploits 
+        - Best model for attackers 
+        - No obsurity slows down the attacker at all 
+        - Attackers and developers are on even playing field 
+            - Same knowledge of the system 
+        - "Open-source" sysem 
+        - Since developers know there isn't obscurity, they must use security methods to make the software secure 
+        - Thus, open source software is generally more secure the close source 
+        - Devs don't have a false sense of security through obscurity
+
+    Attacker capabilities
+        - What capabilities are needed for attacker to perform the attack 
+            - Physical?
+                - Physical access 
+                - Location proximity 
+            
+            - Hardware?
+                - Adding or removing hardware 
+                - Poking into hardware 
+            
+            - OS?
+                - Admin access?
+            
+            - Authentication?
+                - One time login
+                - Repeat login 
+            
+            - Network 
+                - DMZ 
+                - NAT/Firewall 
+            
+        - Capabilties given by the system to the potential intruders to perform the attack 
+        
+    Attacker knowledge is what the attackers KNOW, while attacker's capabilities indicate what the attackers can DO 
+
+    Why does system grant attackers capabilities?
+        - Attackers are users too 
+        - Devs can't easily distringuish between attackers and normal users 
+        - Software needs to grant normal user capabilities to access its system, but might provide attackers an extra path to intrude 
+        
+        Example:
+            - Grant users physical access to the machine 
+            - Send computers for repair, or simply bring our computer to someone else's proximity 
+                - Go to a coffee shop and leave laptop unattended 
+            - Having physical access opens up a lot of attaks 
+
+        

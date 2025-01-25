@@ -1,0 +1,59 @@
+Attack Surface 
+    - Possible routes for attackers to intrude 
+    - Two important criterion for security
+        - TCB 
+        - Attack surface 
+    
+        - Low TCB, low attack surface -> Low Risk 
+        - High TCB, High Attack Surface -> High Risk
+
+        - Typically a large TCB, means a larger attack surface 
+
+    How to define attack surface
+
+        - Defining attack surfaces can be tricky as it requires a complete understanding of security context and knowing how to stand in the mindset of attackers 
+
+        - Exhaustively list all possible routes that can be exploited by the attackers 
+            - Possible that you miss some parts that can be attacked since you can't imagine every possible way 
+
+        One way is to start defining the attack surface is to base it on trusted and untrusted components of the system  
+            - By trusted and untrusted components
+                - All interactions between trusted and untrusted components are attack surfaces 
+                - All attacks start with untrusted components 
+                - Attack's goal is to compromise the security properties of a trusted component 
+        
+        - Another way is to look at all trusted interfaces exported by the system and to determine whether they can be exploited 
+            - By trusted interfaces
+                - All interfaces exported by trusted components are attack surfaces 
+                - Useful when the system has clearly defined trusted interfaces 
+                Example:
+                    - Kernel of OS 
+                        - Primary interfaces are system call 
+                        
+        - Another way is to define teh attack surface based off known vulernabilites and threats 
+            - By known vulnerabilities and threats 
+                - All existing security flaws in the trusted components are attack surfaces     
+            - Commonly used when security researchers need to demonstrate the effectiveness of a defensive mechanism 
+            - A strategy is to show that the newly deployed system defends against all known vulernabilites (or most)
+                - Based off the Common Vulnerability and Explotation Database 
+
+    Attack Surface of Set-EUID Programs 
+        - By trusted and untrusted components 
+            - Users -> Set-EUID Programs 
+            - Non-set EUID Programs -> OS Kernels 
+            - Users -> Admins (Social Engineering)
+        
+        - By trusted interfaces 
+            - Hardware interfaces 
+            - System APIs (Sys calls, library calls, IPCs)
+            - Program Interfaces (GUI, args, sys variables)
+        
+        - Known vulernabilites 
+            - Stack and buffer overflow 
+            - Control flow hijacking 
+            - Time-to-check-to-time-to-use attacks 
+
+        - Out-of-scope threats 
+            - Threats not in your trust model 
+            - Threats not possible with the defined attacker capabilities
+            - Common threats with known solutions 

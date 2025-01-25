@@ -1,0 +1,74 @@
+Network Scanning Background 
+    Ping 
+        - Recall ICMP messages are directly encapsulated in IP datagrams (protocol 1)
+        
+        - To ping a host:
+            - send ICMP echo request (ICMP type 8)
+            - Host responds with ICMP Echo Reply (Type 0)
+        
+        - So let's ping the entire IP address range 
+            - use automated tool for this ping sweep 
+        
+        - If firewall blocks ping packets:
+            - Try sweeping with TCP SYN packets to port 80
+            - Or try sending UDP packets to possible ports 
+        
+    Port Scanning 
+        - Now that we have a map with some hosts, let's find out what ports are open on a target host 
+        - 65,535 TCP ports; 65,535 UDP Ports 
+            - Web server: TCP Port 80
+            - DNS Server: UDP Port 53 
+            - Mail Server: TCP Port 25 
+                - Trying to find what protocol is running on each port to then choose an attack 
+
+        - Port Scanning tools can scan:
+            - List of ports 
+            - Range of ports 
+            - All possible TCP and UDP ports 
+
+        - Attacker may scan a limited set of ports, to avoid detection 
+
+    Interlude TCP Segment Structure 
+
+    16 Bit src and dest port # 
+    32 Bit Sequence number 
+    32 Bit ACk Number 
+    Head Len | Not Used | U | A | P | R | S | F | Receive Window 
+    16 Bit Checksum and URG Data Pnter 
+    Options (Variable Length)
+    Application Data (Variable Length)
+
+    TCP Seq #'s and ACKs 
+        Seq #s:
+            Number of first data packet 
+         ACKs:
+            - Seq $ of next packet expected from other side 
+
+        Example:
+            Host A -----> Seq=42, ACK=79, Data='C' -----> Host B
+            Host B -----> Seq=79, ACK=43, Data='C' -----> Host A 
+            Host A recept of echoed 'C' -----> Seq=43, ACK=80 -----> Host B 
+
+    Three Way Handshake
+        Step 1:
+            Client host sends TCP SYN Segment to server 
+                - SYN=X, ACK=0 
+                - Specifies initial seq #
+                - No Data 
+        Step 2:
+            Server host recieves SYN, replies with SYN-ACK seqment 
+                - SYN=1, ACK= Y = (X + 1)
+                - Server host allocates buffers; ack # is client seq # + 1
+                - Specifies server initaial seq # 
+        Step 3:
+            Client receives SYN-ACK, replies with ACK segment, which may contain data 
+                - SYN=0, ACK= Y + 1
+                - ACK # is server seq # + 1    
+
+    Reset Packet 
+        - If machine receives a TCP packet it is not ecpecting, it responds with TCP packet with RST bit set 
+            - For Example:
+                - No process is listening on dest port 
+
+        - For UDP: Machine reutrns ICMP "port unreachable" instead - IE CLOSED 
+    

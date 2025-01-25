@@ -1,0 +1,115 @@
+Integrity 
+    - Ensure that data is not altered 
+        - Preventing "illegal" modification of data 
+            - What is "illegal"
+                - modifications that violate a predefined security policy 
+                    Example:
+                        - If a security policy specifies that only a certain user can alter data 
+                            a modification by others is considered illegal 
+                        - Data that is intended to be immutable after its creation. 
+                            Any attempt at changing the data is illegal 
+        
+        - Relevance of integrity is for all types of data
+            - Financial records 
+                - illegal modification could be artifically inflatting a balance in an account 
+                    or deleting a record of a transaction, effectively erasing its existence and creating a descrepancy in records 
+
+    - Issues also arise wiht certification 
+        - Authenticity of a certificate verifying ownership or identiy is integral  
+        - Any false representation wihtin is a breach of integrity
+
+    - Violation can occur without direct personal gain but with the intent to cause harm 
+        - Changin someone's password restricts their access to the system 
+        - Corrupting a encryption key would result in loss of access to the encrypted data 
+    
+    - Scope of integrity is not limited to direct data manipulation, but also program integrity
+        - Encompass a range of software from desktop applications to web programs and blockchain tech  
+            - These can be compromised through alterations to their binaries, configs, or memory states, leading to corrupted outputs
+                and functionality  
+    
+    Example 
+        Ransomware 
+            - Good example to illustrate integrity threats 
+            - Typically restricts access to data b encrypting the data until a ransom is paid 
+            - Directly engagin with the integrity of the affected system 
+            
+            - Ransomware represents a scenario where an attacker damages property by encrypting and rendering it inacccessible to its rightful owner.
+            - Attacker seizes exclusive access to data, denying the original owner the ability to use it.
+            - Attacker benefits from being paid, not by the data 
+
+        Code Injection
+            - Occurs when an adversary inserts malicious code into a program, such as overflowing a buffer 
+            - Writing more data to the buffer than it can hold results in a buffer overflow attack, potentially corrupting adjacent memory and allowing 
+                the code to manipulate the program's execution 
+            - This attack alters the program behavior 
+                - Example:
+                    - If program is intended to function X, injected code makes it do Y instead 
+            - Benefit to the attacker comes from the initial modification which can lead to further unauthorized actions 
+            - Example:
+                - manipulation of priveileged programs that preform sensitive operations, like modifying network settings, or user passwords.
+                - These programs typically operate with eleveated priveileges, enabled by a Set-EUID bit that grants system administrator rights upon execution. 
+                - We trust these programs to perform a sepecific function and no more 
+
+                - If an attacker exploits a vulnerabilty in such a program through code injection, the can alter the intended single-purpose function to perfrom unauthorized actions 
+                    like modifying files
+                - This not only changes data but also corrupts the integrity of the system by altering the behavior of the program 
+                - Thus code injection is a significant threat to integrity because it transforms the operation of a system beyond its original scope.
+
+Availablitiy
+    - Whether a system is available to user with ideal performance 
+        - Lack of Availablitiy:
+            - System is made unavaliable 
+        - Compromise of Availablitiy:
+            - System is available sometimes, or with poor performance
+        - How to define availability?
+            - availability asses whether a system is accessible with optimal performance to its users.
+            - A system can become unavaliable indicating a complete lack of availability
+            - Defining availability can be challenging as users will have different expectations adn definitions
+                - Example:
+                    - A user purchasing cloud services might have a local serice level agreement (SLA) with providers like Microsoft or Amazon, specifiying the expected availability
+                
+            However for free services, like google, users do not.
+            If google becomes unavaliable, it raises quiestions about recourse. This is particulary problemativ if one's livelihood or critical activties depend on the service that is unavaliable
+
+            What does one do when a service intergral to their daily operations goes down?
+                - Thus, the exact question is the reason why availability is so important
+            
+    Examples that make availability difficult:
+        Distributed Denial-of-Service (DDOS) attack 
+            - Leverages a bunch of bots or "Zombie network" to flood a system so much that it gets overflowed and can't handle the traffic
+            - Poorly maintained cloud services are susceptible to becoming a part of the zombie network due to a lack of routine maintenance
+            - Detecting devices involved in botnets can be hard. Indicators may include abnromal CPU usage, or power consumption. Howver, if a compromised device remains dormant, only activity when the attacker 
+                says so, makes this attack much harder to detect 
+
+            - Addressing a DDoS attack is not straightforward due to the scale and distributed nature of the assualt. Traditional defenses like firewalls are often insufficient agains tthe vast number of request from diverse global sources.
+            - Techniques such as IP diversification and load balancing cloud services can mitigate the impact by distributing the traffic across multiple servers. 
+
+        Availablitiy vs Integrity/Confidentiality 
+            - Can integrity impact Confidentiality?
+            - Can Confidentiality impact integrity?
+            - Can availability impact integrity or Confidentiality?
+
+                - Yes
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

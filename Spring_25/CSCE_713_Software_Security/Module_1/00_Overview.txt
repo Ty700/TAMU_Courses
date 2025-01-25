@@ -1,0 +1,41 @@
+Critical Concepts in Security
+    - Security Concepts 
+        - Where is the security mechanism applied?
+        - What valuable assets or principals need to be protected?
+        - How servere it is if the security is broken?
+    
+    - Security Polices
+        - What behaviors and usages are permitted or forbidden?
+        - How do we assign and revoke permissions?
+        - In case of violations, what should be the consequences?
+
+    Example:
+        Bank
+            - Context of security systems:
+                - Banking systems
+                    - Both local and online
+            - Assets:
+                - Money accounts
+                - Financial records
+            - Security Properties:
+                - Correectness of te transaction results amoung related money account
+                - Safekeeping of the financial records 
+            - Severity:
+                - Financial
+                - Reputational loss
+    
+    Example:
+        School 
+            - Context of security systems:
+                - Record system 
+                - Facility Management 
+            - Assets:
+                - Faculty and student records 
+                - Access to Facility 
+            - Security Properties:
+                - Correctness and privacy of faculty and student records 
+                - Fair and proper usage of faciltiy according to the school rules 
+            - Severity:
+                - Violation of law or compliance
+                - Losin campus safety or harmony 
+        

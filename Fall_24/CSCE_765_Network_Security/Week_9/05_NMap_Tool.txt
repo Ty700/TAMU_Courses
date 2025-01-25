@@ -1,0 +1,99 @@
+NMap 
+    - Extremely Popular 
+        - Usually run over linux 
+        - Rich feature set 
+        - Need root to use all features 
+    
+    - Ping Sweeping 
+        - Over any range of IP addresses 
+        - With ICMP, SYN, ACK 
+        - OS Determination 
+    
+    - Port Scanning 
+        - Over any range of ports 
+        - Almost any type of TCP, UDP Packet 
+    
+    - Source IP Address spoofing 
+
+Usage:
+    
+    Input:
+        - nmap [Scan Type] [Options] <target_host>
+            - Default for port scanning: Ports 1-1024 + Ports listed in nmap service file 
+
+    Output:
+        - Open ports: SYN/ACK returned; port is opened 
+        - Unfilited (closed) ports: RST returned: Port is closed but not blocked by firewall 
+        - Filtered ports: Nothing returned; port is blocked by firewall 
+
+Ping Sweep Example
+    CMD:    
+        Nmap -sP -v 116.27.38/24 
+            - Sends ICMP echo request (ping) to 256 addresses 
+            - Can change options so hat pings with SYNs, ACKS, ...
+            - -sP = ping 
+            - -v = verbose
+
+Polite Port Scan
+    CMD:
+        Nmap -sT -v target.com 
+            - Attempts to complete a 3-way handshake with each target port 
+            - Sends SYN, waits for SYNACK, sends ACK, then sends FIN to close connection 
+            - If target port is closed, no SYNACK returned 
+                - Instead RST packet is typically returned 
+            - TCP connect scans are easy to detect 
+                - Target (eg. Web Server) may log completed connections 
+                - Gives away attacker's IP Address
+
+TCP SYN Port Scan 
+    CMD: 
+        Nmap -sS -v target.com 
+            - Stealthier than polite scan 
+            - Send SYN, receive SYNACK, sends RST 
+            - Stealthier: Hosts do not record connection 
+                - Since the connection is never established (handshake not completed)
+                - but routers with loggin enabled will record the SYN packet 
+            - Faster: Don't need to send FIN packet 
+
+TCP ACK Scans 
+    CMD:    
+        Nmap -PA -v target 
+            - Many filters (in firewalls and routers) only let internal systems host initiate TCP connections 
+                - Drop packets for whcih ACK=0: No sessions initiated externally 
+            - To learn what ports are open through firewall, try an ACK scan (segments with ACK=1)
+
+            - Why does this work?
+                - Firewall is not expecting an ACK packet, thus allows it through. 
+
+UDP Port Scans 
+    CMD:
+        nmap -PU target 
+        - UDP doesn't have SYN, ACK, RST packets 
+        - nmap simply sends UDP packet to target port
+            - Nothing comes back -> Port Open 
+            - Port unreachable -> Port Closed 
+
+Obscure Source 
+    CMD:
+        namp -n -D IP1, IP2, ...
+        - Attacker can enter list of decoy soruce IP addresses into NMap 
+        - For each packet it sends, Nmap also sends packets from decoy soruce IP addresses 
+            - For 4 decoy srcs, sends 5 packets 
+    
+        - Attacker's actual address must appear in at least one packet, to get a result 
+        - If there are 30 decoys, victim netwrok will have to investigate 31 different sources 
+
+TCP Stack Fingerprinting
+    CMD:
+        namp -O target 
+        - In addition to determining open ports, attacker wants to know OS on targeted machine:
+            - Exploit machine's known vulnerabilities 
+            - hacker can set up lab environments similar to target network 
+        - TCP implementations in different OSes respond differently to illegal combinations of TCP flag bits 
+
+Warnings using NMap 
+    - Use carefully 
+        - Do not scan entire network 
+        - Scanning a host for testing/learning purposes is fine 
+        - Please keep in mind the ethics of security education 
+            - Lab will be the safes platform to try 

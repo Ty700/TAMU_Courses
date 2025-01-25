@@ -1,0 +1,44 @@
+Possiblity to Eliminate ALl vulnerabilties
+    - Is it true? 
+        - Nearly impossible to eradicate all vulnerabilties, but also to ascertain they have been completely addressed 
+        - Big company have bug bounty programs that pay users to find bugs and report them 
+        - Pen testing is also another way to search for vulnerabilties
+            - Pen testing involves simulating cyberattacks to identify and fix security vulnerabilties
+    
+    - In this class we talk about pen testing 
+        - Red vs Blue 
+            Red 
+                - Red Team, often a 3rd party entity 
+                - Focuses on attacking the system without prior knowledge of the src code 
+                - Objective is to uncover seurity weaknesses by simulating potential attacks 
+            
+            Blue  
+                - Blue team is tasked with defense 
+                - Working to fix the vulnerabilties discovered by the red team and strengthening the system's security measures. 
+    
+    - In addition to these methods, there are ways to build a system with secuirty in mind 
+
+Build a Secure System by Principle 
+    Security Principles 
+        - Security "Best Practice" that can help us build a consequentially more secure system 
+        - Can't guarantee an invulnerable system, but has better chance minimizing the emergence and impact of vulnerabilties
+        - Grounded in methodologies for system design, and are intended to resutl in a more robust and secure system. 
+
+8 Security Priniciples
+    - Economy of mechanism 
+        - simplicity of design 
+    - Fail-safe default 
+        - access that should be granted based on explict permission rather than exclusion 
+    - Complete mediation 
+        - requires every access to be checked for authority without exception 
+    - Open design 
+        - encourages public scrutiny of the system's design instead of keeping it confidential, ensuring the design is robust against threats 
+    - Separation of Privileges 
+        - System does not rely on one condition to grant access 
+    - Least privileges 
+        - limits users to the minimal level of access necessary for their task 
+    - Least common mechanism
+        - minimizing shared elements across multiple user functionality
+    - Psychological accetabilty 
+        - security measures should not hinder access to resources more than if security were absent  
+        - importance of designing security systems that users can and will use effectively 

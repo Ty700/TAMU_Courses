@@ -1,0 +1,23 @@
+Network Mapping
+    Goal: Learn about a remote network 
+    - Learn about the path each packet will take 
+        - Where firewalls, and other security measures are
+
+    - Attacker often uses traceroute to determine path to each host discovered during ping sweep 
+        - Overlay results from traceroute to create an approximate network diagram 
+
+Traceroute  
+    - CLI command 
+        - traceroute <src> <dest>
+
+    How it works:
+        - Src sends UDP packets to target 
+            - Each to an unlikely port 
+            - 3 Packets with the same TTL, then increments TTL 
+        
+        - When router decrements TTL to 0, sends back to source ICMP packet 
+            - Type 11, Code 0, TTL Experied 
+        
+        - When target recieves packet, sends back to src ICMP packet 
+            - type 3, code 0, destination port unreachable 
+        

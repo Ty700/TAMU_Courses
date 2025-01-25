@@ -1,0 +1,60 @@
+vulnerabilties vs bugs 
+    - Not all bugs are vulnerabilties
+    - Bugs are errors in software that make the code make an incorrect result or unintended manner
+        - Many bugs don't pose security risks 
+        - These bugs are errors, but don't threaten security properties of the system 
+    - Bugs that are slwoing the system down, these still don't directly mean they are security risks, rather it's an inefficent system
+
+    - Many vulnerabilties are bugs, but not all are from flaws in code 
+    - Many vulnerabilties arise from inadequate configurations or design choices that are not inherently incorrect but become exploitable in certain contexts
+        - May not technically be a bug, can still present a security vulnerabilty 
+    
+    Bugs:
+        - System behaviors or outcomes that violate specifications 
+    
+    Example:
+        Specification:
+            - Read integer inputs and output the sum
+
+        Implementation:
+
+            int values[256];
+            int sum;
+
+            for(int i = 0; i < 256; i++){
+                sum += values[i]; // This line has a potential to overflow, thus a bug 
+            }
+
+            printf("%d\n", sum);
+
+    Defining securit specifications can be hard:
+        - Too abstract 
+            - The software needs to maintain data integrity 
+                - Difficult to implement and verify 
+
+        - Too narow
+            - A file with 0600 permissions can only be read or write by owner 
+                - Fails to encompess all aspects of security 
+        
+        - Thus vulnerabilties may be outside the scope of security specifications, and discovering these hidden vulnerabilties becomes a formidable task. 
+        - There are always security vulnerabilties that an attacker can exploit in ways developers may not predict 
+        
+    Some vulnerabilties are unexpected by developers 
+        - Unusual behavior by attackers 
+        - Insider attacks 
+            - Attacker is collaborating with an insider to generate excessive logs, aking it impractical to look at all entirie effectively 
+        - Specification or design flaw 
+
+    Bugs vs Lines of Code 
+        - Lines of code:
+            - A common metric of program complexity 
+        - Software-engineer belief (myth):
+            - # of bugs in a program is roughly proportional to lines of code 
+            - There are approx 20 bugs for every 10,000 lines of code
+
+            - There is some truth. A program with more lines of code, should have more bugs. 
+
+            - Studies show that the issue is more complex than number of lines of code. 
+                - Factors such as language choice, system design, program maturity, and developer skills play critical roles 
+                
+

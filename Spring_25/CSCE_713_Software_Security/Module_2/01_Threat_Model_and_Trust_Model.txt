@@ -1,0 +1,75 @@
+Security Assessment and Evaluation 
+    - Risk assessment for software products 
+        - Need to assess the risks involved before releasing a product 
+    - Penetrataion testing 
+        - seurity team needs to rigorously examine the software to discover any vulernabilites 
+        - Can't proceed with pen testing without constructing a plan first. This requires evaluation(s) to prioritize the effort of pen testing
+    - Evaluation of defense mechanism 
+
+Threat Model 
+    - Defining the "context" of security threats 
+        - all security threats depend on the context 
+        - Different contexts demand different treatments 
+        - Thus when defining a threat model is very important  
+
+    - Trust Model 
+        - Start by providing a detailed description of the context of the security threats 
+            - Where are the targeted users and where are the attacks emerging?
+
+        - Trusted and untrusted components  
+            - Have to define the trusted and untrusted components in the system     
+        - Trust relationship 
+            - Must define the trust relationship between the components
+        
+        - Attacker Knowledge and capabilities
+            - Define attacker knowledge of the system 
+                - How powerful and knowledgable is the attacker?
+                - Their capabilities
+                    - Example:
+                        - Attacker is an insider and can see the source code 
+                            - Thus doesn't need to do system probing and doesn't need to reverse engineer the binary 
+        
+        - Possible attack surface 
+
+        - In-scope and out-of-scope threats 
+
+    - Enumerating the Trusted Computing Base (TCB)
+        - Which part of the hardware is trusted?
+            - Do you only trust the CPU, RAM, GPU hardware 
+            - Or do you also trust the peripherals?
+        - Which part of the OS is trusted?
+        - Which part of the software stack is trusted?
+            - Only the kernel or any software that is installed?
+        - Who is trusted as an involved personnel?
+
+    - Be detailed and specific 
+    - Not in the TCB -> Untrusted 
+        - Some can be later trusted after verification 
+            
+    Example: Set-EUID Program 
+        - Programs that get to be secalated to root when executed 
+
+        - Widely exists in Linux or UNIX systems 
+        - Permission bit is often used on programs that are for administrative purposes 
+        - These programs have high security senstivity and may open the OS to many threats 
+        - Reason for creating set EUID programs is typically to perform routine admin task
+            - Seeting the network or rebooting the system 
+            - Also to allow users to perform these actions 
+        - Once programs are compromised to perform other operations that are not within their original purposes, the user may abuse these programs to perofrm other admin operatives 
+        - a compromised Set-EUID program mauy be confused to run the file system operations to delete all system files, thus render the system unusable 
+
+    Example: Threat Model for a Set-EUID Program 
+        - Trusted Components 
+            - The whole hardware (CPU, memory, IO Devices)
+            - Operating system kernel 
+            - Compilers 
+            - Source code, configs, and permission of the program 
+            - Other set-EUID programs 
+            - Installer and admin of the system 
+
+        - Untrusted Components
+            - Other user-space programs that not Set-EUID 
+            - Non-root users who execute the Set-EUID program 
+            - Other non-root users who have access to the same system, including files and directories 
+            - Everyone over the network 
+            

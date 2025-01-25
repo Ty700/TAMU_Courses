@@ -1,0 +1,105 @@
+Interconnection Devices 
+    - Hubs 
+    - Switches 
+    - Routers 
+
+Hubs 
+    - essentially phtiscal-layer repeater
+        - bits coming from one ling go out all other link 
+        - at the same rate 
+        - no frame buffering 
+        - no CSMA/CD at hub: adapters detect collisions
+        - provides net management functionality 
+        - "Dummy Router"    
+            Example:
+                Alice is sending a message to Bob.
+                Alice sends message to a hub that Bob is connected to.
+                Hub will send Alice's message to all the connections it has.
+                The host machines getting Alice's message will only accept it if it is expecting Alice's message 
+        - Leaves vulnerability for sniffing if attacker is in the network 
+
+Sniffing 
+    - Attacker is inside firewall 
+    - Requirements:
+        - Attacker's host connected to shared medium 
+        - NIC shold be in "promiscuous mode" 
+            - Processes all frames that comes to NIC 
+    
+    - Sniffer has two components 
+        - Capture
+        - Packet analysis 
+    
+    - Grab and File Away:
+        - Userids and passwords 
+        - Credit card numbers 
+        - Secret e-mail conversations 
+
+    - Island Hopping Attack:
+        - Take over single machine
+        - Install sniffer, observe passwords, take over more machines, install sniffers 
+
+Passive Sniffing 
+    - Easy to sniff
+        - 802.11 traffic 
+        - Ethernet traffix passing through a hub 
+            - Any packets sent to hub is broadcast to all interfaces 
+            - Not true for a switch 
+
+    - Popular sniffers 
+        - wireshark
+        - tcpdump (for unix)
+        - Snort (sniffing and instrusion detection)
+    
+Active Sniffing through a switch: Flooding Switch Memory Approach
+    - How does attacker sniff packets sent to/from the victim?
+    - Have to get victim's packets to attacker 
+    - Has a table that tracks port with the corresponding MAC address 
+    - If attacker knows the MAC address to a certain port 
+        - The attacker will send many requests to the switch telling it that it has XYZ MAC on ABC port 
+        - This will flood the switch's memory, thus ovewritting the MAC/PORT tbl the switch has 
+        - Thus any packet that has the victim's MAC and port on it, will then be forwarded to attacker's computer instead 
+
+Sniffing through LAN: Poison Victim's ARP Table Approach
+    Idea: Have client's traffic diverted to attacker 
+
+    Step 0:
+        Sniff all frames that arrive. Configure so that IP packets arriving from victim are forwarded to defaul router 
+
+    Step 1: 
+        Send fake ARP response, mapping router IP address to attacker's MAC address 
+
+    Step 2:
+        Victim sends trafficc destined to outside wordl. 
+        Poisoned ARP table causes traffic to be sent to attacker 
+    
+    Step 3:
+        Packets are forwarded from attacker's host to default router 
+    
+    Summary:
+        Victim sending out packets thinks they are sending it to the router. 
+        However, it is sending it to the attacker, attacker sends it to the router 
+        router sends it to the outside world 
+
+        Note:
+            This can be reversed. 
+            Attacker poisons the router saying the victim's IP is the attacker's IP. 
+            Any incoming packets go to the attacker, then attacker sends it to the victim 
+
+    Powerful active sniffing tools 
+        - DSniff and ettercap 
+            - Flooding switch memory
+            - ARP posionig 
+
+Sniffing Defenses 
+    - Encrypt Data: IPsec, SSL, PGP, SSH 
+    - Use encryption for wireless 
+    - Get rid of hubs: Complete migration to switched network 
+    - Configure swtiches with MAC addresses 
+        - Turn off self learning (knowing mappings between ports and MAC addresses)
+        - Eliminates flooding problem 
+    - Intrusion detection systems:
+        - Lookout for large numbers of ARP replies 
+    - Honeypot 
+        - Create fake account and send password over network 
+        - Identify attacker when it uses the password 
+

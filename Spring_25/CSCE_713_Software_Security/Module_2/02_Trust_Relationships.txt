@@ -1,0 +1,66 @@
+Trust Relationships 
+    - Describing how the components trust each other 
+        - Even among trusted components, they may not trust each others unconditionally 
+    
+    One-Way Trust 
+        - A trusts B, but B does not trust A 
+            - Common in any primary-secondary, privileged-unprivileged model 
+            
+            - Kernel and user space 
+                - User space trusts kernel 
+                - Kernel doesn't trust user space 
+            
+            - Administrator and non-root users 
+                - Non-root users trust admins 
+                - Admins don't trust non-root users 
+
+            - Controller and distributed nodes 
+
+    Mutually Trusted 
+        - Everyone in the group trusts each other 
+            - Hardware or cyber-physical systems 
+                - Since they collaborate to perform an action, they must trust each other 
+                - Common between hardware systems 
+                    - CPU must trust memory 
+                    - Memory must trust CPU 
+                    - IO Devices must trust CPU and Memory 
+                    - CPU and Memory must trust IO Devices 
+
+            - Distributed Systems
+                - Each node in IOT must follow a protocol
+                - If a node doesn't follow the protocol, the node won't be able to function properly due to incorrect execution of the protocol 
+                - Follow protocol, we like you, else we don't 
+
+            - Information sharing systems 
+
+    Mutually Untrusted 
+        - Anonymous systems 
+            - Does my computer trust my neighbors? Obviously not since I don't know them 
+            - Treat everyone as untrustworthy
+            - If one node needs to broadcast a message to all the nodes 
+                - The main node will communicate to nodes it trusts, then it relies on those nodes to spread the message to other nodes it trusts 
+                - Main node can't guarntee other nodes will broadcast message though 
+                 
+        - Distributed Byzantine-Tolerant system 
+        - Multi-party voting/computation 
+
+    Semi-Trusted 
+        - Semi-Trusted a.k.a, "Honest but Curious"
+            - Participants follow the protocol faithfully, mainly because they could face financial or reputational penalty or sanctions from others if they do not 
+            - On the surface, they are good rule-following citizens 
+                - Can secretly collect information and leak it to third-parties 
+                - Since the leakage is hard to determine who did it, they can deny it wit plausible deniability
+
+            - Multi-party voting/computation but not anonymous 
+            - Financial or reputational consequences if someone fails to follow protocol 
+            - Can leak data to third part with plausible deniability 
+
+    Compound or Multi-Layer Trust 
+        - Different types of trust relationships can co-exist and be combined into compound or multi-layer trust relationships 
+         
+        Example:
+            - A system part can have one-way trust when a controller maages all the components 
+            - Can form a mutually trusted relationship with those equally trusted components 
+            
+
+        

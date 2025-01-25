@@ -1,0 +1,83 @@
+Review of DNS 
+    - Distributed Database implemented in hierarchy of many DNS servers 
+
+Authoritative name server:
+    - FOr a given domain provides server name to IP address mappings for servers in domain 
+    - Primary and secondary name server for reliability 
+    - Responsible for mapping of IP addresses and names on a network 
+
+Portion of hierarchy of DNS servers 
+                           Root DNS
+                               | 
+         +=====================+====================+
+         |                     |                    |
+        COM DNS         org DNS servers       edu DNS Servesr 
+          |                    |                    |
+    +=====+======+          pbs orgs         +======+=======+
+    |            |         DNS servers       |              |
+yahoo servers   amazon                  UAB.edu            UMass.edu 
+               DNS servers             DNS Servers         DNS Servers 
+
+DNS: Queries 
+    Host in UAB.edu wants to connect to a server in UMass.edu
+    - The name cs.umass.edu needs to broken-down into a IP address for UAB.edu host to connect to it 
+    - UAB Host will query the local DNS server 
+    - Local DNS server will not have it since the name is not in its database 
+    - Local DNS server will forward it to the root DNS server 
+    - Root DNS server will tell it to forward its query to the Top-Level-Domain DNS Server 
+    - TLD DNS Server will then tell the local DNS server where to forward its query 
+    - Local DNS Server will query the right DNS Server and that DNS Server will forward the IP to the local DNS server 
+    - Local DNS server iwll connect host to the IP 
+
+DNS Records 
+    DNS: Distributed DB storing resource records (RR)
+        RR Format: (Name, Value, Type, TTL) -> Name = HOST (if its a host), Value = IP Address of HOST, TTL = Time to Live (Experiation Date for Resource record)
+            Type: Can be address, a name server, or mailserver 
+
+            Type=A -> Address 
+                - Name is hostname 
+                - Value is IP Address 
+            
+            Type=NS 
+                - Name = Domain 
+                - Value = IP Address of Authoritative name server for this domain 
+            
+            Type=MX 
+                - Value is name of mailserver associated with name 
+
+DNS Protocol:
+    Sent over UDP Port 53 
+
+Caching And Updating Records 
+    - Once (any) DNS server learns mapping, it caches mapping 
+        - Cache entries timeout (disappear) after some time 
+        - Improves efficiency of lookips of name/address mapping 
+            - Hwoever, what if attacker poisons the DNS cache by forward any google.com query to the attacker's machine 
+
+    Interrogating DNS Servers 
+        - Attacker first gets primary or secondary authoritative server for target organization using whois 
+        - Attacjer cab tgeb qyery tge DBS vy sebdubg DBS query messages 
+        - Tools (often available in Unix and Windows machines; also available at websites):
+            - nslookup 
+                - Can fetch all the RR this server is storing 
+                - Avaliable in most Unix and Windows machines 
+                - Get yahoo DNS server anme using whois 
+                - set type=any 
+                - "get all"
+            - host 
+            - dig 
+
+Summary 
+    - Obtaining information from public databases:
+        - whois database 
+            - Tool: Web sites 
+        - DNS Database 
+            - Tool: nslookup 
+    
+    - Defense:
+        - Keep to a minimum what you put in the public database: Only what is neccessary 
+
+
+
+
+    

@@ -1,0 +1,10 @@
+Discusses security assesments and evalations
+
+Focuses on threat models and trust relationships 
+
+importance of definign threat modesl, distingushing trusted components and untrusted components
+
+Trust relationships and the role of attacker knowledge and capabilities in threat assesments
+
+Defining attack surfaces using various modeling methods 
+

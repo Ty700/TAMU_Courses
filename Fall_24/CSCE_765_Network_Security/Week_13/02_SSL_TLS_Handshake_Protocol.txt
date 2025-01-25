@@ -1,0 +1,50 @@
+
+Establishing Secure Sommunications 
+    First, establish TCP connection from client to port 443 on server 
+
+    1. Client Hello 
+        - Client sends ClientHello message proposing SSL options
+            Includes:
+                - SSL Version 
+                - RandomNumber 
+                    - 32-byte random number used to seed the cryptographic calculations 
+                - SessionID 
+                    - identififes a specific SSL session 
+                - CipherSuites 
+                    - a list of cryptographic parameters tha tthe client supports 
+                - CompressionMethods
+                    - Identifies data compression methods the client supports 
+    2. Server Hello 
+        - Server responds wiht ServerHello message selecting the SSL options 
+            - Picks Version
+            - RandomNumber
+            - SessionID 
+            - CipherSuite that the client and server will use 
+            - CompressionMethods that the client and server will use
+
+    3. Server Key Exchange 
+        - Server sends its public key information in ServerKeyExchange message 
+            - Server send its public key certificate 
+
+    4. ServerHelloDone 
+        - Server concludes its part of the negotiation with ServerHelloDone message 
+
+    5. ClientKeyExchange 
+        - Client sends session key information (encrypted with server's public key) in ClientKeyExchange message 
+            - Generates a premaster secret 
+            - sends it encrypted with the server's public key 
+            - Server decrypts the premaster secret using the private key 
+
+            
+    6. ChangeCipherSpec 
+        - Client sends ChangeCipherSpec message to activate the negotiated options for all future messages it will send 
+
+    7. Finshed 
+        - Client sends finished message to let the server check the newly activated options. 
+    
+    8. ChangeCipherSpec 
+        - Server sends ChangeCipherSpec message to activate teh negotiated options for all future messages it will send 
+
+    9. finished
+        - Server sends Finished message to let the client check the newly activated options 
+    

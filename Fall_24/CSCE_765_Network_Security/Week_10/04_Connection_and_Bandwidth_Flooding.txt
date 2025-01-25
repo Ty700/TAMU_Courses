@@ -1,0 +1,87 @@
+Connection Flooding Attacks 
+    Overwhelming connection queue w/ SYN flood 
+        - Recall, slient sends SYN packet with inital seq number when initiating a connection 
+        - TCP on server machine allocates memory on its conecction queue, to track the status of the new half-open connection 
+        - FOr each half-open connection, server waits for ACK segment, using a timeout that is often > 1min
+        
+        Attack:
+            - Send many SYN packets, filling connection queu with half-open connections 
+                - Can spoof source IP addresses 
+            
+            - When conenction queue is exhausted, no new connections can be initiaed by legit users 
+        
+            Need to know of open port on victim's machine: Port Scanning 
+
+SYN Flooding Explained 
+    - Attacker sends many connection requests (SYNs) with spoofed src addresses 
+    - Victim allocates resources for each request 
+        - New thread, connection state maintained until timeout 
+        - Fixed bound on half-open connections 
+    - Once resources exhausted, requests from legit clients are denied 
+    - This is a classic DoS attack 
+        - Common Pattern: 
+            - Costs nothing to TCP client to send a connection request, but TCP server must spawn a thread for each request 
+    
+Preventing Denial of Service (SYN Flood)
+    - DoS is caused by asymmetric state allocation 
+        - If server opens new state for each connection attempt, attacker can initiate many connections from bogus or forged IP addresses 
+    - Cookies allow server to remain stateless until client produces:
+        - Server state (IP Address and port) stored in a cookie and originally sent to client 
+    - When client responds, cookie is verified 
+
+SYN Flood Defense: SYN Cookies 
+    - When SYN segment arrives, host B calculates function (hash) based on:
+        - Source and destination IP addresses and port numbers, and a secret number 
+    - Host B uses resulting "cookie" for its initial seq # (ISN) in SYNACK 
+    - Host B does not allocate anything to half-open connection:
+        - Does not remember A's ISN 
+        - Does not remember cookie 
+
+    - Essentially sets TCP Seq # as a cookie 
+    
+    - Cookie needs to be unforgeable and tamper-proof 
+    - Client should not be able to invert a cookie 
+    - If so, attacker can fulfill handshake with really eavesdropping and do other attacks 
+
+Overwhelming link bandwidth with packets 
+    - Attack traffic can be made similar to legitimate traffic, hindering detection 
+    - Flow of traffic must consume target's bandwidth resources 
+        - Attacker needs to engage more than one machine -> DDos 
+    - May be easier to get target to fill-up its upstream bandwidth: ASync access 
+
+
+    Attacker -> A lot of bots -> Victim 
+
+        - Attacker takes over many machines, called "bots." Potential bots are machines with vulnerabilities 
+        - Bot processes wait for command from attacker to flood a target 
+
+DDos Reflection Attack:
+    - Attacker sends requests to DNS Server 
+        - Source IP Addr = Victim's machine 
+    - DNS Servers forward reply to Victim's device 
+    - Many DNS Servers flood Victim's machine 
+
+"Smurf" Attack 
+    - 1. ICMP Echo Requ 
+        Src -> Victim's Address 
+        Dest -> Broadcast address 
+    - Every host on the network generates a ping reply and sends it to the victim's machine 
+    - Flooding and Overwhelming victim's machine 
+
+DDos Defense
+    - Don't let your systems become bots 
+        - Keep systems patched
+        - Employ egress ant-spoof filtering on external router 
+    
+    - FIlter dangerous packets
+        - Vulnerability attacks 
+        - Intrusion preveention systems 
+    
+    - Signature and anomaly detection and filtering 
+    
+    - Rate limit 
+        - limit # of packets sent from src -> dest 
+
+    - CAPTCHAs 
+        - Could be useful against application level attacks 
+        

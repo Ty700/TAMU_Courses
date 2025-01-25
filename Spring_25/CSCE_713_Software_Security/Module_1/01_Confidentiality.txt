@@ -1,0 +1,60 @@
+Confidentiality
+    - Giving people access to information that they shouldn't access 
+    - Valuable information:
+        - Profitable to the attackers
+            - Credit card info 
+            - Encryption keys 
+            - Digital properties 
+                - Music, movies, copyright 
+        
+        - Private Information:
+            - Not directly profitable, but valuable to personnel
+            - Examples:
+                - Medical Records
+                - Locations
+                - Travel pins
+                - Browsing and search history
+            - All this private information can hurt you personally
+                - Might be held by blackmailing
+                    - "I have your medical records, give me money or I'll expose you"
+                - Location:
+                    - If a theif knows you aren't home, then they know when to come and steal your things 
+            
+            - Definition:
+                - Can be defined with communication channels
+                    - How much information can be retrieved by the user?
+                
+                - Secure System -> User 
+                    - Encryption can be used to restrict access only to the user and system 
+                    - Introduce noise to the channel
+                    - Censoring and redacting 
+                        - Parsing over entire data and removing critical data 
+                    - Elimate the channel 
+                        - IE Miltary computers 
+                            - "Air gapped Computers"
+                                - Computers that are entirely disconnected from the outside 
+                
+            - Confidentiality vs Privacy
+                - Confidentiality   
+                    - Protection of the DATA or SYSTEM STATES from illegal observation 
+                - Privacy
+                    - Protection of the users' indentities or personal states from illegal observation 
+                        of data or metadata 
+                    
+                    Example:
+                        Alice is communicating to Bob over confidential channel 
+                            - Alice might expose she is communicating with bob exposing metadata
+                                - Metadata:
+                                    - Who is sending the message
+                                    - How big is the message
+                                    - When is the message sent 
+            
+            Confidentiality Violation Examples 
+                - Keylogger
+                    - A mechanism that records all the keystrokes on a keyboard and logs it somewhere
+                    - Attacker can find sensitive information 
+                        - a password could be entered after a banking URL or some sort of email addres 
+                
+                - Mobile App Permissions 
+                    - Permissions that can violate Confidentiality if allowed 
+                

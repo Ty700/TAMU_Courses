@@ -1,0 +1,61 @@
+Economy of Mecahnism 
+    - advocates for simplicity in the system and software Design
+    - simpler a system is, the easier it is to understand and secure 
+    - complexity often introduces more varibles and potential points of failure 
+    - thus creating a system with fewer possible components and interactions, reducing the potential attack surface for malicious actors    
+        - when a system is complex, it is hard to see all the ways it can be attacked 
+    
+    - Writing simpler code is a prncipe that often guides secure and robust software development 
+        - simplicity in code is not just about have fewer lines rather about:
+            - clarity 
+            - maintabiltiy 
+            - understandabilty of those lines of code 
+        
+Fail-Safe Default 
+    - when a system fails, it goes to a state that perserves security even if it compromises other aspects like convenience or functionality
+    
+    Example:
+        If a safe with a bunch of money needs to be powered on to work loses power it shouldn't automatically open the safe.
+        It should default to locking the safe and never unlocking unless power is restored again and unlocked with the code 
+
+    - Designing for the worst case scenario 
+
+    Example
+        Allowlist vs Blocklist 
+            - using a deny-by-default list, or "allow list" is a key aspect of the "fail-safe default" policy. 
+            - it assumes everything can't be trusted until explicity evaluated and permitted. 
+            - Minimizes the risk by limiting the number of potential vulnerabilties that an attacker can exploit since only known and vetted actions or entities are permitted. 
+        
+            - Difficult to use since you must know of all the legit use cases for a system 
+            - Defining and maintaing an exhaustive list of the accceptable behaviors, inputs/outputs, and processes that are considered safe within the context of a system 
+            - strictness of the list greatly enhances security despite the overhead  
+
+        Block List is the opposite "Deny List"
+            - Everything is permitted EXECPT what is on the list 
+            - Relies on the ability to predict and identify all possible malicious actions in advance, which is not feasible 
+            - more user-friendly, but needs more updating as new threats emerge 
+
+Complete Mediation 
+    - requires every access request to an information system to be checked for authorization before access is granted 
+    - road illustrates the necessity for consisten and comprehensive security measures 
+        - on this road there are checkpoints and everything must go through them... the ability to swere around the checkpoint defeats the policy 
+    - may impact system performance due to the checkpoints 
+    - security checks can be bypassed if not designed properly 
+        - offline vs online checks 
+        - complete checks vs sample 
+    - demands every resource be properly authenticated and authorized to ensure no unauthorized transactions slips through 
+    
+Open Design     
+    - hiding the design doesn't make it secure 
+    - the more eyes that are on it, the more flaws will be spotted 
+    
+Least Common Mecahnism
+    - minimizing the amount of shared resources to reduce the risk of information leakage and potential vulnerabilties
+    - premise that shared systems, such as common network, computing environment, or even a physical space, can become conduits for security breaches 
+    - provide security by limiting the opportunties for uninteded and potentially malicious interactions among components that share these resources 
+    
+Psychological Acceptabilty 
+    - A secure system needs to be psychological acceptabel to users 
+    - If users find the system unacepted or unsusable, they will turn to less secure alternatives 
+    
+                

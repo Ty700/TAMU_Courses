@@ -1,0 +1,82 @@
+Security Assessment and Assurance 
+    - Once there is an established threat model, it becomes possible to contemplate ways to prove or assess the security of the system 
+        - Mathmatical proofs and model-based proofs 
+            - Cryptographic Algorithm - Attack Complexity 
+                  Algorithm Name    | Security Claim    | Best Attacks 
+                        DES         |      2^56         | 2^39 - 2^43 
+                      AES-128       |      2^128        | 2^126.1 time, 2^88 data, 2^8 memory 
+                      AES-192       |      2^192        | 2^189.7 time, 2^80 data, 2^8 memory 
+                      AES-256       |      2^256        | 2^254.4 time, 2^40 data, 2^8 memory
+                      Blowfish      |   Up to 2^448     | 4 of 16 rounds 
+                        RC4         |   Up to 2^2048    | 2^20 time, 2^16.4 related keys 
+
+            - Mathematical Proofs 
+                - Randomization - Entropy or distribution 
+                    - Example: ASLR (Address Space Layout Randomization)
+                    - Randomization aims to increase the difficulty level for potential attackers 
+                        - Making the attempt to compromise the system challenging
+                    - Core idea is to introduce randomness 
+                        - To obfuscate the elements that attackers want to attack 
+
+            - Model Checking or Formal Verification 
+                - Serves as a method to rigorously proving the correctness of a program 
+                - Underlying principle involves the creation of additional documenation alongside the program itself 
+                - Invariants are coniditions established to verify the correct functioning of a program 
+                    - process entails defining a set of rules alongisde the program to affirm its accuracy 
+                    - rules, specifications, and invariants can be inputted into tolls known as model checkers or provers 
+                    
+                    Example:
+                        SMT (Satisfiability Modulo Theories) prover
+                            - Capable of verifying that the sepcified properties of the program are correct 
+
+        - Static Analysis
+            Take a compilation of source code for example 
+                - Src code -> Intermediate Representation (IR) -> Binary 
+                    - We can do an analyis at each level 
+
+        - Dynamic Analysis
+            - Running the program with various inputs and observe its behavior 
+            - Consider a program with different inputs A, B, C 
+                - inputs are processed through an attack detection system designed to identify potential vulnerabilities
+                    - memory corruption
+                    - stack overflow 
+                    - info leakage 
+                - system captures inputs that causes theses vulernabilites 
+
+            - Challenge is the nature of the input-specific nature 
+                - Each input only explores one path corresponding to a single corner case 
+                - To achieve coverage of all cases, all corner cases need ot be test, thus a multide of different inputs
+                    - potentially millions 
+            
+            - Coverage is a critical metric in dynamic analysis 
+                - There are methods to increase coverage via one input 
+                    - Example -> Symbolic execuition 
+                        - analyzing variable ranges influencing the program's behaviro and identifying different corner cases based on the ranges 
+                        - Int input within the range of 0 to 20 might trigger one set of behaviors while a range of 21 to 200 might trigger another 
+
+        False Postives vs False Negatives 
+            - False Postives 
+                - Incorrectly identifies a bug or vulnerabiltiy 
+                    - Positive findings turn out to be negative 
+                    - Static Analysis 
+                        - Usually a high amount of false postives 
+                        - Due to conservative approach 
+                        - Many corner cases are difficult to ascertain, leading to assumptions of all possible outcomes 
+                            - Might lead to impossibilites as vulernabilites
+
+                    - Dynamic Analysis
+                        - Depends on threshold can have high or low amount 
+                            - if certain paths or states are not covered during analysis, their vulernabilites go undetected 
+                
+                - Lead to alarm fatigue and users start to ignore warnings 
+
+            - False Negatives 
+                - Negative findings turn out to be positive 
+                - Finds no bug or vulernabilites when there is one 
+                    - Static Analysis
+                        - Low to none due to broad specturm of potential issues 
+
+                    - Dynamic Analysis
+                        - Usually high
+
+                - System is unreliable 

@@ -1,0 +1,28 @@
+Common vulnerabilties and Exposure (CVE) database 
+    - Records known past vulnerabilties 
+    - Every known vulnerabilty has a:
+        ID - A unique ID assigned by NVD 
+        Severity - Common Vulnerabilty Scoring System (CVSS)
+            - Ratings:
+                - Low:      0.0 ~ 3.9
+                - Medium:   4.0 ~ 6.9
+                - High:     7.0 - 10.0
+            
+            - Associated Vectors
+                - Access Vector (AV), Access Complexity (AC), Authentication (Au)
+                - Confidential Impact (C), Integrity Impact (I), Availablitiy Impact (A)
+                - Exploatiability (E), Remedation Level (RL), Report COnfident (RC)
+                - Collateral Damage potential (CDP), Target Distribution (TD), Security Requirements (CR, IR, AR)
+            
+            - Weakness Enumeration
+            - Known affected software configuration 
+
+    - If you discover and report bugs in a project, you might recieve a CDP record, which is a notable feat 
+    - CVSS score is determined by evaluators who review the reported vulnerabilties and assign a score based on their judgement 
+        - process is somewhat subjective
+    - In addition to severity, CVE includes Associated vectors that provide further details about the vulnerabilty. They indicate wheter the vulnerabilty can be exploided locally, or remotely, 
+        the complexity of the attack required, whetehr authentication is needed, and the types of impacts it has on Confidentiality, integrity, and availability
+    
+    Common Weakness Enumeration
+        - The concept of internal weakness denomination refers to the categorization of vulnerabilties, fo rwhich there is a standard called Common Weakness Enumeration
+        - Comprehensive list that documents different types of vulnerabilties that can be referenced for classification purposes. 

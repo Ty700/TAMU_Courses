@@ -1,0 +1,24 @@
+Session Hijacking 
+    - Take control of one side of a TCP connection 
+    - Marriage of sniffing and spoofing  
+    - A form of Man-in-the-Middle attack 
+
+    - Alice sends message to Bob
+        - Alice (unknowingly) actually sends message to Attacker 
+    - Attacker forwards message to Bob under the impression they're Alice 
+    - Bob sends message back 
+    - Attacker sends Bob's message back to Alice (under the impression they're Bob)
+
+    - Attacker can do a lot with this. 
+
+
+The Details 
+    - Attacker is on segment where traffic passes from Alice to Bob 
+        - Attacker sniffs packets 
+        - Sees TCP packets between Bob and Alice and their sequence numbers 
+
+    - Attacker jumps in, sending TCP packets to Bob; source IP address = Alice's IP addresses 
+        - Bob now obeys commands sent by attacker, thinking they were sent by Alice 
+
+    - Principal Defense: Encyption + MAC 
+        - Attacker does not have keys to encypt/authenticate and insert meaninful traffic 

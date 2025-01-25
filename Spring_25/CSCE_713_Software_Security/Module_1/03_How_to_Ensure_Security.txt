@@ -1,0 +1,38 @@
+How to ensure software security
+    - Elimination of vulnerabilty
+        - Very hard to do
+    
+    - Systematic defense or Systematic secure design 
+        - adopting secure principles and seiging with security as a core objective
+        - Does not guarntee security, it does increase likelihood of a more secure system 
+        - Reduces risk of insecurity 
+
+    - Raising the bar for attacks 
+        - Mitigates the amount of attacks 
+        - Makes attacking the system harder 
+        
+        Example:
+            - Encryption 
+
+    Security = A state with no vulnerabilty
+        - vulnerabilties
+            - System attributes that can be exploited by attackers to cause harm 
+            - Can come from different avenuse
+                - features 
+                - implementation details 
+                - use of certain system libraries 
+            
+            - same as bugs, vulnerabilties need to be discovered 
+                - By good entities:
+                    - Examination, testing, inspection 
+                        - Once found, these vulnerabilties are kept under an embargo to allow the company to fix it, before releasing details to the public
+                        - Information after fixing is then passed out through update notes and details 
+
+                - By malicious entities:
+                    - Exploatitation and report 
+                    - "Black Hat" 
+
+        Vulnerabilty managagement is a critical aspect of software security 
+            - within any software there are known vulnerabilties, which is a small subset of all unknown vulnerabilties
+            
+    

@@ -1,0 +1,33 @@
+Reconnaissance 
+    - "casing the hoint" 
+    Let's take a close look at:
+        - Reconnaissance with whois (this lecture)
+        - Reconnaissance with DNS (next lecture)
+
+        - A few words about a registrar:
+            - Organization where you register a domain name 
+            - verifies uniqueness of name 
+            - Enters domain name into various databases:
+                - Whois and DNS 
+
+Whois Databases 
+    - Input: Domain name or comapny name 
+    - Output: registrar, whois server, dns server 
+
+    Some useful whois sites:    
+        - www.internic.net 
+            - For com, net and org top-level domains 
+        - www.allwhois.ord 
+            - For country0code top level domains, EX: .jp, .fr 
+
+Recpmmaossamce: IP Ranges 
+    - ARIN: American Registry for Internet Numbers 
+        - Maintains whois databse that includes IP address for US 
+    
+    - RIPE: Europe 
+    - APNIC: Asia
+
+Why whois databses needs to be publicly available 
+    - If you're under attack, can analyze source address of packets
+    - Can use whois database to obtain info about the domain from where teh attack is coming from 
+    - Can inform admin that their systems are source of an attack 
