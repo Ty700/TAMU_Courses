@@ -1,0 +1,479 @@
+Value Set 
+    0 - Low/False 
+    1 - True/High 
+    Z - High Impedance 
+    X - Uninitialized/Unknown 
+
+Data Types 
+    Verilog provides three groups of value objects and different types in each group:
+        - Nets 
+            - represent physical connections between structures and objects 
+                Example:
+                    - supply0
+                    - supply1
+                    - tri/wire 
+                    - tri0 
+                    - tri1 
+        - Variables 
+            - Represent abstract storage elemnets 
+                - integer 
+                - real 
+                - reg 
+                - time 
+                - realtime 
+        
+        - Parameters 
+            - Run-time constants 
+                - localparam
+                - parameter 
+                - specparameter 
+
+Net and Register Type Rules 
+    - Nets and reg are one-bit wide unless you also specify their range 
+    - A port delcaration implicitly declares a one-bit wire net unless you explicitly declare it otherwise 
+
+    Rules govern your use of data types:
+        - Variables cna only be driven inside procedures 
+        - Nets are driven everywhere else 
+        - Constants are unchaning or instance-specific values 
+        - Wildcard (*) - all inputs are added to the sensitivity list 
+            - Any trigger of any input, will trigger block 
+
+Type Rules in Connectivity 
+    - Module input ports are always nets 
+    - Module output ports are variables if driven by a procedural block, or nets in all other cases 
+    - Connections to the input ports of a module instance are variables if driven by procedural block, or other nets in all other cases 
+    - Connections to the output ports of a module instance are always nets 
+    - Conecctions to bidirectonal input ports are always nets 
+
+Net and Register Type Example 
+    /* 
+        y_out is reg in mone - assigned in procudural block 
+        a_in, b_in are wire in mone and mtwo - module inputs 
+        y_out is wire in mtwo - assigned by a continuous assignment 
+        and_out, or_out are wire in module test - instance outputs 
+        a, b are reg in module test - assigned in an initial procudural block 
+    */
+
+    module mone(output reg y_out, 
+                input wire a_in, b_in
+        );
+        always @(a_in or b_in)
+            y_out = a_in && b_in;
+    endmodule 
+
+    module mtwo(output wire y_out, 
+                input wire a_in, b_in);
+            assign y_out = a_in || b_in;
+    endmodule
+    
+    module test;
+        reg a, b;
+        wire and_out, or_out;
+
+        mone u1(and_out, a, b);
+        mtwo u2(or_out, a, b);
+    
+        inital begin 
+            a = 0;
+            b = 0;
+            ...
+        end 
+    endmodule
+
+Declaring Vectors 
+    - A vector is a net or reg with a range specification 
+    - You specify the vector's range when declaring the variable 
+        - [msb_constant_expression : lsb_constant_expression ]
+        - range can be ascending or descending 
+        - bounds can be negative, zero, or positive 
+        - bounds must be constant expressions 
+        - individual bits can be selected from a vector 
+
+Using Vector Ranges 
+    - Acesss vector selections whatever way you declared the range 
+    - Select one or more contigous bits 
+
+    input[3:0] inp;
+    output[3:0] outp;
+    assign outp = inp;
+
+    /*
+        outp[3] = inp[3];
+        outp[3] = inp[2];
+        ...
+    */
+
+
+    input[3:0] inp;
+    output[3:0] outp;
+    assign outp[3] = inp[0];
+
+
+    input[0:3]   inp;
+    output[3:0]  outp;
+    inp = outp;
+
+    inp[0] = outp[3]
+    inp[1] = outp[2]
+    inp[2] = outp[1]
+    ...
+
+Assigning Between Different Widths 
+    - Vector widths do not need to match in assignment 
+        - source wider than target truncastes value from msb 
+        - unsigned source shorter than target zero-extends value 
+        - signed source shorter than target sign-extends value 
+            - Selections and concatenations are not considered signed 
+
+        reg[3:0] zbus; 
+        reg[5:0] widebus;
+
+        always @* begin 
+            zbus = widebus;
+                = widebus[5]
+                = widebus[4]
+        zbus[3] = widebus[3]
+        zbus[2] = widebus[2]
+        zbus[1] = widebus[1]
+        zbus[0] = widebus[0]
+
+        Since widebus[5] and widebus[4] are unknown, we can use a concatenation operater to fill it 
+
+        widebus = {2'b00, zbus};
+
+        0       = widebus[5]
+        0       = widebus[4]
+        zbus[3] = widebus[3]
+        zbus[2] = widebus[2]
+        zbus[1] = widebus[1]
+        zbus[0] = widebus[0]
+
+Defining Literal Values 
+    You can specify a literal value as:
+        <size>'<base><value>
+
+        - size is an optional postive decimal number of bits 
+            - if unsized is at least 32 bits 
+        - base is a character to indicate binary, octal, decimal, or hexadecimal 
+            - B/b, O/o, D/d, H/h
+                - Verilog-2001: Optional preceded by an "s" character for signed character
+        - value is legal digits for base:
+            - can include _ if not first character 
+            - can include Z/z and X/x digits if base is binary, octal, or hexadecimal
+        - Verilog-2001: can be single Z/z or X/x digit if decial base 
+        - value is itself an unsigned number
+
+    Examples:
+        8'b1100_0001    -> 8 bit binary 
+        9'o017          -> 9 bit octal 
+        12              -> 32 bit decimal 
+        'h83a           -> 32-bit hexadecimal
+
+Automatic Extension of Unsigned Literals 
+    - For sized literals (e.g 1'b1)
+        - verilog pads to left with 0 to match size of wider expression 
+
+        Example:
+            reg[7:0] a;
+                a = 8'b11; //0000_0011 
+                a = 8'o11  //0000_1001
+                a = 11;    //0000_1011
+
+    - For unsized literal (e.g., 'b1)
+        - size is 32 bits 
+        - if leftmost digit is 1 or 0 
+            - verilog left-fills with 0 to make 32 bits and pads to left with 0 to match size of wider expression 
+        - If leftmost digit is Z or X:
+            - Verilog left-fills with that leftmost digit to make 32 bits 
+            - Verilog-1995 then pads to left wiht 0 to match size of wider expression
+            - Verilog-2001 then pads to left with that leftmost digit to match size of wider expression
+
+            reg[11:0] b;
+
+            b = 12'hzzz;    // zzzz_zzzz_zzzz
+            b = 12'hz       // zzzz_zzzz_zzzz
+            b = 12'h0z      // 0000_0000_zzzz
+            b = 12'hz0      // zzzz_zzzz_0000
+
+Variable Vector Selection 
+    - Bit-select   
+        - A single bit-select index may be variable 
+    - Range select
+        - In verilog 1995, range select indices must be constant 
+    - In verilog 2001, a range-select can use a variable index and a constant width 
+        - Base expression
+        - Width expression
+        - Offset directive 
+            - pos or neg 
+        - Offset indicates if the width is added or subtracted 
+
+        xample:
+            reg[7:0] vect;
+            reg[1:0] slice;
+            reg[2:0] index;
+
+
+            intial begin 
+                vect = 8'b10011001;
+                index = 4;
+                slice[0] = vect[index];
+
+                index = 4;
+                slice = vect[4:3];
+                slice = vect[index : index - 1];
+                    - This will error since it doesn't allow range select bounds to be a variable 
+
+            Thus needs to be like:
+                index = 4;
+                slice = vect[index -: 2];
+
+                This is correct 
+
+Declaring Nets 
+    - Nets behave like physical wires 
+    - Values are driven to them 
+    - Verilog has serveral net types 
+        - Most commonly used is wire 
+
+    - Verilog imlicitly declares wires
+        - Verilog-1995
+            - Undeclared identifiers connected to instance ports 
+        - Verilog-2001 
+            - Also undeclared identifier by continous assignment 
+        - Continuous assignments and instance output/inout ports drive nets 
+        - Change default with compiler directive 
+            - `default_nettype <nettype>
+
+        Net Types 
+            wire, tri        // Float to Z
+            wor, trior       // wire-or 
+            wand, triand     // wire-and 
+            tri0, tri1       // float to 0, 1
+            trireg           // capacitive 
+            supply1, supply0 // Power rails 
+            uwire            //unresolved 
+
+        
+        Examples: 
+            wire a, b, sel;  // Scalar wires 
+            wire [31:0] w1   // Vector wire 
+            wand c;          // Scalar wired-and 
+            tri [15:0] busa; // Vector bus 
+
+            module halfadd(input a, b, output sum, carry);
+            //a and b are wire by default 
+            //drive by continous assign 
+
+            assign sum = a ^ b;
+            assign carry = a & b;
+
+Undeclared Identifier in Verilog 
+    - A net is inferred for undeclared identifer by default in Verilog-2001 
+    - Whats the issue?
+        - svm is undeclared, so defaults to a single bit wire (implicit)
+        - No compilation error/warnings 
+        - sum output port is un-driven and so becomes value Z 
+        - Mistyped identifier defaults to net/wire 
+    
+    - What is the solution?
+        - Check simulation carefully 
+        - Use Verilog2001 default nettype which gives compilation error on svm 
+
+        module halfadd(input a, b, output sum, carry);
+            // a & b are wire by default 
+            assign svm = a ^ b; 
+            assign carry = a & b;
+        endmodule
+
+Usage of `default_nettype
+    - implicit wires can be avoided by using the default_nettype none compiler directive 
+    - any undeclared identifier is a compilation error/warning when this directive is used 
+    - directive can affect the compilation of other files once turned on 
+
+    Instead of:
+        input a, b, output sum, carry 
+
+    We should explicitly define what they are 
+
+        input wire a, b, output wire sum, carry 
+
+Merging Net Declarition and Assignment 
+
+    You can merge the net declaration and assignmnet - known as "net declaration assignment"
+
+Declaring Variables 
+    - Variables hold values that you procedurally assign 
+    - They keep the values untul you assign a different value 
+
+    - reg 
+        - 4 - state unsigned 1-bit 
+        - Can declare multi-bit vector 
+        - Verilog-2001 adds reg signe 
+    
+    - integer
+        - 4 state signed 32-bit 
+    
+    - time 
+        - 4 state unsigned 64-bit 
+
+    - real 
+        - double precision float 
+    
+    - realtime 
+        - same as real 
+
+Making Assignmnets to Variables 
+    - Read a variable's value from inside to outside a procudure 
+    - Write a variavble's value only from inside a procudure 
+    - Within a procedure you write only to variables 
+
+    Example 1 
+        module mux(
+            input a, b, sel, 
+            output op //wire by default
+        );
+        
+        /*
+            There is an error here because we are trying to procedurally assign a net 
+            We need to use the 'assign' key word  
+        */
+        always @*
+            if (sel == 1)
+                op = b;
+            else 
+                op = a;
+        end 
+    endmodule
+
+    Example 2:
+
+        module mux( 
+            input a, b, sel, 
+            output reg op
+        );
+
+        /*
+            Error here as we are trying to continuously assign a variable  
+            Continously assigments can only be used to write to wires  
+        */
+        assign op = sel ? b : a;
+
+    endmodule
+
+
+Assigned between integers and vectors 
+    - Assignment between reg and integer follows these rules:
+        - If value wider than target 
+            - Truncates value 
+        - If value shorter than target:
+            - If unsigned value:
+                - Zero-extends 
+            - If signed value:
+                - Sign-extends 
+
+Declaring Arrays of Nets and Variables 
+    - Verilog-1995 supports one-dimensional arrays of integer, reg, and time 
+        - integer int_a [0:99] 
+        - reg [7:0] reg_a [0:99]
+
+    - You can access one element (word) at a time by indexing to that word 
+    - You cannot direcctly take bit or part selects of a word (use an intermediate variable)
+    
+        reg[7:0] word, arr[0:255]
+        reg bit;
+
+        word = arr[5]; //acces address 5 
+        word = arr[10] //access address 10 
+        bit = word[7]; //access bit 7 of extracted word 
+
+    - Verilog-2001 supports multi-dimensional arrays 
+        reg reg_b [0:99] [7:0] //100 x 8 array of 1-bit elements 
+
+        - you can directly take bit and part selects of an indexed elemetn 
+            reg [7:0] array [0:255]
+            bit = array[10][5] //The 5th bit in the 10th register 
+
+Declaring Module Parameters
+    - A module parameter is an instance-specific constant 
+        - Parameterizes the module definition 
+            - width, depth, freq, time 
+        - Can override for each individual instance 
+
+        Example parameter list 
+            parameter   INTERGER_P  = 8, 
+                        REAL_P      = 2.039,
+                        VECTOR_P    = 16'bx;
+
+            module mux #(paramter integer WIDTH = 2)
+                        (input wire[WIDTH - 1:0] a, b,
+                         input wire,
+                         output reg [WIDTH - 1:0] op);
+
+Local Parameters and Parameter Passing 
+    - Localparams are true constants 
+    - Unlike parameters, localparams cannot be overriden from the next level of hierarchy
+        - Use for constants that should never be overriden upon instantion 
+            - For a module that is not instantiated (testbench?)
+            - For "enumerations" (FSM States)
+    - Verilog-2001 provides three ways to override module parameters
+        - Redefintion using defparam 
+        - Positional paraeter override during instantion 
+        - Named parameter override during instantiation 
+
+    defparam u2.width_b = 7;
+
+    us_mult #(5,7) u1(  .a(a_net), 
+                        .b(b_net),
+                        .product(a_b_mult));
+
+1. What are the four logic values in Verilog 
+    1, 0, Z, X 
+    High, Low, High Impedance, Unknown 
+
+    2. Rewrite 11010011 in hex 
+        D3
+    
+    3. How many bits wide is integer type 
+        4
+    
+    4. Primary difference between a net and variable 
+        - Net is continouslsly driven (wire) 
+        - A variable represents storage, storing a value until a new one is ASSIGNED 
+
+Module Exercise 
+    Code this two-inut AND operation using:
+        a: (i) wire 
+        b: (ii) reg 
+
+    A 
+        module and(input wire a, b, output wire y);
+            always @* begin 
+                y = a & b;
+            end 
+        endmodule
+
+    B 
+        module and(input reg a, b, output reg y);
+            assign y = a & b;
+        endmodule
+
+    WRONG 
+
+    A 
+
+        module and(input wire a, b, output wire y);
+            assign y = a & b;    
+        endmodule
+
+    B 
+        module and(input wire a, b, output wire y);
+            always @* begin 
+                y = a & b;
+            end 
+        endmodule
+
+        Reg has to be in an always block 
+
+        Regs need an always block 
+        wire needs to be assigned a value 
