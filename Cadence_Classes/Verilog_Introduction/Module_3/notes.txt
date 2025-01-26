@@ -1,0 +1,203 @@
+Introduction to Verilog 
+
+Describing Design Modules 
+    - Start with a module keywork 
+    - Describe the module interface 
+    - Verilog - 1995
+        - list of ports 
+            - (a,b);
+        - followed by a port declaration 
+            - input a, b;
+        
+        - Verilog-2001 
+            - list of port declaration
+                (input a,b,...);
+        
+        - Describe the module behavior
+        - End with endmodule keyword 
+
+    Verilog 1995 Halfadder Example:
+        module halfadd(a,b,sum,carry);
+            input a, b;
+            output sum, carry;
+                assign sum = a ^ b;
+                assign carry = a & b;
+        endmodule
+
+    Verilog-2001 Halfadder Example
+        module halfadd(input a, b, output sum, carry);
+            assign sum = a ^ b;
+            assign carry = a & b;
+        endmodule
+
+Creating hierarchy
+    - Declare local nets and variables 
+    - Instantiate module(s)
+        - Connect instance ports to local nets and variables 
+    - A port of an instance of a module can b econnected using:
+        - Named port connection 
+        - Ordered port connecttion 
+
+    Full Adder Example:
+        module halfadd(input a, b, output sum, carry);
+            assign sum = a ^ b;
+            assign carry = a & b;
+        endmodule
+
+        module fulladd(input a, b, cin, output sum, carry);
+            wire n_sum, n_carry1, n_carry2;
+                //  wires to carry a signal within fulladd module 
+
+            halfadd U1(.a(a), .b(b), .sum(n_sum), .carry(n_carry1));
+                // sum is the output 
+                //      a + b populates n_sum 
+                //      carry will be populated if there is a carry and will be sent to an or operation U3 
+
+            halfadd U2(.a(n_sum), .b(cin), .sum(sum), .carry(n_carry2));
+                // n_sum (a + b originally) + cin will populate sum 
+                // n_carry2 will be thrown to an or operation in U3 
+
+            or      U3(carry, n_carry2, n_carry1);
+                - takes 2 inputs, and an output of carry 
+                    - ors n_carry1 and n_carry2
+                    - carry will be high or low depending on the inputs 
+
+
+        endmodule
+
+            - ports are implicitly nets if not declared as a variable 
+                - input a, b, cin are nets 
+
+            - we are instatiating U1, U2, and U3 to Instantiate 3 halfadders within the full adder module 
+             
+Connecting Hierarchy - Named Port Connection 
+    - Map local port, net or variable to instance port by name - explicitly specify the instance port name 
+        - with this syntax you are less likely to make a mistake 
+
+        Example
+            halfadd U1 (.a(a), .b(b), .sum(n_sum), .carry(n_carry1))
+                The named port connection is doing:
+                    .a(a)
+                        - we are explicitly say .a of the halfadd module will be the a input of fulladd module 
+
+Connecting Hierarchy - Ordered Port Connection 
+    - Mao local port, net or variable to instance port by position 
+
+        halfadd U1(a, b, n_sum, n_carry2);
+            - doesn't have .a(a)
+                - thus we are passing the parameters by the order of the halfadd module parameters
+            - might be hard to remember the order of parameters, thus isn't as obvious
+
+Describing Module Behavior with Prodedural Blocks 
+    - Procedural Block starts with the keywords:
+        - always    
+            - Synthesizable construct 
+            - Executes at start of simulation 
+            - Execution blocks and unblocks in accordance with timing controls 
+            - When at end, loops back to beginning 
+            
+            Example:
+                always @ (a or b or sel) 
+                begin 
+                    if (sel == 1)
+                        op = b 
+                    else 
+                        op = a 
+                end 
+            
+            Event List:
+                (a or b or sel)
+                    - if any of these change, then the block is ran 
+            
+            Procedural block 
+                if (sel == 1)
+                    op = b 
+                else    
+                    op = a 
+                end 
+                    - ran as if normal code 
+                    - line by line 
+
+        - inital 
+            - non-Synthesizable or testbench construct
+            - executes at start of simulation 
+            - execution blocks and unblocks in accordance with timing contorls 
+            - when at end, terminates 
+        
+            Example 
+                initial 
+                begin 
+                    a = 1;
+                    b = 0;
+                end 
+
+
+        - Multiple statements in Procedural blocks are enclosed between begin and end keywords 
+        - Multiple procedural blocks interact concurrently 
+
+Synchronizing Module Behavior
+    - use the '@' even contorl 
+    - Execution block until an event in the event expression occurs 
+    - an event is any transition of the specified nets and variables 
+    - Verilog 2001 and above added the comma and wildvard operations 
+        - The wildcard operator adds all "signals" that go into the block and into any funtions called from the block 
+
+    1995 Example:
+        always @(a or b or sel)
+            if (sel == 1)
+                op = b 
+            else 
+                op = a 
+        end 
+
+    2001 and above 
+        always @ (a, b, sel)
+    
+    2001 and above - can use * wildward for combinatorial logic inputs 
+        always @*
+
+
+Communication Between Behaviors
+    - A design contains one or more modules 
+        - Reminder: 
+            - Modules communicate through ports connected to external nets and varialbes 
+    - A module may contain any number of procedural blocks:
+        - Each executes their own statements sequentially (like conventional programming languages)
+        - Multiple blocks execute concurrent (like hardware)
+        - Multiple blocks communicate using nets and varialbes
+
+Rules for Naming Identifers 
+    - Identifiers start with a letter or an underscore 
+    - Subsequent characters may be letter, digit, dollar sign, or underscore
+    - Verilog does not restrict name length 
+    - tool or methodology may restrict name length 
+    - Identifiers are case sensitive 
+
+Rules for comments and white space 
+    - Just like C and C++
+
+Using Design Libraries 
+    - Some verilog tools use compilation libraries 
+        - A collection of already-compiled modules or primitives 
+        - Stored in file system 
+        - Referred to by library name 
+        - Library map file maps name to location 
+            - Library name -> directory work 
+        - Compiler places output in "WORK" library 
+            - Word library specified by user for each compilation session 
+        - Configuration in Verilog provides a prioritized list of libraries form which to bind compiled cell descriptions to cell instances 
+            - not all verilgo simulator use compilation libraries
+
+Compiling the Design 
+    - generally not important 
+    - Execption: compiler directives 
+        - In sourc file(s)
+        - Tell compiler how to interpret Subsequent code 
+        - Not part of design but can effect how compiler creates the design 
+
+                Testbech
+                Design 
+        Processor Handler Monitor 
+            Recieveer Sender  
+
+

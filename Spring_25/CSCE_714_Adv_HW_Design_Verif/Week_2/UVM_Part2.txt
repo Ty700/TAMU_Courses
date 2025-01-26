@@ -1,0 +1,48 @@
+UVM Test   
+    - Top most class that will create the environment 
+    - Performs:
+        - Configures the testbench 
+        - Initiates teh testbench components construction by building the next level down in hiearchy
+        - Initiate the stimulus by starting the sequence 
+    
+    Class declaration 
+        - virtual class uvm_test extends uvm_component
+    
+    Methods 
+        - 'new'
+            - creates and initializes an instnace of uvm_test using the normal constructor arguments for uvm_component
+
+UVM Environment 
+    - a container for multiple reusable verification components and defines their default configuration 
+    - It instantiates and connects the following:
+        - Agents 
+        - Scoreboard 
+        - Top-level monitor 
+        - Checker 
+    - uvm_env is the base class for hierarchical containers of other components that make up a complete environment
+
+Example
+    class mem_model_env extends uvm_env;
+        
+        mem_agent mem_agnt;                     //declaration of an agent 
+        `uvm_component_utils(mem_model_env);    //declaration of an agent
+
+        // These next few lines are a constructor 
+        function new(string name, uvm_component parent);
+            super.new(name, parent);
+        endfunction: new 
+
+        //Build phase - creates an agent label "mem_agent"
+        function void build_phase(uvm_phase phase);
+            super.build_phase(phase);
+            mem_agnt = mem_agent::type_id::create("mem_agent", this);
+        endfunction : build_phase
+    
+    endclass : mem_model_env
+
+SystemVerilog Interfaces 
+    - A SystemVerilog interface is a named bundle of wires that encapsulates communication 
+    - It provides a mechanism for grouping together multiple signals into a single unit that can be passed around the design hiearchy
+        - Basically, rather than worrying about all the small details of all the wires, bundle them together under a name, e.g. "Bus A", and 
+            have a monitor watch it 
+    

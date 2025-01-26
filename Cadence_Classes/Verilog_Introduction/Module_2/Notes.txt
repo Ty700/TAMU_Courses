@@ -1,0 +1,105 @@
+Terms and Definitions 
+    - HDL 
+        - Hardware Description Language 
+            - Programming-like language that describes the functionality of digital electronic hardware circuits 
+
+        - HDL supports design at multiple levels of abstraction
+            - Behavioral Modeling 
+                - Sequential    
+                    - Kinda like normal programming where expressions are run one after another 
+
+                - Parallel Behaviors 
+                    - All the blocks expressions run at the same time 
+            
+            - Structural Modeling 
+                - Hardware Component hierarchy 
+                - Software subroutine hierarchy
+
+        - An HDL typically supports simulation of estimated design timing 
+            - HDL has to model propregation delays, clocks, etc because it doesn't have any idea what time is 
+
+    - Simulator 
+        - Software that imitates the functionality of electronic hardware as described by the HDL 
+
+    - Level of Abstraction 
+        - The level of detail provided by the utilized modeling syste
+
+    - Application Specific Integrated Circuit (ASIC)
+        - Integrated circuit developed for a specific application 
+
+    - Bottom-Up Design Flow 
+        - A design methodology in which you build the low-level components first and then connect them to make large systems 
+    
+    - Top-Down Design Flow 
+        - Define the system at a very high level of abstraction and then iteratively fine it 
+    
+    - Register Transfer Level (RTL)
+        - A level of abstraction that defines storage elements and their clocks 
+    
+    - Tool Command Language (TCL)
+        - A scripting language used for issuing commands to interative programs 
+
+What is an HDL?
+    - Programming language with special constructs for modeling hardware, such as abstraction, concurrent behavior and timing 
+
+4 Basic Levels of Abstraction
+    - Behavioral 
+        - Algorithms 
+
+    Down one level...    
+    - Register Transfer Levels 
+        - Nets and registers 
+    
+    Down one level...
+    - Gate Level    
+        - Built-in and user-defined primitives 
+    
+    Down one level...
+    - Switch Level  
+        - Built-in switch primitives
+
+Abstraction Level Tradeoffs 
+- Simulation effort is proportional in detail 
+    - The higher up in abstraction
+        - less detail
+        - Faster design entry 
+        - Faster Simulation 
+    
+    - Lower in abstraction
+        - More detail 
+        - Slower in design entry 
+        - Slower simulation
+
+Abstraction Level Example - Divide by two 
+
+Behavioral Levle 
+    always @ (din)  
+        dout = din/2;
+
+    - Block executed on every change in din 
+
+RTL Level   
+    always @(posedge clk)
+        dout <= din >> 1;
+    
+    - posedge filters transitions to just @ positive edge of clk 
+    - special "nonblocking" assignment 
+
+Why use a HDL 
+    - write HDL in simple ASCII text 
+        - Capture teh design qickly and easily manage modifications 
+
+    - Design at a higher abstraction level 
+        - Easily explore design alternatives 
+        - Find probems earlier in the design cycle 
+    
+    - Use of a standard HDL enables design reuse 
+        - Between design teams and partners, and through the design flow 
+        - No re-entry, reformatting, or translation 
+    
+    - Description it independent of the implmentation 
+        - Delay the choice of implementation technology 
+        - More easily make architectural and functional changes 
+        - Easily adapt the design to future jobs
+
+    

@@ -1,0 +1,117 @@
+Outline
+    - What is UVM 
+    - What are the features of UVM 
+    - UVM Testbench History 
+    - What are the components of a UVM testbench 
+    - UVM testbench example code 
+
+What is UVM 
+    - Universal Verification Methodology 
+    - Framework which uses system veriolog constructs to build testbenches to verify the functional correctness of designs 
+    - Consists of a set of base classes and methods 
+        - Advantage 
+            - Reusability 
+            - Help speed up the creation or implementation of test bench 
+    - SystemVerilog environment can be developed by extending these base classes 
+    - Originally developed by Accellera 
+    
+What are the features of UVM? 
+    - A library of base classes 
+        - Agent
+        - Sequencer 
+        - Driver 
+        - Monitor 
+        - Scoreboards 
+
+    - Code reusability and parameterization 
+
+    - Verification phases for synchronizing concurrent processes 
+        - UVM phasing mechanism gives a structure flow called phase
+    
+    - Reporting mechanisms for printing and logging results 
+        - Debugging 
+
+    - Transaction Level Modeling for communication between verification components 
+    
+    - Macros to semi-automate the generation of required UVM code   
+    
+UVM Core Components    
+    - Transaction
+        - Objects that model data transfers between components 
+    - Sequences
+        - Series of transactions that generate stimulus 
+    - Sequencers 
+        - Components that control sequence execution 
+    - Drivers 
+        - Convert transactions into pin-level activity 
+    - Monitors
+        - Observe and collect pin-level activity 
+    - Scoreboards
+        - Check if the design behaves correctly 
+
+DUT Example 
+
+    Memory DUT (
+        .clk(intf.clk),
+        .reset(intf.reset),
+        .addr(intf.addr),
+        .wr_en(intf.wr_en),
+        .rd_en(intf.rd_en),
+        .wdata(intf.wdata),
+        .rdata(intf.rdata),
+    )
+
+    .addr   -> bus that specifies which addr to access 
+    .wr_en  -> write enable. If high, writes to the addr 
+    .rd_en  -> read enable. If high, reads to the addr 
+    .wdata  -> carries the data to be written to at the addr 
+    .rdata  -> output, provides the values that are read out of the memory at addr 
+
+    What features do we want to verify?
+        - Have to think about: 
+            1. Memory Operations
+                - What are we doing? Writing? Okay, after we write is it correct?
+            2. Reset 
+                - Do we verify all the memory values to make sure that all are reset 
+            3. Address Space Coverage     
+            4.  Control Signal Scenarios 
+            5. Corner Cases?
+                - Write with an immediate read after at the same addr 
+            
+UVM Classes 
+    - Uses OOP design patterns and the UVM to write more manageale and re-usable code 
+    - UVM consists of three main types of classes:
+        1. uvm_object class
+        2. uvm_transaction class 
+        3. uvm_component class 
+
+    uvm_object
+        - this class contains core class based operation methods (create, copy, clone, compare, print, record, etc...), instance identification fields (name, type name, id, etc), 
+            and random seeding
+        - uvm_transaction and uvm_component are derived from uvm_object
+    
+    uvm_transaction
+        - the root class for UVM transactions
+        - used in stimulus generation and analysis 
+        - inherits all methods of uvm_object and adds a timing and recording interface 
+        - provides:
+            - timestamp properties 
+            - notification events 
+            - transaction recording support 
+        
+        Example:
+            - Single write operation:
+                - "Write 0xAA to address 0x2"
+            - Single read operation:
+                - "Read from address 0x1"
+
+    uvm_component
+        - Components are static objs that exist throughout the stimulation 
+            - Every uvm_component is uniquely addressable using a path name, e.g. "env.agent.drive"
+            - uvm_component also defines a phased test flow, that components follow during the course of the simulation 
+            - each phase is defined by a callback that is executed in precise order 
+            - uvm_component also defines configuration, reporting, transaction recording, and factory interfaces 
+        
+        
+
+            
