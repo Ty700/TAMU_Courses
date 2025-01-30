@@ -1,0 +1,69 @@
+Type safety 
+    - Langauge property that helps defend against memory safety issues 
+
+Langauge-Based Memory Safety 
+    - Lots of memory safert issues come from use of C/C++ or similar languages 
+        - Type-safe languages:
+            - Java
+            - Smalltalk
+            - scheme
+            - Haskall
+
+            - These languages are designed with memory saferty in mind 
+
+        - C/C++ is used for performance considerations 
+
+Type Safety 
+    - A program is type safe if it is known to be free of type errors 
+        - However, the system is allowed to halt at runtime before performing an operation that would result in a type error 
+
+    - A language is type safe is all legal programs in that language are type safe     
+    - Some Langauges for systems programming, for example Mesa, have a safe subset, although the languages as a whole is not type safe 
+    
+    - Type safety is critical in programming languages  
+        - aims to prevent type errors from occuring in programs 
+        - Enforcing type safety is a challenge 
+
+Type Error 
+    - runtime error that occurs when an attempted operation on a value for which the operation is not defined to do so 
+        Example:
+            boolean b, c;
+            b = c + 1;
+
+            int i;
+            boolean b;
+            i = b;
+
+        - Type errors would occur here 
+
+Type Defintion 
+    - Type: 
+        - a set of value and operations allowed on certain values 
+        
+        Example:
+            - Java:
+                - int 
+                    - values = [2^(-31) - 2^(31) - 1]
+                    - operations = {+, -, *, /,...}
+
+                - boolean   
+                    - values = T/F
+                    - operations = {&&, ||, ...}
+
+Statically Typed Langauges
+    - Statically Typed:
+        - the type of every expression can be determined at compile time 
+        - each variable has a single type throughout the lifetime of that variable at runtime 
+            - Java, ML, Haskell, etc 
+
+        - Has advantages in security because it provides certainty about the var's type. 
+        - This allows you to understand the operations that can be applied to it and the range of values it can hold 
+
+Dynamically Typed Languages 
+    - Types of expressions are not known until runtime 
+        - type of a variable can change dynamically during the execution of the program 
+
+    - Type checking isn't done at compile time, rather run time 
+        - If type error happens, it will crash unlike statically type safe languages that will crash at compile time 
+
+        

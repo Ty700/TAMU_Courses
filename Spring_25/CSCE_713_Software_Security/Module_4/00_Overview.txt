@@ -1,0 +1,6 @@
+Overview 
+    Dives into memory safety
+        - critical aspect of software security 
+        - spotlighting its importance through statistics and examples 
+    - Spatial memory safety attacks  
+    - Significance of type safety in programming langauges, shedding light on the balance between security and performance 

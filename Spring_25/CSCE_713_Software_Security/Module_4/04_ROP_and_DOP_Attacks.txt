@@ -1,0 +1,67 @@
+Variants of Spaitial Memory Attacks 
+    - Return-oriented programming attacks 
+        - "ROP" attacks 
+        - Return addresses are certainly the main targets of most spatial memory attacks 
+            - Not the only target 
+                - For instance, there can be code pointers on the stack, which are tpyically function pointers among local variables 
+                    Corrupting these code pointers has the same affect as corrupting the return address 
+                - There is also data on the stack, whcih are simply other local variables that are not function pointers 
+                    - Not typically targets of spatial memory attacks since changing these don't change the execution flow of a program directly 
+                        - Will discuss more later 
+    For instance, there can be code pointers on the stack, which are tpyically function pointers among local variables 
+              
+    Return Addresses on Stack   
+        - Attackers can corrupt multiple return addresses by buffer overflow 
+        - When the function returns, the CPU will pop the return address off the stack, and then jump to the location the attacker overwrote 
+            - Extension of this attack:
+                - One buffer overflow can corrupt multiple return addresses stored in their respective frames 
+                    - Would require attacker to know the size of each frame
+                        - Obtained via reverse engineering 
+    
+    Return-oriented Programming 
+        - Using multiple "gadgets" ended with "RET" can allow you to compose proper code sequence for attack 
+        - By corrupting multiple return addresses, attackers can achieve a pretty complex attack called "Return-Oriented Programming" attack 
+            - does not require injecting code into the stack, since code injection is typically impossible ith the OS settings the stack and data segment of the program 
+                 to be non-executable
+            - However, a ROP attack can reuse the exisiting code inside the program, and reconstruct the logic the attackers want to achieve 
+
+        - Key to this attack: 
+            - scan the pgoram code and discover small code snippets that are called "Gadgets" 
+                - each "gadget" contains some assmebly code and a return address 
+                - attackers can search gadgets starting from any location inside the program 
+                
+        - Once the attacker finds some gadgets, they can chain them togeter to form the attack logic they want to achieve inside the program 
+            - chaining works by overwriting multiple return addresses on the stack to make them point to the select gadgets. 
+            - Since all the gadgets ended with a return address, they will pop the next return addresses off the stack, whcih pointes to the beginning of the next 
+                gadget 
+            
+    - Code pointers on Stack 
+        - Not just return addresses can be corrupted by spatial memory attacks 
+            - Return addresses are not the original code addresses that can be overwriten off the stack 
+            - A code pointer assigned at teh run time, also called a function pointer, can be overwritten when a buffer overflow happens 
+
+    - Data in local variables 
+        - Code pointers and data poitners or structures stored on the stack can be overwritten during buffer overflow attacks 
+
+        Example:
+            seteuid(0);
+            ...
+            seteuid(pw->pw_uid);
+
+            - If an attacker does a buffer overflow attack they can overwrite the pw pointer and where it points to.
+                - Thus, they can setuid to any value they want too...
+
+Data-Oriented Programming 
+    - recent 
+    - like ROP but more complex 
+    - allows attackers to execute almost any arbitrary code by simply corrupting local data varaibles 
+    - biggest strength of the attacK:
+        - can work even when ROP attacks are prohibited using software defense techniques like control flow integrity 
+    
+    - Fundamental idea is to use buffer overflow attacks to corrupt data variables rather than code pointers 
+    
+    - What can attacker achieve by modifying local variables?
+        
+Code/Data Pointers in structures 
+    - Code pointers and data pointers can be inside a structure, whcih is again pointed by a data pointer 
+    - Essentially pointers are bad in terms of secuirty lol

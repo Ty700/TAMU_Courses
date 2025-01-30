@@ -1,0 +1,65 @@
+Memory Safety 
+    - one of the most important security issues 
+    - apparent when you look at the list of vulernabilites in this categories 
+    - more than 70% of all security bugs are memory safety issues 
+
+    - The reason?
+        - Easily found 
+            - Common mistakes when programming 
+        - Have severe consequences 
+            - With memory saferty breach
+                - Data leakage 
+
+Types of Memory Safety Attacks 
+    - Root Causes:
+        - Out-of-bound pointers     
+            - Spatial 
+            - Pointers that point to a range that is out of bounds 
+        - Dangling Pointers 
+            - Used outside of the time where the pointer is valid 
+            - Temporal memory safety issues 
+
+    - Using these different kinds of memory safety attacks, a person can corrupt a lot 
+    - Corruption Targets:
+        - return addresses of functions 
+            - common with out-of-bound attack 
+                - AKA "Stack Smashing"
+        - Code pointers 
+        - Data pointers 
+        - Data variables 
+
+    As a result of these attacks, one might encounter:
+        - code corruption 
+        - code injections 
+        - control flow hijacking 
+            - allows attackers to redirect the program's execution flow to uninteded locations 
+        - Advanced techniques:
+            - return-oriented programming attacks 
+                - enable arbitrary code execution 
+            - data-oriented programming attacks 
+
+Why is Memory Saferty Hard? 
+    - Fundamentally a difficult topic, unsolved today 
+        - partially due to the trade-offs between:
+            - Fine-grained vs coarse-grained policy 
+
+            Example:
+                char test_buffer[256];
+                int secret;
+                scanf("%s", test_buffer);
+                pritn("%d\n", secret);
+            
+            - Line 3 can access variable "test_buffer"
+            - Line 4 can acccess variable "secret"
+        
+            - A fine-grained policy dictates that line 3 should only access the test buffer, not the secret
+            - Line 4 can only access the secret, not the test_buffer
+            - approach aligns with the principle of least privilege and the separation of privileges, aiming to minimize potential vulernabilites
+                and the risk of data leakage or exploitation 
+            
+            However, this is not programs usually operate 
+                - programs are subjected to a coarse-grained policy enforced by OSs, whcih provides an address space labeled as 'data' and allows every line of code to 
+                    read any part of this data without restrictions 
+                - Thus, there is a large block of memory designated for data and another for code, with any segement of code capable of accessing any part of the data 
+                
+    

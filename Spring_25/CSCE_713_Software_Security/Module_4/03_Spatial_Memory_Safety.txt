@@ -1,0 +1,69 @@
+Spatial Memory Safety 
+    - Due to the challenges posed by poitners, programs require what we refer to as spatial memory safety. 
+        - This memory property necessitates that a porgram avoids the issues we discussed early. 
+        - It should not trigger any out-of-bound pointer issues 
+    
+    - Say we have a range of memory 0x0000_0000 to 0xFFFF_FFFF 
+    - We have a pointer than is in-bounds from 0x5555_5555 to 0x5555_F555;
+        - This range is supposed to be read/modified
+        - If the pointer points beyond the designated ranges, it is considered 'overflow' 
+        - If the pointer points below the ranges, it is 'underflow'
+    - Spatial memory safety involves bounds checking 
+        - verifying that the pointer accesses only the specified range 
+            - challenging task 
+
+    - Naive Case of Buffer Overflow attacks 
+        - We have a stack or a heap with two buffers beside each other 
+            - buffer1 and buffer2 
+            - 256 bytes in size 
+        - If we attepmt to copy something into buffer1, we can exceed the bounnds by writing more than 256 bytes into this buffer 
+        - This will corrupt buffer2 
+        - In the past, when there wasn't any fine-grained permission control over pages, there was no mechanism to prevent a page being executable 
+        - This posed a problem because if a page was both readable and writable, you could write code into it. 
+        - Essentially, we could fill it with src code and use it later to execute 
+        - Not possible today due to the non-executable but, but in the past, this was a feasilble approach enabling code injection 
+
+        - Another scneario arises when the assembly code is writable, whcih is occasionally the case 
+        - Sometiems we make ethe assembly code writable, primarily for loading purposes or just-in-time compilation 
+        - This allows corruption of the assembly code 
+
+        - Challenges: 
+            - dealing with sections in the middle 
+            - attackers might make educated guesses about what should be in the middle 
+                - Thier goal is simple: 
+                    - prevent the program from crashing 
+                    - As long as the provide some value that prevents a crash, it is considered successful 
+
+            - How do attackers know whcih part of the assembly code to target? 
+                - "Landing zones" 
+                    - attackers might include "NOP" instructions. 
+                    - When the proram encounters these instructions, it simply proceeds to the next instruction 
+                    - Attacks can write a series of "NOP" to create a landing zone 
+                    - If someone jumps into the middle of this zone, it is akin to an airplane landing, and they can proceed until they reach the instruction they want to execute 
+                    - Various techniques enchance effectiveness of such attacks 
+
+                Classic Stack Smashing 
+                    - void copy_msg(char *new_msg){
+                        char msg[256];
+                        strcpy(msg, new_msg);
+                    } 
+    
+                - What is stack smashing?
+                    - we see the stack is composed of specific elements 
+                        - local vars 
+                            - like "msg"
+                            - space referred to the current function is referred to as "current frame" 
+                                - includes local variables, and has a poitner pointing to the last frame and return address 
+                                    - The return address points to the next instruction in the caller 
+                                        this is where the function will go after it hits a return statement 
+                                    - since the stack grows downwards, adding new frames with new variables, with new return addresses, and new last frames, 
+                                        what happens where the input to this function exceeds the size of "msg" which is set to 256 bytes> 
+                                        - This can lead to corruption of the frame pointer and the return address above it 
+                                        - Thus redirecting the return addresses to some where else 
+                                        - This place could be any where but a classic example often involves pointing to something like "system" 
+                                        - "System" is a C library that allows you to execute shell code 
+                                            - Thus we can run system commands
+                                                - We can do anything system commnands allows us to do: 
+                                                    - Delete files 
+                                                    - escalate permission 
+                                                    - perform other powerful actions 

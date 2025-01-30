@@ -1,0 +1,182 @@
+Overview 
+    - Describe design behavior procedurally
+    
+Describing module behavior 
+    - initial construct starts execution at the start of simulation, and when completed, terminates 
+    - always constructs starts execution at the start of simulation, and when complete, executes again
+
+    Example:
+        initial begin 
+        end 
+
+        always @* begin 
+        end 
+
+Synchronizing Module Behavior 
+    - Procedures "block" upon encountering an event control 
+    - Procedures "unblock" upon occurrence of any of the listed events 
+    - An even control can reference:
+        - A single even identifer
+        - An event expression 
+        - The " " wildcard operation 
+
+    Examples:
+        @a 
+        @(a)
+        @(a or b)
+        @(a, b)
+        @*
+        @(*)
+        @(posedge clk)
+        @(posedge clk or negedge rstn)
+
+    Event Expression is the list of inputs that when changed will trigger always block 
+
+    always @(a or b or sel)
+        - if a, b, or sel is changed, always block will run 
+
+Interactions Between Behaviors 
+    - always blocks will execute its statments concurrently 
+    - if multiple always blocks, the top most will run first, and move down to the second, third, ...
+
+    always @* begin 
+        ...
+    end 
+
+    always @(posedge clk) begin 
+        ...
+    end 
+
+Making Procedural Assignments 
+    - Procedural assignments are assigned made inside procedures 
+    - You make procedural assignments only to variables 
+
+Making Conditional Statements 
+    - if is a conditional statement 
+
+    Syntax:
+
+    always @(a, b, c, sel) 
+        if (sel == 3'b000)
+            y = a;
+        else if(sel <= 3'b001)
+            y = b;
+        else 
+            y = c;
+    endmodule
+
+Making Case Statement 
+    Syntax  
+        case(sel)
+            0:          y = a;
+            1,2,3,4,5:  y = b;
+            6,7         y = c;
+            default:    y = 'bx;
+        endcase 
+    
+Making Case Statement casex 
+    - Treats Z, X, and ? characters as don't care bit position in either:
+        - cae expression 
+        - case item expression 
+    - Let's you group match values for more concise description
+        - encodes, decoders, etc 
+        - not very useful in testbenches 
+        - not a preferred method usually 
+    - casex treats X in case expression as meaninful in uninitialized logic 
+        - hides initialization problems 
+        - not recommends 
+
+    Example
+        always @(a, b, c, sel) 
+            casex(sel)
+                3'b000          : y = a;
+                3'b0??, 3'b?0?  : y = b; // 001, 010, 011, 100, 101 are all fine, and we want this to execute
+                3'b11x          : y = c; // 110 or 111 is 6 or 7, so either one we want to execute 
+                default         : y = 'bx;
+            endcase 
+        
+        - Using ? is more readable than using x or z 
+
+
+Making Case Statement casez
+    - Treats z and ? characters as "don't care" bit positions in:
+        - case expression (sel)
+        - case item expression 3'b0ZZ 
+    - Performs definitive match for X 
+        - useful in testbenches 
+    - Casez is perferable to casex 
+        - X in case expression is not wildcard 
+        - Safer for unintialized RTL code 
+
+Alternate Case Statement form 
+    - case item match can be an expression as well 
+    - case item match expression does not have to be a constant value 
+    - can use case statement to match variable expressions 
+    - case items are prioritized according to the other 
+
+    always @* (a, b, c, d)
+        case(1'b1) //Always run 
+            sel == 3'b000 : y = a;
+            sel <= 3;b101 : y = b;
+            sel >= 3'b110 : y = c;
+            default       : y = 'bx;
+
+        endcase 
+
+        - Essentially, always run the case, find the first one that is true, else go to default 
+
+Making loop statements 
+    - while loop iterates and executes its following statements while the expression is known and non-zero 
+    - must previousl declare any variables used in expression 
+    - while expression is known and true, executes statement 
+
+    Example:
+        count = 0; 
+        while(tempreg)
+            begin 
+                if(tempreg[0])
+                    count = count + 1;
+                tempreg = tempreg > 1;
+            end 
+        
+Making Loop Statements: For 
+
+    - For loop requires prior declaration of any variables used in expression 
+    - initialized is done for the loop 
+    - condition checked 
+    - while condition is known true, executes statements 
+    - update expression is then executed at end of each iteration 
+
+    Example:
+        always @*
+            begin 
+                odd = 0;
+                for(i = 0; i <= 3; i = i + 1;)
+                    odd = odd ^ a[i];
+            end 
+
+Making Loop Statements: repeat 
+    - repeat loop executes teh statements number of times specified in the loop 
+    - must previously declare any variables used in expression 
+    - for expressed count executes statement 
+    - repeat loop is equivality to a for loop with the index variable automatically declared, initialized, and incremented 
+
+    Example:
+        repeat(4)
+            begin 
+            ...
+            end 
+    ... will repeat 4 times 
+
+Making Loop Statements: forever 
+    - forever loop executes statement forever 
+    
+    Example:
+        reg clock;
+        intial 
+            forever 
+                #10 clock = !clock;
+        
+        - This example turns a clock high to low or low to high every 10 seconds 
+        - Cycle is every 20 seconds 
+ 

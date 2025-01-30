@@ -1,0 +1,235 @@
+Learning Outcomes 
+    - Involves working with an APB master without a DUT, using VIP testbench components (APB VIP) to test the master itself 
+
+You will learn  
+    - How the APB master sends read/write transactions by setting input address, data, and read/write signals 
+    - Using an APB Monitor to check and cover the signals of the APB master's traffic 
+    - Applying assertion-based verification
+    - Analyzing and improving coverage metrics 
+    - Debugging assertion failures 
+    - Creating test cases for read and write operations 
+    - Understanding APB protocol state transitions 
+
+Testbench 
+    - includes an APB Master and Monitor
+        - The APB master vip tests itself by initiating multiple transactions 
+        - A passive APB monitor checks coverage of the APB Master traffic 
+        - No DUT 
+    - In future labs, DUT is present 
+
+Testbench - APB Transactions
+    - bus protocl implements a master-slave communication interface with singals: 
+        - pclk 
+        - psel 
+        - penable 
+        - paddr 
+        - write control and bidirectional data busses 
+    
+    - The master has some system level signals as input because there is no slave in the testbench 
+    - This architecture supports single and burst transfers?
+
+
+APB Transactions and state machines 
+    - IDLE State:
+        - No transfer is occuring 
+            - PSELx = 0 
+            - PENABLE = 0 
+                - system waits for a transfer to be initiated 
+    
+    - SETUP State 
+        - Transfer is initiated, slave is selected, PSELx = 1, PENABLE = 0
+            - Prepares the system for data transfer or repsonse 
+    
+    - ACCESS State 
+        - Active transfer phase where data is read or writeten 
+            - PSELx = 1
+            - PENABLE = 1
+            - PREADY determines if the transfer is complete 
+
+    - PREADY Signal 
+        - When PREADY = 1 in SETUP, it transitions to ACCESS for transfer 
+        - When PREADY = 1 in ACCESS, transfer completes and may return to IDLE 
+    
+    - Transition Flow 
+        - From IDLE -> SETUP 
+            - A transfer is initiated. 
+        - From SETUP -> ACCESS
+            - Transfer begins if PREADY = 1
+        - From ACCESS -> IDLE 
+            - Transfer ends when PREADY = 1 
+
+Advance Peripheral Bus Protocol 
+    - Key features 
+        - State Machine 
+            - Idle, Setup, and Access 
+        - Single Transfer Cycle: 
+            - setup phase and access phase 
+        - Simple Control signals 
+            - Psel, PEnable, PWrite 
+
+    Signal 
+        PAddr 
+            - Master -> Slave 
+            - Address of the target register or device 
+        PWDATA 
+            - Master -> Slave 
+            - Write data to the slave 
+        PRDATA 
+            - Slave -> Master 
+            - Read data from slave 
+        PWRITE 
+            - Master -> Slave
+            - Read (0) or Write (1) transaction 
+            - Control signal for read or write 
+        PSEL 
+            - Master -> Slave 
+            - Selects the slave for communication
+        PENABLE 
+            - Master -> Slave 
+            - Indicates teh access phase 
+        PREADY  
+            - Slave -> Master 
+            - Indicates the slave is ready 
+        PSLVERR 
+            - Slave -> Master 
+            - Error signal for unsuccessful transfers 
+        PSTRB 
+            - Master -> Slave 
+            - Byte lane enable for partial transfers 
+        PPROT 
+            - Master -> Slave 
+            - Access type: Privileged, secure etc 
+        PPCLK 
+            - Clock 
+            - Clock for synchronizing
+        PRESETn 
+            - Reset 
+            - Active-low reset for initialization 
+
+Directory Strucutre for this lab 
+    lab-1
+    |
+    |
+    +--example
+    |
+    |
+    +--sim
+        |
+        |
+        +--- cov_word 
+        |
+        |
+        +--- rtl 
+        |    |
+        |    +--- apb3_monitor.sv 
+        |    |
+        |    +--- apb_master.v 
+        |    |
+        |    +--- version.v 
+        |
+        +--- waves.shm 
+        |
+        |
+        +--- top.v
+
+cov_work 
+    - Directory and waves.shm are generated after you run a simulation 
+    - Contains the recorded coverage and waves.shm is the wavefrom database that is exported automatically 
+
+Sim (Directory) 
+    - Where the coverage data, waveform signals data, rtl files and testbecnch top file is saved 
+    - Simulations are launched in this directory 
+
+top.v 
+    - Testbench top file that does the job of parameter and variable declarations, master, and monitor instantiations, clock generation, managing timing of transactions, and run tests 
+
+waves.shm (Directory)
+    - contains saved waveforms, generated post-simulation
+
+cov_work (Directory)
+    - contains collected coverage data, generated post-simulation 
+
+rtl (Directory)
+    - containing the rtl files associated with this lab 
+
+apb3_monitor.sv     
+    - monitor file containing assertions to validate APB protocol, signal observation, and coverage metrics 
+
+apb_master.v 
+    - Master file containing APB State maching implementation, drives APB signals and accepts system level inputs 
+
+version.v 
+    - file displaying the apb VIP version 
+
+
+APM Master - apb_master.v 
+    - Module Purpose 
+        - implements an APB master interface that manages read and write transactgions with the APB slaves 
+    - State Machine 
+        - Contains a 3-state FSM logic (IDLE, SETUP, ACCESS) to control the APB protocol phases 
+    - Signal Handling 
+        - Drives APB signals (PADDR, PWRITE, PWDATA, PENABLE, PSEL) based on the FSM state machine 
+    - System Interface 
+        - Accepts system-level inputs (sys_addr_i, sys_data_i, sys_write_i, sys_ready_i) to initiate and manage APB controls 
+    - Read Data Check   
+        - Includes a property for verifying correctness of read data (prdata_i) during APB read transactions
+    - parameterization 
+        - Allows flexibilty for address and data bus widths through configurable parameters 
+
+APB Monitor - apb3_monitor
+    Module Purpose 
+        - A SysVerilog Assertion base monitor to validate and observe compliance with the AMBA APB3 protocol in SoC designs 
+    Interface 
+        - Configurable to validata both master and slave components of the APB3 bus 
+        - Supports signal observation for key APB3 protocol fields like address, data, protextion and select signals 
+    functionality  
+        - Implements assertions for protocol checks 
+        - Optional coverage metrics enabled through COVERAGE_ON for functional validation and tracking 
+
+Testbench - top.v 
+    - Parameter and Variable Declarations 
+        - Defines bus widths and control signals for the APB master-slave interface 
+    - Master - Slave communication
+        - Handles communication between the APB master and slave using various control and data signals 
+    - APB Master Instatntiation 
+        - Instantiates the APB master module to initiate transactions with the slave 
+    - Clock and Test Case Simulation 
+        - Generages clock and runs test ases for read/write operations with specific address/data values and delays 
+    - Simulation Timing Contorl 
+        - Controls the timing of transaction, including delays to simulate real-world conditions and test edge cases 
+
+TO-DO 1 
+    - In the file examples/sim/top.v write two test cases under TO-DO1 to perform two read operations to the addresses and data:
+        A1 = 0x12345678, D1 = 0x9ABCDEF0 
+        A2 = 0x9ABCDEF0, D2 = 0x12345678 
+
+    - If you simulate, you will get the slave_plsverr_last_access assertion failure 
+        - The assertion is not fixed yet 
+        
+        - Capture the simvision waveform containing all the signals covered in Figure 2.2
+        - Capture the screenshot of the cp_state_transition covergroup 
+        - Move your waveforms and screenshots to the direction TO-DO_1 
+
+TO-DO 2 
+    - When you run the simulation for the first time you will see the error: 
+        - slave_plsverr_last_access 
+    - Update TO-DO 2 in top.v to solve this assertion failure 
+
+        - Capture the simvision waveform containing all the signals covered in Figure 2.2
+        - Capture the screenshot of the cp_state_transition covergroup 
+        - Move your waveforms and screenshots to the direction TO-DO_2
+
+TO-DO 3 
+    - Under the initial block on top.v complete the following:
+        Testcase 1:
+            - Write a test case that writes using the following address and data 
+                A = 0x1111_2222, D = 0x5555_6666
+                
+                - The test case should also cover teh coverpoint tran_access_wait 
+            - When you open the coverage, you should notice that the state tran_access_wait is covered 
+                - goes from 0% -> 100%
+                - trans_access_setup will be the only one 0%
+        
+        - Capture the simvision waveform containing all the signals covered in Figure 2.2
+        - Capture the screenshot of the cp_state_transition covergroup 
+        - Move your waveforms and screenshots to the direction TO-DO_3

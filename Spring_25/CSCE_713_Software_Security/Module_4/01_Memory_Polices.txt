@@ -1,0 +1,72 @@
+Memory Permissions in OS 
+    - Physical memory
+        - No permission control 
+        - not accessible by user space 
+        - when accessing new memroy, kernel faces no limitations, it is all readable, writable, and executable 
+
+    - When a program wants to use physical memory, it must map it into virtual memory 
+        Virtual memory DOES have permission control 
+        - Page table enforces this mapping 
+        - The idea is that within this virtual memory, addreses go through the page table one level at a time until they are mapped to a 
+            physical address 
+        
+    - Then how does that connect to pointers?
+        - A pointer is a programming primitive that refers to function or data pointers 
+        - From the CPU's perspective, a pointer's type is irrelevant 
+            - it is just an address that can be dereferenced to any part of the virtual memroy 
+    
+        - For OSs, memory permissions are tied to the addresses and controled at the page granularity 
+            - If two pointers point to the same page, they are subjected to the same permissions 
+                - flexibilty of controlling the permissions for individual objects is limited, leaving potential vulnerabiltiy in the software 
+
+    Another issues in memory permissions for user processes is that they are assigned in chunks 
+        - chunks of memory that combine several pages to form what is known as Virtual Memory Area (VMA)
+        - Each process has its own distinct address space within the address space of each process, all the code is constrained to the permissions graned 
+            to the specific VMA 
+
+        - For example, a VMA denoted as 'blue' is readable, writable, and executable
+            - This results in a large segment of memory sharing the same permissions, offering a level of access control that is even more coarse-grained than that 
+                provided at the page level 
+
+        - In a program, the memory organizaation can vary across different OSs. 
+            - Windows or OSX will have a different scheme
+            - In a tradition 32-bit linux address space, the high memory, which is 1GB, is allocated to the OS Kernel Space, and the remaining 3GB are reserved for user 
+                spaces. 
+
+        - Kernel space is exclusive to the kernel 
+        - Stack Space 
+            - starts at the top of the addressable memory, and grows downward.
+                - Readable, writeable region used for local variables 
+        - Heap 
+            - Begins just about the program and grows upward 
+            - Managedd by lib routines that provide dynamic memory allocation through 'malloc' or 'new' 
+
+        - Text 
+            - Space where the code is stored 
+            - segment contains all the src code compiled into assemble, including machine code 
+
+        Data 
+            - Adjacent to the text 
+            - stores global or static variables 
+            - readable, and writeable or read-only 
+
+        Block Starting Symbol (BSS)
+            - continuation of the data space allocated for global or static variables that are unintiatilzed 
+            - typically, these varaibles are set to 0 
+            - program begins executing by mapping its ile into this space, thus initializing the program's run 
+
+    Fine-Grained Policy Wastes Space (and Time)
+        - Need to assign one page for each varaible + switch page tables between operations 
+        - Waste of memory space and disk space 
+        - Waste of time to switch page tables to enforce different fine-graded policies 
+
+        - Consider if every line of code within the text segment must match the data it accesses; the process would be really complex 
+        - need to allocate each varaible to different pages beause the smallest unit of permission enforcement is at page level 
+            - Thus space ineffeciency 
+                - For example:
+                    - need to store just an int, which is 4bytes
+                    - but following fine-graded policy it will get its own page which is 4kb 
+
+        - Also, we would need to switch between different page tables, whcih is time consuming 
+            - thus time ineffecient 
+             

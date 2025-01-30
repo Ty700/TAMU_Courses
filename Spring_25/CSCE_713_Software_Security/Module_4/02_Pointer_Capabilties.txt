@@ -1,0 +1,32 @@
+Spaitial Memory Attacks 
+    - Pointer Capabilties 
+        - Pointers can be:
+            - used as arrays (bufferes)
+            - added, subtracted, multiplied, and divided 
+            - stored and loaded from files 
+            - encoded and encrypted, decoded and decrypted 
+            - casted to different types, and be used as BOTH data and code pointes 
+                - Pointer Casting and Arithmetic Example 
+                    void* any_ptr  = 0x3000;
+                    int* int_ptr = (int *)(any_ptr + 1);
+                    printf("%d\n", *int_ptr);
+
+                struct {
+                    char *buffer[256]; 
+                    int size;
+                } data;
+
+                char *buffer = &data;
+                int size = (int *)(buffer + 256);
+                memcpy(output, buffer, size);
+
+                - The buffer can point to data 
+                - An attacker can manipulate the pointer and access the size data 
+                    - Via pointer arithmetic
+    - Versatile by a nature 
+    
+    Pointer Storing and Loading 
+        - Say I have a structure loaded in memory at x1000;
+        - One of the members, 'start' points exactly to the beginning of this struct. 
+        - If we copy this structure into a file, it effectively becomes an integer value when stored in a file 
+        - When we load it back, at a different loaction, the pointer is broken and doesn't point to the structure anymore. 

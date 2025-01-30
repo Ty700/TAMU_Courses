@@ -40,9 +40,165 @@ Example
     
     endclass : mem_model_env
 
+Comoonponents of a UVM testbench: Single Agent 
+    - test class 
+        - env class
+            Has instances of: 
+            - Scoreboard
+            - Agent 
+                Has instances of:
+                - monitor 
+                    - Observe the activities on the DUT 
+                - Sequencer
+                    - cordinate the transaction flow of multiple sequences 
+                        - Basically a controller, if we have a lot of sequences, 
+                            it will send them to the driver, the driver will send it to the DUT 
+                - driver 
+                    - sends transaction to the DUT 
+        - interface 
+            - Bundles a bunch of wires and is able to monitor their values 
+        - Design under test 
+
 SystemVerilog Interfaces 
     - A SystemVerilog interface is a named bundle of wires that encapsulates communication 
     - It provides a mechanism for grouping together multiple signals into a single unit that can be passed around the design hiearchy
         - Basically, rather than worrying about all the small details of all the wires, bundle them together under a name, e.g. "Bus A", and 
             have a monitor watch it 
+    
+Within the Agent Class 
+
+`uvm_component_utils()
+    - when we see this we are registring the parameter 
+        for its creation 
+
+Build Phase 
+    - creation of monitor 
+    - creation of driver and sequencer 
+    - create method is the one that creates these 
+
+    mem_sequencer::type_id::create("driver", this);
+        - creates a driver 
+
+Connect Phase 
+    - Since the sequencer is conencted to the driver, we need to do so 
+    - driver.seq_item_port.connect(sequencer.seq_item_port)
+        - connectes the export of the sequencer into the import of the driver 
+    
+Driver Class 
+    - Virtual Interface 
+        - What is it?
+            - Pointer or handler that allows code to access the actual interface signals 
+                - Remember the interface is a bundle of wires that encapsulates communication 
+            - Need it because classes are abstract 
+                - Can't directly contain or contact signals 
+        
+        - Allows driver and monitor classes to access the memory signals 
+            - wr_en, rd_en, etc, signals 
+            - Virtual interface is driving the signals
+                - Monitor can look at it 
+                - Monitor doesn't need to worry about how the wires are, just the virtual interface 
+        
+        - Separation between physical interface and class based code 
+
+    - Build Phase 
+        - Get virtual interface handle from uvm_config_db(virtual_mem_if) 
+    
+    - Run phase 
+        - Main driver loop 
+
+        - Essentially, since sequencer will be passing signals to driver 
+            this will capture each one and drive them to the DUT 
+
+            Example:
+                virtual task run_phase(uvm_phase phase)
+                    forever begin 
+                        seq_item_port.get_next_item(req);   // Caputures the next transaction from sequencer in line 
+                        drive();                            // Drivers the sequencer to the DUT  
+                        seq_item_port.item_done();          // Finished and clears the transaction to get ready for the next one 
+                end 
+
+                virtual task drive();
+                    - Transaction level to signal level 
+                    - Drive the value's from seq_item to interface level 
+
+Memory Sequencer Class 
+    - extends uvm_sequencer class 
+    - all it does is constructs the sequener 
+
+Memory Sequence Classes 
+    - Classes because mem_sequence.sv will contain multiple classes 
+    - extends uvm_sequence
+    - Will have all the operations that can be driven to the DUT 
+        - read_sequence class 
+        - write_sequence class 
+        - random_stimulus class 
+        
+        - all of these will have the code to perform the operations 
+
+Monitor Class   
+    - extends uvm_monitor 
+    - instance of virtual interface 
+    - Analysis port, to send transactions to scoreboard 
+    - A property handler that will hold the current transaction's information 
+        mem_seq_item trans_collected;
+    
+    - Build phases 
+        - Construction of handler for the current transaction's information (trans_collected) 
+            - builds the trans_collected instance 
+        - Getting the interface handler 
+            - So we can view the signals 
+    - Run Phase     
+        - Some sort of monitoring functionality 
+        
+            Example:
+                virtual task run_phase(uvm_phase phase);
+                    forever begin 
+                        @(posedge vif.MONITOR.clk);
+                        wait(vif.monitor_cb.wr_en || vif.monitor_cb.rd_en);
+                            trans_collected.addr = vif.monitor_cb.addr;
+                        if(vif.monitor_cb.wr_en) begin // If transaction is writing 
+                            trans_collected.wr_en   = vif.monitor_cb.wr_en;     // Set's monitor wr_en to 1 
+                            trans_collected.wr_data = vif.monitor_cb.wr_data;   // Copies transaction's wr_data into monitos's wr_data 
+                            trans_collected.rd_en   = 0;                        // Set's monitor's rd_en to 0 
+                            @(posedge vif.MONITOR.clk); //Wait a clock cycle 
+                        end 
+                        if(vif.monitor_cb.rd_rn) begin // If transaction is read 
+                            // Perform read operations 
+                            trans_collected.rd_en = vif.monitor_cb.rd_en;
+                            trans_collected.wr_en = 0;
+                            @(posedge vif.MONITOR.clk); //Wait a clock cycle 
+                            @(posedge vif.MONITOR.clk); //Wait a clock cycle 
+                        end 
+                    item_collected_port.write(trans_collected);
+                    end 
+                endtask : run_phase 
+            
+    Monitor does:
+        - 1. DUT behavior 
+        - 2. Convert signal activity to transaction level 
+        - 3. Enable transaction comparison into the scoreboard 
+
+Scoreboard 
+    - Check if the DUT behaves correctly 
+    - extends uvm_scoreboard 
+    - Virtual Interface 
+    - A queue 
+        - storing recieved transaction 
+            - Scoreboard is used for comparison
+                - thus we need to store incoming transactions
+    - Local Memory array 
+        - stores expected behavior of DUT  
+    - Analysis port 
+        - recieving transaction from the monitor 
+    - Build phase 
+        - creates analysis port 
+        - initialize the reference memory to the same as DUT 
+        - write task 
+            - recieves the packet from monitor and pushes to the queue 
+        - Run phase 
+            - compare's the read data with the expected data stored in local memory 
+
+            - Checking logic between the packets coming in with the local memory 
+    
+    - Scoreboard provides a model for expected behavior vs DUT behavior
     
