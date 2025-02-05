@@ -1,0 +1,154 @@
+Assertion-based Verification    
+    - Methodology where design specifications and requirements are expressed as precise logical and temporal statements (assertions)
+
+    - These assertions act as automated checkers that continiously monitor the design's behavior to ensure it adhers to its intended functionality and protocols 
+
+    ABV is a form of white-box testing
+        - Properties can monitor the behavior within the design and not just at the interface level 
+        - It can identify errors sooner and closer to when they happen and specify the functional coverage points deep within the design 
+
+    Assertions for Functional Verification  
+        - can be verified using different ABV technologies 
+            - Formal 
+            - Simulation 
+            - Two categories
+                - Dynamic ABV 
+                - Static ABV 
+
+    Dynamic ABV 
+        - runtime verification during simulation 
+        - simulates the design with the test vectors while monitoring assertions 
+
+        - Helps catch:
+            - Functional bugs 
+            - Protocol violations
+            - timing issues 
+        
+        Key components:
+            - Simulation-based verification with assertions monitoring behavior
+            - Coverage analysis to measure verification completeness
+            - Constrained random test generation 
+            - Hardware acceleration and emulation for complex designs 
+    
+    Static ABV 
+        - mathematical techniques to prove assertions hold true under ALL POSIBBLE CONDITIONS WITHOUT RUNNING SIMULATIONS 
+
+Types of Assertions 
+    Immediate Assertions 
+        - Procedural statements taht execute and evvaluate instantly at specifi points in the code 
+            - used within procedural blocks 
+            - verify conditions at specific time points 
+            - Cannot express temporal behavior 
+            - Used primarily in simulation 
+            - act like procedural "if statements"
+        Syntax: [label :] assert (expression) action_block 
+
+    Example:
+    Monitor the APB3 bus address range on each clock edge 
+    
+        always(@posedge pclk) begin 
+            apb3_addr_check: assert (paddr[31:0] < APB_ADDR_MAX)
+                begin 
+                    // VALID STATEMENTS 
+                end 
+                else begin 
+                    // INVALID STATEMENTS
+                end 
+            end 
+        end 
+
+    Example:
+    Monitor assertion to check valid APB3 protocol state transitions 
+
+    always @(posedge pclk) begin 
+        if(present_n) begin //Only check when not in reset 
+            apb3_state_check: assert ((psel && !penable) ##1 (psel && penable)) //Transitioning from setup to access 
+                begin 
+                    // VALID STATEMENTS 
+                end 
+                else begin 
+                    // INVALID STATEMENTS
+                end 
+            end 
+        end 
+
+
+        Example:
+        Check APB3 protocol state transitions 
+
+        always(@posedge pclk) begin 
+            if(psel && penable) begin 
+            apb3_response_check: assert (pready within [1:4] ##0 (!pready || !pslverr)) // Make sure pready is asserted within 1 - 4 CCs and check if the slave is not ready or no error 
+                begin 
+                    // VALID STATEMENTS 
+                end 
+                else begin 
+                    // INVALID STATEMENTS
+                end 
+            end 
+        end             
+
+    Concurrent Assertion 
+        - Declarative statements that continiously mointor temporal relationships between signals in a hardware desing during simulation 
+            - Execute continiously through simulation 
+            - evvaluated over clock cycles 
+            - used to specify temporal relationships
+            - can verify sequences of events 
+            - used in simulation and formal verification
+            - Describes a behvavior over clock cycles 
+        
+            Syntax: [label:] asssert property(property) [[pass_state] else fail_state];
+        Example:
+            Verify that PREADY must assert within 16 CC of PSEL and PENABLE being ready
+
+            apb_ready_check: assert property(
+                @(posedge pclk) disable iff(!present_n) (psel && penable) |-> ##[1:16] pready
+            ) else 
+                $fatal(1, "APB3 Slave failed to respond within 16 cycles");
+
+
+        Example:
+
+            property apb3_setup_to_enable;
+                @(posedge pclk) disable iff(!present_n)
+                $rose(psel) |-> ##1 penable;
+            endproperty 
+
+            property abp3_enable_high_one_cycle;
+                @(posedge pclk) disable iff(!present_n) //This property is disabled on reset 
+                penable |-> ##1 !penable;   // 1CC later, penable needs to be disasserted after it was asserted 
+            endproperty
+            
+
+            //Assert the properties now 
+            assert property (apb3_setup_to_enable)
+                else $error("Error msg");
+            
+            assert property (abp3_enable_high_one_cycle);
+                else $error("Error msg2");
+
+        Example:
+            Concurrent assertions for APB3 secure write transfers 
+
+        property apb3_secure_write;
+            @(posedge pclk) iff disable(!present_n)
+            (psel && pwrite && pprot[1]) |-> (##1 penable && $stable(pwdata) && !pprot[0]) //When data is privileged (pprot[1] high)sel is high and write is high, penable needs to be high next CC. data must be stable pprotection 0 (unpriviledged) needs to be 0. More on pprot later 
+        endproperty
+
+        property apb3_write_strobe;
+            @(posedge pclk) disable iff(!present_n);
+            (psel && pwrite) |=> (|pstrb) && //At least one strobe active 
+                                 (pstrb & ~4'hF) == 0; //No invalid strobes 
+        endproperty
+
+        //Assert the properties now 
+        assert property (apb3_secure_write)
+            else $error("Error msg");
+
+        assert property (apb3_write_strobe)
+            else $error("Error msg2");
+        
+
+        Notes:
+            |-> Within the same cycle (immediately) 
+            |=> Within the NEXT cycle 

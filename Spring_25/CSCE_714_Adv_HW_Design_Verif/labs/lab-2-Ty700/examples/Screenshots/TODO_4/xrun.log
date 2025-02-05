@@ -1,0 +1,115 @@
+xrun: 22.03-s012: (c) Copyright 1995-2023 Cadence Design Systems, Inc.
+TOOL:	xrun	22.03-s012: Started on Feb 02, 2025 at 19:31:18 CST
+xrun
+	-define TEST1
+	-define TEST2
+	-define TEST3
+	-define TEST4
+	top.v
+	-f xrun.f
+		-incdir /home/grads/t/tscotti24/labs/lab-2-Ty700/examples/sim/rtl
+		-define ABVIP_SIM
+		/home/grads/t/tscotti24/labs/lab-2-Ty700/examples/sim/rtl/apb_master.v
+		/home/grads/t/tscotti24/labs/lab-2-Ty700/examples/sim/rtl/apb3_monitor.sv
+		/home/grads/t/tscotti24/labs/lab-2-Ty700/examples/sim/rtl/apb3_slave.sv
+		/home/grads/t/tscotti24/labs/lab-2-Ty700/examples/sim/top.v
+		-input /home/grads/t/tscotti24/labs/lab-2-Ty700/examples/sim/xrun.tcl
+		-sv
+		-top top
+		-access rwc
+		-assert
+		-coverage A
+		-covoverwrite
+		-covfile ./cov_conf.ccf
+	+gui
+xmsim: *W,NOMTDGUI: Multi-Threaded Dumping is disabled for interactive debug mode.
+xmsim: *W,DSEM2009: This SystemVerilog design is simulated as per IEEE 1800-2009 SystemVerilog simulation semantics. Use -disable_sem2009 option for turning off SV 2009 simulation semantics.
+
+-------------------------------------
+Relinquished control to SimVision...
+xcelium> 
+xcelium> source /opt/coe/cadence/XCELIUM/tools/xcelium/files/xmsimrc
+xcelium> #database -open tr_db -into tr_db -event -default
+xcelium> #probe -create -shm top -all -depth all
+xcelium> database -open waves -into waves.shm -event -default
+Created default SHM database waves
+xcelium> probe -create top -all -memories -depth all -tasks -functions -all -database waves -waveform
+xmsim: *W,PRWFD: Only the signals/variables having immediate scope 'top' will be added to the waveform viewer.
+xmsim: *W,PRLDYN: The design contains dynamic objects. The "-all" option excludes dynamic objects to improve performance. To enable probing of dynamic objects the "-all -dynamic" options should be added to the probe command.
+Created probe 1
+xcelium> run 1000 ns
+  ABVIP Version: 11.30-s098
+-------------------------------------------------------------
+Cadence AMBA APB 3 Assertion Monitor Configuration
+  Module:   worklib.apb3_monitor
+  Instance: top.apb_checker
+  ABUS_WIDTH:                32
+  DBUS_WIDTH:                32
+  COVERAGE_ON:                1
+  COVERGROUPS_ON:             1
+  MAX_WAIT_CYCLES_ON:         0
+  RST_CHECKS_ON:              0
+  RECM_CHECKS_ON:             1
+  XCHECKS_ON:                 0
+-------------------------------------------------------------
+LAB2: PART1: Test Case 1 finished at time                   95
+Read 1 Test: Expected: 0x9ABCDEF0 | Actual: 9abcdef0
+Read 2: Expected: 0x12345678 | Actual: 12345678
+LAB2: TO-DO 2.1: Test Case 2 finished at time                  410
+LAB2: TO-DO 2.2: Test Case 3 finished at time                  590
+LAB2: TO-DO 3: Test Case 4 finished at time                 750
+Ran until 1 US + 0
+xcelium> assertion -summary
+  Disabled Finish Failed   Assertion Name 
+         1      4      0   top.apbMaster.assert_rdata_check_not_sys_ready
+         1      4      0   top.apbMaster.assert_rdata_check_sys_ready
+         1      1      0   top.apb_checker.genCov.cover_access_after_setup_state
+         1      1      0   top.apb_checker.genCov.cover_access_state
+         1      1      0   top.apb_checker.genCov.cover_burst_of_read_transfers
+         1      0      0   top.apb_checker.genCov.cover_burst_of_write_transfers
+         1      1      0   top.apb_checker.genCov.cover_idle_after_access_state
+         1      1      0   top.apb_checker.genCov.cover_idle_after_idle_state
+         1      1      0   top.apb_checker.genCov.cover_idle_state
+         1      0      0   top.apb_checker.genCov.cover_read_after_write_transfer
+         1      1      0   top.apb_checker.genCov.cover_read_transfer
+         1      1      0   top.apb_checker.genCov.cover_setup_after_access_state
+         1      1      0   top.apb_checker.genCov.cover_setup_after_idle_state
+         1      1      0   top.apb_checker.genCov.cover_setup_state
+         1      0      0   top.apb_checker.genCov.cover_write_after_read_transfer
+         1      1      0   top.apb_checker.genCov.cover_write_transfer
+         1      1      0   top.apb_checker.genCov.nnw.cover_read_transfer_with_wait_states
+         1      1      0   top.apb_checker.genCov.nnw.cover_write_transfer_with_wait_states
+         1     14      0   top.apb_checker.genLiveChks.slave_pready_eventually
+         1      1      0   top.apb_checker.genRecmStbChks.master_idle_paddr_stable
+         1      1      0   top.apb_checker.genRecmStbChks.master_idle_pwrite_stable
+         1      1      0   top.apb_checker.genRecmTrnChks.slave_pslverr_last_access
+         1     14      0   top.apb_checker.master_exit_access
+         1     55      0   top.apb_checker.master_never_idle_to_access
+         1      1      0   top.apb_checker.master_never_penable_first_clock
+         1      1      0   top.apb_checker.master_never_penable_without_psel
+         1     14      0   top.apb_checker.master_setup_paddr_stable
+         1     14      0   top.apb_checker.master_setup_psel_stable
+         1      6      0   top.apb_checker.master_setup_pwdata_stable
+         1     14      0   top.apb_checker.master_setup_pwrite_stable
+         1     14      0   top.apb_checker.master_setup_to_access
+         1     14      0   top.apb_checker.stable_checks.master_access_paddr_stable
+         1     14      0   top.apb_checker.stable_checks.master_access_penable_stable
+         1     14      0   top.apb_checker.stable_checks.master_access_psel_stable
+         1      6      0   top.apb_checker.stable_checks.master_access_pwdata_stable
+         1     14      0   top.apb_checker.stable_checks.master_access_pwrite_stable
+  Total Assertions = 36,  Failing Assertions = 0,  Unchecked Assertions = 3
+  Assertion summary at time 1 US + 0
+xcelium> #exit
+xcelium> ^C
+xcelium> exit
+
+coverage setup:
+  workdir  :  ./cov_work
+  dutinst  :  top(top)
+  scope    :  scope
+  testname :  test
+
+coverage files:
+  model(design data) :  ./cov_work/scope/icc_2426f0cc_4b70ef16.ucm (reused)
+  data               :  ./cov_work/scope/test/icc_2426f0cc_4b70ef16.ucd
+TOOL:	xrun	22.03-s012: Exiting on Feb 02, 2025 at 19:35:04 CST  (total: 00:03:46)

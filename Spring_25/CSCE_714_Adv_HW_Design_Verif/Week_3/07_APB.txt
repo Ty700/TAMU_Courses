@@ -1,0 +1,268 @@
+APB (Advanced Peripheral Bus)
+    - Non-pipedline, Synchronous Protocol
+    - 3 Main States:
+        - Idle
+        - Setup 
+        - Access 
+
+    - Low-bandwidth communication in SoC designs 
+    - Non-Synchronous means operations are only on posedge of clk 
+
+Non-pipedline vs pipedline protocol 
+    - Only one transfer can be going at one time 
+    - 3 Transfers:
+        - Transfer 1 must finsih before 2 starts 
+        - Transfer 2 must finish before 3 starts 
+        - Transfer 3 starts 
+
+        Non-pipedline:
+
+        T0  Transfer 1 Setup 
+        T1  Transfer 1 Access 
+        T2                      Transfer 2 Setup 
+        T3                      Transfer 2 Access
+        T4                                          Transfer 3 Setup 
+        T5                                          Transfer 3 Access 
+
+
+        Pipelined:
+        
+        T0  Transfer 1 Setup 
+        T1  Transfer 1 Access   Transfer 2 Setup 
+        T2  Transfer 1 Complete Transfer 2 Access   Transfer 3 Setup 
+        T3                      Transfer 2 Complete Transfer 3 Access 
+        T4                                          Transfer 3 Complete 
+
+    
+    Non-pipedline is slower but consumes less power 
+
+Purpose in SoC Design 
+    - Low complexity 
+    - Low-bandwidth
+    - Low power consumption 
+    - Optional wait states in R/W transfers for slow peripherals 
+    - For peripherals that don't require high performance of a pipelined bus    
+    - Transfers take a MINIMUM of 2 CCs 
+
+APB: Clock and Reset 
+    PCLK 
+        - Clock generator 
+        - 1 bit 
+        - Clock (All APB signals are timed against posedge)
+
+    PRESETn 
+        - System Bus Resest 
+        - 1 bit 
+        - Active low reset signal connected to the sys bus reset signal 
+
+    PSELx 
+        - Requester (Master)
+        - 1 bit 
+        - Selects target peripheral
+        - PSELx indicates that the completer is selected and that a data transfer is required 
+        - Geneates a PSEL signal for each slave 
+
+    PENABLE 
+        - Master 
+        - 1 bit 
+        - indicates the second and subsequent cycles of an APB transfer 
+    
+    PADDR 
+        - Master 
+        - ADDR_Width (variable, 8/16/32)
+        - APB addr bus 
+    
+    PWDATA 
+        - Master 
+        - Data Width (8/16/32)
+        - write data bus is driven by the APB bridge Master during write cycles when PWRITE is HIGH 
+
+    PRDATA 
+        - Slave 
+        - Data Width (8/16/32)
+        - Read data bus is driven by the selected slave during read cycles when PWRITE is LOW 
+
+    PWRITE 
+        - Master 
+        - 1 bit 
+        - Write when high, Read when low 
+
+    PREADY 
+        - Slave 
+        - 1 bit 
+        - Extend an APB transfer by the slave 
+
+    PSLVERR     
+        - Slave 
+        - 1 bit 
+        - High when error has occured during APB transfer 
+
+APB Protocol States 
+    - Idle State (Default)
+        - start here until a transfer is required 
+    
+    - Setup State 
+        - When a transfer is required, the protocl moves to the setup state 
+            - PSELx is asserted (targets peripheral x)
+            - Operate 1 CC 
+            - Access state at next rising clock edge 
+
+    - Access State 
+        - PENABLE is asserted 
+        - Stable signals during setup -> Access transition:
+            - PADDR 
+            - PWRITE 
+            - PWDATA (only for write transactions)
+            - PREADY 
+                - If PREADY is 0, stays in access state 
+                - If PREADY is 1
+                    - If a transfer is needed, then it will go back to setup 
+                    - If a transfer is not needded, then it will go to IDLE 
+
+APB Transfer Types 
+    - APB Read Transfer Types 
+        - Read transfer with no wait states 
+        - Read transfer with wait states 
+
+    - APB Write Transfer Types 
+        - Write transfer with no wait states 
+        - Write transfer with wait states 
+
+    Example: Read - No wait states   
+        T1 Setup 
+            - PSEL = 1 
+            - PADDR = valid 
+            - PWRITE = 0 
+        
+        T2 Access 
+            - PENABLE = 1 
+            - PREADY = 1 
+            - PRDATA = valid 
+
+        T3 Idle or setup (Depending on if there is another transfer)
+
+    Example: Read - With wait states   
+        T1 Setup 
+            - PSEL = 1 
+            - PADDR = valid 
+            - PWRITE = 0 
+        
+        T2 Access 
+            - PENABLE = 1 
+            - PREADY = 0 (Waiting) 
+            - PRDATA = valid 
+        
+        T3 Access 
+            - PENABLE = 1 
+            - PREADY = 0 (Waiting) 
+            - PRDATA = valid 
+        
+        T4 Access 
+            - PENABLE = 1 
+            - PREADY = 0 (Waiting) 
+            - PRDATA = valid 
+        
+        T5 Access 
+            - PENABLE = 1 
+            - PREADY = 1  
+            - PRDATA = valid 
+
+        T6 Idle or setup (Depending on if there is another transfer)
+
+    Example:
+        Write with no wait states 
+
+        T1 Setup 
+            - PSEL = 1 
+            - PADDR = valid 
+            - PWRITE = 1 
+
+        T2 Access  
+            - PENABLE = 1 
+            - PREADY = 1 
+
+        T3 Idle or setup (Depending on if there is another transfer)
+
+    Example:
+        Write with wait states 
+
+        T1 Setup 
+            - PSEL = 1 
+            - PADDR = valid 
+            - PWRITE = 1
+        
+        T2 Access 
+            - PENABLE = 1 
+            - PREADY = 0 (Waiting) 
+        
+        T3 Access 
+            - PENABLE = 1 
+            - PREADY = 0 (Waiting)
+        
+        T4 Access 
+            - PENABLE = 1 
+            - PREADY = 0 (Waiting)
+        
+        T5 Access 
+            - PENABLE = 1 
+            - PREADY = 1
+
+        T6 Idle or setup (Depending on if there is another transfer)
+
+APB Bridging 
+    - APB Bridge is an interface that facilitates comms between high-performance busses and the APB 
+        Example:
+            AXI -> APB 
+
+    - Master initiates the comms and controls the data transfer 
+    - Slave responds to these requests 
+    - Bridge acts as a slave to AXI and Master to APB 
+                         +==============================================================================+
+                         |                                                                              |
+    AXI Master Interface-|-> AXI Slave Interface ----+---> Request FIFO ---+---> APB Master Interface --|-> APB Slave Interface 
+                         |                           |                     |                            |
+                         |                           +---> Write FIFO -----+                            |
+                         |                           |                     |                            |
+                         |                           +---- Read FIFO <-----+                            |
+                         |                                                                              |
+                         |                                  APB BRIDGE                                  |
+                         +==============================================================================+
+
+            - Request FIFO 
+                - Stores AXI access requests 
+                - Decodes AXI code into APB formate 
+
+            - Write FIFO 
+                - Buffer write data from AXI
+                - Handles AXI burst transfer 
+                    - Splits it into single APB transfer 
+
+            - Read FIFO 
+                - Takes in and stores data from APB peripherals 
+                - Assembles multipe APB reads into one AXI response 
+
+    Example:
+        AXI initiaties transaction 
+        Bridge stores request and data 
+        APB Master converts protocol and timing 
+        APB Slave response 
+
+Verification of APB Interfaces 
+    - Basic Protocol Rules 
+        - Signal timing relationships 
+        - State transitions 
+        - Transfer sompleteion conditions 
+    
+    - Extended Features 
+        - Error response handling 
+        - Wait state insertion 
+        - Transfer size support 
+    
+    - Common Compliance Checks 
+        - Setup time violations 
+        - Hold time requirements 
+        - Protocol sequence verification
+    
+
+
+            

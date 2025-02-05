@@ -1,0 +1,194 @@
+AMBA Protocol 
+    - Overview of APB, AHB, and AXI 
+
+What is a protocol?
+    - A set of riles and procedures that define how different components system communicate and interact with each other 
+        - States:
+            - The possible conditions a component can be in 
+        
+        - Events:
+            - The triggers or actions that can occur 
+        
+        - Transitions:
+            - How the system moves between states in repose to events 
+        
+        - Action:
+            - What needs to be done during transitions 
+    
+What is AMBA?
+    - Advance Microcontroller Bus Architecture 
+        - protocol developed by ARM 
+        - defines how IPs and subsystems in a SoC communicate with each other 
+
+Evolution of AMBA 
+    - introduced in the early 90s 
+    - undergone many versions 
+
+AMBA in IP based SoC Design 
+    - Different IP blocks might use different communication protocols or interfaces, leading to integration challenges 
+        Example:
+            - AXI to AHB, APB to AHB, etc 
+        
+    - Extra bridges are required: 
+        - APB - AHB bridge 
+        - These are "translators" between one protocol to the next 
+        - For instance, high speed components are communicating to lower speed compoennts need a translator 
+            for the high components to understand the low speed and the low speed to understand the high speed 
+    
+AMBA APB Interface 
+    - APB (Advance Peripheral Bus) is a low bandwidth bus protocol used primarily for connectign low-speed peripheral devices in SoC 
+        - Composed of an APB Master and Slave 
+        - Single clock operation (only rising edge)
+            - reduces how much power it requires 
+        - Simple timing compared to other protocols 
+        - Supports non-pipeline perofrmance 
+
+    Control and Data Signals 
+        - PADDR:
+            - The address bus specifies the target peripheral or register 
+        
+        - PWRITE:
+            - The ccontrol signal indicates if the operation is a write(1) or read(0)
+        
+        - PWDATA:
+            - 32-bit wide bus. Write data from the Master to the Slave 
+        
+        - PRDATA:
+            - 32-bit wide bus transfers read data from Slave to Master 
+
+    Peripheral Selection Signal 
+        - PSELx: (x referes to the specific responder)
+            - selects which peripheral is involved in the current transaction 
+
+        - PSel 
+            - asserted at a time, indicating the active peripheral
+
+    Enable 
+        - PENALBE signal indicates teh start of the data phase 
+        - ensure that the address is valid, and the peripheral is ready to respond 
+        
+    Transaction Complete 
+        - PREADY 
+            - signals that the current transfer is complete, allowing the controller to proceed to the next transaction 
+
+Key Charateristics of AMBA APB Interface 
+    - Non-pipelined Comms 
+        - Each transaction across APB must complete before the next transaction begins 
+    
+    - Synchronous Design 
+        - APB operates synchronously using a single clock signal (PCLK) and all operations are driven by this clock 
+
+    - Low power and complexity 
+        - minimizes power and complexity, ideal for low-speed peripherals
+
+AHB (Advnaced High Performance Bus)
+    - AMBA AHB is designed for high-performance high-bandwidth communication between components in a SoC 
+    - Used for communications between CPUs to on chip memory 
+    - Supports pipeline operations 
+        - overlapping address and data phases 
+        - 1 address and data transfer per clock cycle 
+        - While transfering data for addr A, it can setup for data transfer for addr B 
+
+    - Supports burst transfer 
+        - multiple data transfer width of single addr phase 
+        - single transfer, increment transfer, etc 
+
+    - Split transactions 
+        - Allows slaves to release the bus if it needs more tiem 
+            - This bus can then be used for other operations 
+            - When slave is ready, operation on the slave will continue 
+
+    Clock and Reset 
+        - HCLK 
+            - Clock signal for synchronization of all operations 
+        
+        - HRESETn 
+            - Input Active-low reset signal 
+            - resets the bus and all components 
+
+        - HADDR 
+            - Output address bus, usually 32 bits indicating the address of the accessed data 
+        
+        - HWRITE 
+            - Indicates if the transaction is a write (1) or read (0)
+
+        - HSEL
+            - responder select signal 
+            - indicates which responder is being accessed 
+
+
+    Read and Write data buses 
+        - HWDATA 
+            - Write data bus (32 bits) carrying data to be written (master -> slave) 
+        
+        - HRDATA 
+            - Read data bus (32 bits) carrying data read from a slave 
+
+    Other signals 
+        HREADY 
+            - Indicates whether the current transaction is complete (1) or sill in progress (0)
+        
+        HRESP 
+            - Response signal from the slave indicating the status of the transaction 
+                - OK or ERR 
+        
+        HSPLIT 
+            - Used for split transactions, indicating that the controller should wait for a response 
+
+    Advantages 
+        - High performance with support for burst transaction 
+            - Example:
+                - Smartphone SoC AHB can enable fast data transfer between CPU and GPUs 
+                - Gaming applications on smart phones require fast access to memory and need to use AHB rather than slower bus protocol 
+        - Multicontoller capability with multiple devices controller-level access to the bus 
+        - Flexible addressing and data widths (32 and 64 bits)
+        - Low power consumption 
+
+AXI (Advanced eXtensible Interface)
+    - designed for high-performance, high-bandwidth communication on SoCs 
+    - uses 5 independent channels 
+        - Two are used for read operations (addr and data)
+        - Three are used for write (Addr, data, response)
+        - Supports multiple outstanding transacitons
+        - Out of order completion 
+            - Can issue multiple read/write commands without waiting for previous to complete 
+            - Not avaliable in lower bandwith protocol 
+            - The returns from the slave can return in an order that doesn't match the way the were outputted from master 
+            - How?
+                - Identifers attached to transactions 
+                - Keeps tracks of different reqs/responses 
+
+            Example:
+                - CPU issues multi memory read request 
+                - Sends out requests while also handling data coming from earlier requests 
+
+    Key Charateristics
+        - Full Duplex Comms 
+            - AXI supports full-duplex comms allowing for simulatenous read and write operatiosn 
+
+        - Out-of-Order Transactions
+            - Responses can be returned in a different order than requests, improving efficiency and responsiveness 
+
+        - Support for multiple master and slaves 
+            - also in AHB protocols 
+            - But allows multiple masters to access the bus 
+        
+        - Flexible Data Widths 
+            - 8 to 1024 bits 
+            - Better data and addr handleing 
+
+        - Separate Addr and Data channels 
+            - distinct channels for address and data transfers 
+
+    Use Cases 
+        - AXI interface based connection between CPU and a DMA 
+            - Within each channel there are multiple signals 
+
+            - Within the write data channel there are about 9 signals (I think) 
+
+    Advantages
+        - High Performance due to full-duplexing and burt transactions 
+        - Flexible Data widths for a more flexible protocol 
+        - Ease of integration with other buses in the AMBA family 
+        - Widespread adoption and support 
+        - Out of order transactions for more efficient bus usage 

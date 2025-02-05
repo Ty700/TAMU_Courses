@@ -1,0 +1,179 @@
+xrun: 22.03-s012: (c) Copyright 1995-2023 Cadence Design Systems, Inc.
+TOOL:	xrun	22.03-s012: Started on Feb 02, 2025 at 15:57:09 CST
+xrun
+	top.v
+	-f xrun.f
+		-incdir /home/grads/t/tscotti24/labs/lab-2-Ty700/examples/sim/rtl
+		-define ABVIP_SIM
+		/home/grads/t/tscotti24/labs/lab-2-Ty700/examples/sim/rtl/apb_master.v
+		/home/grads/t/tscotti24/labs/lab-2-Ty700/examples/sim/rtl/apb3_monitor.sv
+		/home/grads/t/tscotti24/labs/lab-2-Ty700/examples/sim/rtl/apb3_slave.sv
+		/home/grads/t/tscotti24/labs/lab-2-Ty700/examples/sim/top.v
+		-input /home/grads/t/tscotti24/labs/lab-2-Ty700/examples/sim/xrun.tcl
+		-sv
+		-top top
+		-access rwc
+		-assert
+		-coverage A
+		-covoverwrite
+		-covfile ./cov_conf.ccf
+	-define TEST1
+	+gui
+file: top.v
+	module worklib.top:v
+		errors: 0, warnings: 0
+file: /home/grads/t/tscotti24/labs/lab-2-Ty700/examples/sim/rtl/apb_master.v
+	module worklib.apb_master:v
+		errors: 0, warnings: 0
+file: /home/grads/t/tscotti24/labs/lab-2-Ty700/examples/sim/rtl/apb3_monitor.sv
+	module worklib.apb3_monitor:sv
+		errors: 0, warnings: 0
+file: /home/grads/t/tscotti24/labs/lab-2-Ty700/examples/sim/rtl/apb3_slave.sv
+	module worklib.apb3_slave:sv
+		errors: 0, warnings: 0
+file: /home/grads/t/tscotti24/labs/lab-2-Ty700/examples/sim/top.v
+module top ();
+         |
+xmvlog: *W,RECOME (/home/grads/t/tscotti24/labs/lab-2-Ty700/examples/sim/top.v,22|9): recompiling design unit worklib.top:v.
+	First compiled from line 22 of top.v.
+	Elaborating the design hierarchy:
+		Caching library 'worklib' ....... Done
+   .ABUS_WIDTH(ABUS_WIDTH),
+             |
+xmelab: *W,CUVUKP (./top.v,103|13): The name 'ABUS_WIDTH' is not declared in the instantiated module (defined at ./rtl/apb3_slave.sv,11).
+   .DBUS_WIDTH(DBUS_WIDTH)
+             |
+xmelab: *W,CUVUKP (./top.v,104|13): The name 'DBUS_WIDTH' is not declared in the instantiated module (defined at ./rtl/apb3_slave.sv,11).
+	Top level design units:
+		top
+xmelab: *W,DSEMEL: This SystemVerilog design will be simulated as per IEEE 1800-2009 SystemVerilog simulation semantics. Use -disable_sem2009 option for turning off SV 2009 simulation semantics.
+
+	Extracting FSMs for coverage:
+		worklib.apb_master
+			FSM extracted for state register state
+		worklib.apb3_monitor
+		worklib.apb3_slave
+		worklib.top
+	Total FSMs extracted = 1
+	Building instance overlay tables: ..........
+xmelab: *W,COVFHT: FSM hold transitions (transitions to the current state) are not extracted for any FSM in default mode.
+.......... Done
+	Enabling instrumentation for coverage types: block expression FSM toggle functional
+xmelab: *W,COVDCL: By default expression coverage is scored only for Verilog logical operators (|| and &&) and VHDL logical operators (OR, AND, NOR, and NAND), and is scored only in condition expressions. To score coverage for other operators and for expressions in other statements, use the "set_expr_coverable_operators" and "set_expr_coverable_statements" coverage configuration file commands with suitable options at elaboration.
+	Generating native compiled code:
+		worklib.apb3_slave:sv <0x266656c0>
+			streams:  15, words:  7501
+		worklib.apb3_monitor:sv <0x10b492d9>
+			streams: 167, words: 106864
+		worklib.apb_master:v <0x65dd1d12>
+			streams:  25, words: 29857
+		worklib.top:v <0x7156aa78>
+			streams:  17, words: 10180
+    reg [DATA_WID - 1 : 0] mem[int];
+                             |
+xmelab: *W,COVUTA (./rtl/apb3_slave.sv,27|29): Toggle coverage is not supported for SystemVerilog integer, real, string, dynamic array, sparse memory and reference ports. It is also not supported for VHDL multi-dimensional array and array of record. There may also be other such objects in the design.
+xmelab: *W,COVNOEN: By default, toggle coverage is not supported for systemverilog enumerated nets and variables. To enable toggle coverage of these objects, specify the 'set_toggle_scoring -sv_enum' command in the coverage configuration file.
+	Building instance specific data structures.
+xmelab: *W,CGPIDF: Covergroup "per_instance" option , by default, is set as 0.
+	Loading native compiled code:     .................... Done
+	Design hierarchy summary:
+		                 Instances  Unique
+		Modules:                 4       4
+		Registers:             233     282
+		Scalar wires:           31       -
+		Vectored wires:         17       -
+		Named events:            2       2
+		Always blocks:         123     156
+		Initial blocks:         43      58
+		Clocking blocks:         1       1
+		Cont. assignments:      20      42
+		Pseudo assignments:      6       6
+		Assertions:             36      48
+		Covergroup Instances:    0       1
+	Writing initial simulation snapshot: worklib.top:v
+xmsim: *W,NOMTDGUI: Multi-Threaded Dumping is disabled for interactive debug mode.
+xmsim: *W,DSEM2009: This SystemVerilog design is simulated as per IEEE 1800-2009 SystemVerilog simulation semantics. Use -disable_sem2009 option for turning off SV 2009 simulation semantics.
+
+-------------------------------------
+Relinquished control to SimVision...
+xcelium> 
+xcelium> source /opt/coe/cadence/XCELIUM/tools/xcelium/files/xmsimrc
+xcelium> #database -open tr_db -into tr_db -event -default
+xcelium> #probe -create -shm top -all -depth all
+xcelium> database -open waves -into waves.shm -event -default
+Created default SHM database waves
+xcelium> probe -create top -all -memories -depth all -tasks -functions -all -database waves -waveform
+xmsim: *W,PRWFD: Only the signals/variables having immediate scope 'top' will be added to the waveform viewer.
+xmsim: *W,PRLDYN: The design contains dynamic objects. The "-all" option excludes dynamic objects to improve performance. To enable probing of dynamic objects the "-all -dynamic" options should be added to the probe command.
+Created probe 1
+xcelium> run 1000 ns
+  ABVIP Version: 11.30-s098
+-------------------------------------------------------------
+Cadence AMBA APB 3 Assertion Monitor Configuration
+  Module:   worklib.apb3_monitor
+  Instance: top.apb_checker
+  ABUS_WIDTH:                32
+  DBUS_WIDTH:                32
+  COVERAGE_ON:                1
+  COVERGROUPS_ON:             1
+  MAX_WAIT_CYCLES_ON:         0
+  RST_CHECKS_ON:              0
+  RECM_CHECKS_ON:             1
+  XCHECKS_ON:                 0
+-------------------------------------------------------------
+LAB2: PART1: Test Case 1 finished at time                   95
+Ran until 1 US + 0
+xcelium> assertion -summary
+  Disabled Finish Failed   Assertion Name 
+         1      0      0   top.apbMaster.assert_rdata_check_not_sys_ready
+         1      0      0   top.apbMaster.assert_rdata_check_sys_ready
+         1      1      0   top.apb_checker.genCov.cover_access_after_setup_state
+         1      1      0   top.apb_checker.genCov.cover_access_state
+         1      0      0   top.apb_checker.genCov.cover_burst_of_read_transfers
+         1      0      0   top.apb_checker.genCov.cover_burst_of_write_transfers
+         1      1      0   top.apb_checker.genCov.cover_idle_after_access_state
+         1      1      0   top.apb_checker.genCov.cover_idle_after_idle_state
+         1      1      0   top.apb_checker.genCov.cover_idle_state
+         1      0      0   top.apb_checker.genCov.cover_read_after_write_transfer
+         1      0      0   top.apb_checker.genCov.cover_read_transfer
+         1      0      0   top.apb_checker.genCov.cover_setup_after_access_state
+         1      1      0   top.apb_checker.genCov.cover_setup_after_idle_state
+         1      1      0   top.apb_checker.genCov.cover_setup_state
+         1      0      0   top.apb_checker.genCov.cover_write_after_read_transfer
+         1      1      0   top.apb_checker.genCov.cover_write_transfer
+         1      0      0   top.apb_checker.genCov.nnw.cover_read_transfer_with_wait_states
+         1      1      0   top.apb_checker.genCov.nnw.cover_write_transfer_with_wait_states
+         1      2      0   top.apb_checker.genLiveChks.slave_pready_eventually
+         1      1      0   top.apb_checker.genRecmStbChks.master_idle_paddr_stable
+         1      1      0   top.apb_checker.genRecmStbChks.master_idle_pwrite_stable
+         1      1      0   top.apb_checker.genRecmTrnChks.slave_pslverr_last_access
+         1      2      0   top.apb_checker.master_exit_access
+         1     91      0   top.apb_checker.master_never_idle_to_access
+         1      1      0   top.apb_checker.master_never_penable_first_clock
+         1      1      0   top.apb_checker.master_never_penable_without_psel
+         1      2      0   top.apb_checker.master_setup_paddr_stable
+         1      2      0   top.apb_checker.master_setup_psel_stable
+         1      2      0   top.apb_checker.master_setup_pwdata_stable
+         1      2      0   top.apb_checker.master_setup_pwrite_stable
+         1      2      0   top.apb_checker.master_setup_to_access
+         1      2      0   top.apb_checker.stable_checks.master_access_paddr_stable
+         1      2      0   top.apb_checker.stable_checks.master_access_penable_stable
+         1      2      0   top.apb_checker.stable_checks.master_access_psel_stable
+         1      2      0   top.apb_checker.stable_checks.master_access_pwdata_stable
+         1      2      0   top.apb_checker.stable_checks.master_access_pwrite_stable
+  Total Assertions = 36,  Failing Assertions = 0,  Unchecked Assertions = 9
+  Assertion summary at time 1 US + 0
+xcelium> #exit
+xcelium> ^C
+xcelium> exit
+
+coverage setup:
+  workdir  :  ./cov_work
+  dutinst  :  top(top)
+  scope    :  scope
+  testname :  test
+
+coverage files:
+  model(design data) :  ./cov_work/scope/icc_184629fc_4b70ef16.ucm
+  data               :  ./cov_work/scope/test/icc_184629fc_4b70ef16.ucd
+TOOL:	xrun	22.03-s012: Exiting on Feb 02, 2025 at 16:13:57 CST  (total: 00:16:48)

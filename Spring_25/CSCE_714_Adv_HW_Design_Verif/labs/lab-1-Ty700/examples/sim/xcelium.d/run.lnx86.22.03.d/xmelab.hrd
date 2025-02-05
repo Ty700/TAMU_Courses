@@ -1,0 +1,12 @@
+//
+// File created by:  xrun
+// Do not modify this file
+//
+
+top
+-ACCESS
+rwc
+-COVERAGE
+A
+-COVFILE
+./cov_conf.ccf

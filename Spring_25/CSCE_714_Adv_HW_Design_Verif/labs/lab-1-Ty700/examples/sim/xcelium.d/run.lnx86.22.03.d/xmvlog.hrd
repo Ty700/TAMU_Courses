@@ -1,0 +1,10 @@
+//
+// File created by:  xrun
+// Do not modify this file
+//
+-INCDIR
+/home/grads/t/tscotti24/labs/lab-1-Ty700/examples/sim/rtl
+-DEFINE
+ABVIP_SIM
+-sv
+-assert

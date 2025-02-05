@@ -1,0 +1,26 @@
+//
+// File created by:  xrun
+// Do not modify this file
+//
+-XLMODE
+./xcelium.d/run.lnx86.22.03.d
+-RUNMODE
+-INCDIR
+/home/grads/t/tscotti24/labs/lab-1-Ty700/examples/sim/rtl
+-DEFINE
+ABVIP_SIM
+/home/grads/t/tscotti24/labs/lab-1-Ty700/examples/sim/rtl/apb_master.v
+/home/grads/t/tscotti24/labs/lab-1-Ty700/examples/sim/rtl/apb3_monitor.sv
+/home/grads/t/tscotti24/labs/lab-1-Ty700/examples/sim/top.v
+-sv
+-assert
+-CDSLIB
+./xcelium.d/run.lnx86.22.03.d/cdsrun.lib
+-HDLVAR
+./xcelium.d/run.lnx86.22.03.d/hdlrun.var
+-MESSAGES
+-UPDATE
+-XLLIBSTORE
+./xcelium.d/run.lnx86.22.03.d/xllibs
+-ALLOWUNBOUND
+-hastop

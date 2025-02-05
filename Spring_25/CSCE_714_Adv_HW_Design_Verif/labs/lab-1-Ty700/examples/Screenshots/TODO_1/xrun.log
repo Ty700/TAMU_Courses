@@ -1,0 +1,107 @@
+xrun: 22.03-s012: (c) Copyright 1995-2023 Cadence Design Systems, Inc.
+TOOL:	xrun	22.03-s012: Started on Jan 27, 2025 at 16:54:23 CST
+xrun
+	-f xrun.f
+		-incdir /home/grads/t/tscotti24/labs/lab-1-Ty700/examples/sim/rtl
+		-define ABVIP_SIM
+		/home/grads/t/tscotti24/labs/lab-1-Ty700/examples/sim/rtl/apb_master.v
+		/home/grads/t/tscotti24/labs/lab-1-Ty700/examples/sim/rtl/apb3_monitor.sv
+		/home/grads/t/tscotti24/labs/lab-1-Ty700/examples/sim/top.v
+		-input /home/grads/t/tscotti24/labs/lab-1-Ty700/examples/sim/xrun.tcl
+		-sv
+		-top top
+		-access rwc
+		-assert
+		-coverage A
+		-covoverwrite
+		-covfile ./cov_conf.ccf
+	+gui
+xmsim: *W,NOMTDGUI: Multi-Threaded Dumping is disabled for interactive debug mode.
+xmsim: *W,DSEM2009: This SystemVerilog design is simulated as per IEEE 1800-2009 SystemVerilog simulation semantics. Use -disable_sem2009 option for turning off SV 2009 simulation semantics.
+
+-------------------------------------
+Relinquished control to SimVision...
+xcelium> 
+xcelium> source /opt/coe/cadence/XCELIUM/tools/xcelium/files/xmsimrc
+xcelium> #database -open tr_db -into tr_db -event -default
+xcelium> #probe -create -shm top -all -depth all
+xcelium> database -open waves -into waves.shm -event -default
+Created default SHM database waves
+xcelium> probe -create top -all -memories -depth all -tasks -functions -all -database waves -waveform
+xmsim: *W,PRWFD: Only the signals/variables having immediate scope 'top' will be added to the waveform viewer.
+Created probe 1
+xcelium> run 500 ns
+  ABVIP Version: 11.30-s098
+-------------------------------------------------------------
+Cadence AMBA APB 3 Assertion Monitor Configuration
+  Module:   worklib.apb3_monitor
+  Instance: top.apb_checker
+  ABUS_WIDTH:                32
+  DBUS_WIDTH:                32
+  COVERAGE_ON:                1
+  COVERGROUPS_ON:             1
+  MAX_WAIT_CYCLES_ON:         0
+  RST_CHECKS_ON:              0
+  RECM_CHECKS_ON:             1
+  XCHECKS_ON:                 0
+-------------------------------------------------------------
+xmsim: *E,ASRTST (./rtl/apb3_monitor.sv,521): (time 20 NS) Assertion top.apb_checker.genRecmTrnChks.slave_pslverr_last_access has failed 
+xmsim: *E,ASRTST (./rtl/apb3_monitor.sv,521): (time 70 NS) Assertion top.apb_checker.genRecmTrnChks.slave_pslverr_last_access has failed 
+xmsim: *E,ASRTST (./rtl/apb3_monitor.sv,521): (time 110 NS) Assertion top.apb_checker.genRecmTrnChks.slave_pslverr_last_access has failed 
+xmsim: *E,ASRTST (./rtl/apb3_monitor.sv,521): (time 150 NS) Assertion top.apb_checker.genRecmTrnChks.slave_pslverr_last_access has failed 
+xmsim: *E,ASRTST (./rtl/apb3_monitor.sv,521): (time 190 NS) Assertion top.apb_checker.genRecmTrnChks.slave_pslverr_last_access has failed 
+Ran until 500 NS + 0
+xcelium> assertion -summary
+  Disabled Finish Failed   Assertion Name 
+         1      2      0   top.apbMaster.assert_rdata_check_not_sys_ready
+         1      0      0   top.apbMaster.assert_rdata_check_sys_ready
+         1      1      0   top.apb_checker.genCov.cover_access_after_setup_state
+         1      1      0   top.apb_checker.genCov.cover_access_state
+         1      0      0   top.apb_checker.genCov.cover_burst_of_read_transfers
+         1      0      0   top.apb_checker.genCov.cover_burst_of_write_transfers
+         1      1      0   top.apb_checker.genCov.cover_idle_after_access_state
+         1      1      0   top.apb_checker.genCov.cover_idle_after_idle_state
+         1      1      0   top.apb_checker.genCov.cover_idle_state
+         1      0      0   top.apb_checker.genCov.cover_read_after_write_transfer
+         1      1      0   top.apb_checker.genCov.cover_read_transfer
+         1      0      0   top.apb_checker.genCov.cover_setup_after_access_state
+         1      1      0   top.apb_checker.genCov.cover_setup_after_idle_state
+         1      1      0   top.apb_checker.genCov.cover_setup_state
+         1      0      0   top.apb_checker.genCov.cover_write_after_read_transfer
+         1      1      0   top.apb_checker.genCov.cover_write_transfer
+         1      0      0   top.apb_checker.genCov.nnw.cover_read_transfer_with_wait_states
+         1      0      0   top.apb_checker.genCov.nnw.cover_write_transfer_with_wait_states
+         1      0      0   top.apb_checker.genLiveChks.slave_pready_eventually
+         1      1      0   top.apb_checker.genRecmStbChks.master_idle_paddr_stable
+         1      1      0   top.apb_checker.genRecmStbChks.master_idle_pwrite_stable
+         1      0      5   top.apb_checker.genRecmTrnChks.slave_pslverr_last_access
+         1      4      0   top.apb_checker.master_exit_access
+         1     39      0   top.apb_checker.master_never_idle_to_access
+         1      1      0   top.apb_checker.master_never_penable_first_clock
+         1      1      0   top.apb_checker.master_never_penable_without_psel
+         1      4      0   top.apb_checker.master_setup_paddr_stable
+         1      4      0   top.apb_checker.master_setup_psel_stable
+         1      2      0   top.apb_checker.master_setup_pwdata_stable
+         1      4      0   top.apb_checker.master_setup_pwrite_stable
+         1      4      0   top.apb_checker.master_setup_to_access
+         1      0      0   top.apb_checker.stable_checks.master_access_paddr_stable
+         1      0      0   top.apb_checker.stable_checks.master_access_penable_stable
+         1      0      0   top.apb_checker.stable_checks.master_access_psel_stable
+         1      0      0   top.apb_checker.stable_checks.master_access_pwdata_stable
+         1      0      0   top.apb_checker.stable_checks.master_access_pwrite_stable
+  Total Assertions = 36,  Failing Assertions = 1,  Unchecked Assertions = 14
+  Assertion summary at time 500 NS + 0
+xcelium> #exit
+xcelium> ^C
+xcelium> exit
+
+coverage setup:
+  workdir  :  ./cov_work
+  dutinst  :  top(top)
+  scope    :  scope
+  testname :  test
+
+coverage files:
+  model(design data) :  ./cov_work/scope/icc_31d3c7b5_2e98073a.ucm (reused)
+  data               :  ./cov_work/scope/test/icc_31d3c7b5_2e98073a.ucd
+TOOL:	xrun	22.03-s012: Exiting on Jan 27, 2025 at 16:59:42 CST  (total: 00:05:19)

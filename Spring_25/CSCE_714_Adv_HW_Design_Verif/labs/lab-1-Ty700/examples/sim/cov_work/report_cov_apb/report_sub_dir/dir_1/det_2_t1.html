@@ -1,0 +1,567 @@
+<HTML>
+<HEAD>
+<link type="text/css" rel="stylesheet" href="../../imc.css"></link>
+<script type="text/javascript" src="../../sortable.js"></script>
+<TITLE>IMC Report: cov_work/report_cov_apb</TITLE></HEAD>
+<BODY>
+<A NAME="_topcov"></A>
+<P class="summary_title">Coverage   Summary Report, Instance-Based</P>
+
+<P class="fs"><A STYLE="float: left" class="namet" HREF="../../index.html">Top Level Summary</A><A STYLE="float: right" class="namet" HREF="../../legend.html">Legend and Help</A></P>
+<BR>
+<TABLE class="detail_header"><TR class="detail"><TD>
+
+<B>Instance name: </B><A HREF="../dir_1/summ_0_t1.html" class="namet">top</A>.apb_checker<BR>
+
+<B>Type name: </B>apb3_monitor<BR>
+
+<B>File name: </B><A HREF="/home/grads/t/tscotti24/labs/lab-1-Ty700/examples/sim/rtl/apb3_monitor.sv" TARGET="_blank">/home/grads/t/tscotti24/labs/lab-1-Ty700/examples/sim/rtl/apb3_monitor.sv</A><BR>
+
+</TD></TR></TABLE>
+
+<BR>
+<P class="subtitle">Coverage Summary Report, Instance-Based</P>
+<TABLE class="sortable sml summary_table" id="totalTable">
+
+
+<TR><TH class="wht">Block</TH>
+<TH class="wht">Expression</TH>
+<TH class="wht">Toggle</TH>
+<TH class="wht">Statement</TH>
+<TH class="wht">Fsm</TH>
+<TH class="wht">Fsm Covered</TH>
+<TH class="wht">Assertion</TH>
+<TH class="wht">CoverGroup</TH>
+<TH class="wht">CoverGroup Covered</TH>
+<TH class="wht">name</TH>
+
+</TR>
+
+<TR><TD class="range90to94"><A HREF="#_Blockcov">90.91%&nbsp;(20/22)</A></TD>
+<TD class="range65to69"><A HREF="#_Expressioncov">66.67%&nbsp;(8/12)</A></TD>
+<TD class="range15to19"><A HREF="#_Togglecov">18.77%&nbsp;(58/309)</A></TD>
+<TD class="rangenone">n/a</TD>
+<TD class="rangenone">n/a</TD>
+<TD class="rangenone">n/a</TD>
+<TD class="range100"><A HREF="#_Assertioncov">100.00%&nbsp;(9/9)</A></TD>
+<TD class="rangenone">n/a</TD>
+<TD class="rangenone">n/a</TD>
+<TD class="namecell">apb_checker</TD>
+
+</TR>
+
+
+</TABLE>
+<A NAME="_Blockcov"></A>
+<P class="detail_title">     Covered+Uncovered+Excluded+UNR Block Detail Report, Instance Based</P>
+<P class="fs"><A STYLE="float: right" class="namet" HREF="#_topcov">To Top</A></P><BR>
+
+<TABLE class="detail_header"><TR class="detail"><TD>
+<B>Instance name: </B>top.apb_checker<BR>
+<B>Type name: </B>apb3_monitor<BR>
+<B>File name: </B><A HREF="/home/grads/t/tscotti24/labs/lab-1-Ty700/examples/sim/rtl/apb3_monitor.sv" TARGET="_blank">/home/grads/t/tscotti24/labs/lab-1-Ty700/examples/sim/rtl/apb3_monitor.sv</A><BR>Include Files:<BR>
+<B>    </B><A HREF="/home/grads/t/tscotti24/labs/lab-1-Ty700/examples/sim/rtl/version.v" TARGET="_blank">/home/grads/t/tscotti24/labs/lab-1-Ty700/examples/sim/rtl/version.v</A><BR><B>Number of covered blocks: </B>20 of 22<BR>
+<B>Number of uncovered blocks: </B>2 of 22<BR>
+<B>Number of excluded blocks: </B>0<BR>
+<B>Number of unreachable blocks: </B>0<BR>
+
+
+</TD></TR></TABLE>
+
+<PRE class="detail_report_text">
+Count  Block Line  Kind                 Origin Source Code                    
+------------------------------------------------------------------------------
+1      1     1 (version.v) code block           1 (version.v) initial begin                  
+1      2     162   code block           162    initial begin                  
+0      3     172   true part of         172    if (MAX_WAIT_CYCLES_ON) begin  
+1      4     172   implicit else        172    if (MAX_WAIT_CYCLES_ON) begin  
+1      5     175   code block           175    $display("  RST_CHECKS_ON:              %d", RST_CHECKS_ON); 
+1      6     187   code block           187    always_ff @(posedge pclk or negedge presetn) begin : flops 
+1      7     188   true part of         188    if (!presetn) begin            
+1      8     191   false part of        188    else if (presetn && out_of_reset) begin 
+1      9     191   true part of         191    else if (presetn && out_of_reset) begin 
+1      10    194   false part of        191    else begin                     
+1      11    204   code block           204    always @ (posedge pclk or negedge presetn) begin 
+1      12    205   true part of         205    if (~presetn) psel_prev &lt;= 0; 
+1      13    206   false part of        205    else psel_prev &lt;= psel;     
+1      14    213   code block           213    always @* begin                
+1      15    214   true part of         214    if (!presetn) begin            
+1      16    216   false part of        214    end else begin                 
+1      17    217   true part of         217    if (|psel) begin               
+1      18    218   code block           218    for (int i=0 ; i&lt;=PSEL_N-1 ; i++) begin 
+1      19    218   code block           218    for (int i=0 ; i&lt;=PSEL_N-1 ; i++) begin 
+1      20    219   true part of         219    if (psel[i] == 1) begin        
+0      21    219   implicit else        219    if (psel[i] == 1) begin        
+1      22    223   false part of        217    end else begin                 
+
+</PRE>
+<A NAME="_Expressioncov"></A>
+<P class="detail_title">     Covered+Uncovered+Excluded+UNR Expression Detail Report, Instance Based</P>
+<P class="fs"><A STYLE="float: right" class="namet" HREF="#_topcov">To Top</A></P><BR>
+
+<TABLE class="detail_header"><TR class="detail"><TD>
+<B>Instance name: </B>top.apb_checker<BR>
+<B>Type name: </B>apb3_monitor<BR>
+<B>File name: </B><A HREF="/home/grads/t/tscotti24/labs/lab-1-Ty700/examples/sim/rtl/apb3_monitor.sv" TARGET="_blank">/home/grads/t/tscotti24/labs/lab-1-Ty700/examples/sim/rtl/apb3_monitor.sv</A><BR>Include Files:<BR>
+<B>    </B><A HREF="/home/grads/t/tscotti24/labs/lab-1-Ty700/examples/sim/rtl/version.v" TARGET="_blank">/home/grads/t/tscotti24/labs/lab-1-Ty700/examples/sim/rtl/version.v</A><BR><B>Number of covered expressions: </B>8 of 12<BR>
+<B>Number of uncovered expressions: </B>4 of 12<BR>
+<B>Number of excluded expressions: </B>0<BR>
+<B>Number of unreachable expressions: </B>0<BR>
+
+
+</TD></TR></TABLE>
+
+<PRE class="detail_report_text">
+index  | grade         | line   | expression                                         
+-------------------------------------------------------------------------------------
+1.1    | 66.67% (2/3)  | 191    | presetn && out_of_reset                            
+2.1    | 100.00% (3/3) | 233    | ((~| psel) && (~ penable))                         
+2.2    | 66.67% (2/3)  | 234    | ((| psel) && (~ penable))                          
+2.3    | 33.33% (1/3)  | 235    | ((| psel) && penable)                              
+
+<B>index: </B><B>1.1</B><B> grade: </B><B>66.67% (2/3)</B><B> line: </B><B>191</B><B> source: </B><B>else if (presetn && out_of_reset) begin</B>
+
+presetn && out_of_reset<BR>
+<B><</B>--<B>1</B>--<B>></B>    <B><</B>----<B>2</B>-----<B>></B>
+
+index     | hit   | &lt;1&gt; &lt;2&gt; 
+---------------------------- '&&'
+1.1.1     | 0     | 0   -   
+1.1.2     | 1     | -   0   
+1.1.3     | 1     | 1   1   
+
+<B>index: </B><B>2.1</B><B> grade: </B><B>100.00% (3/3)</B><B> line: </B><B>233</B><B> source: </B><B>assign state = (~|(psel) && ~penable) ? IDLE   :</B>
+
+((~| psel) && (~ penable))<BR>
+ <B><</B>---<B>1</B>---<B>></B>       <B><</B>--<B>2</B>--<B>></B>
+
+index     | hit   | rval | &lt;1&gt; &lt;2&gt; 
+-----------------------------------
+2.1.1     | 1     | 1    | 1   0   
+2.1.2     | 1     | 0    | -   1   
+2.1.3     | 1     | 0    | 0   -   
+
+<B>index: </B><B>2.2</B><B> grade: </B><B>66.67% (2/3)</B><B> line: </B><B>234</B><B> source: </B><B>(|(psel) && ~penable)  ? SETUP  :</B>
+
+((| psel) && (~ penable))<BR>
+ <B><</B>--<B>3</B>---<B>></B>       <B><</B>--<B>4</B>--<B>></B>
+
+index     | hit   | rval | &lt;3&gt; &lt;4&gt; 
+-----------------------------------
+2.2.1     | 1     | 1    | 1   0   
+2.2.2     | 1     | 0    | -   1   
+2.2.3     | 0     | 0    | 0   -   
+
+<B>index: </B><B>2.3</B><B> grade: </B><B>33.33% (1/3)</B><B> line: </B><B>235</B><B> source: </B><B>(|(psel) &&  penable) ? ACCESS :</B>
+
+((| psel) && penable)<BR>
+ <B><</B>--<B>5</B>---<B>></B>    <B><</B>--<B>6</B>--<B>></B>
+
+index     | hit   | &lt;5&gt; &lt;6&gt; 
+---------------------------- '&&'
+2.3.1     | 0     | 0   -   
+2.3.2     | 0     | -   0   
+2.3.3     | 1     | 1   1   
+
+
+</PRE>
+<A NAME="_Togglecov"></A>
+<P class="detail_title">     Covered+Uncovered+Excluded+UNR Toggle Detail Report, Instance Based</P>
+<P class="fs"><A STYLE="float: right" class="namet" HREF="#_topcov">To Top</A></P><BR>
+
+<TABLE class="detail_header"><TR class="detail"><TD>
+<B>Instance name: </B>top.apb_checker<BR>
+<B>Type name: </B>apb3_monitor<BR>
+<B>File name: </B><A HREF="/home/grads/t/tscotti24/labs/lab-1-Ty700/examples/sim/rtl/apb3_monitor.sv" TARGET="_blank">/home/grads/t/tscotti24/labs/lab-1-Ty700/examples/sim/rtl/apb3_monitor.sv</A><BR>Include Files:<BR>
+<B>    </B><A HREF="/home/grads/t/tscotti24/labs/lab-1-Ty700/examples/sim/rtl/version.v" TARGET="_blank">/home/grads/t/tscotti24/labs/lab-1-Ty700/examples/sim/rtl/version.v</A><BR><B>Number of covered signal bits: </B>58 of 309<BR>
+<B>Number of uncovered signal bits: </B>251 of 309<BR>
+<B>Number of excluded signal bits: </B>0<BR>
+<B>Number of unreachable signal bits: </B>0<BR>
+<B>Number of signal bits partially toggled(rise): </B>25 of 309<BR>
+<B>Number of signal bits partially toggled(fall): </B>1 of 309<BR>
+
+
+</TD></TR></TABLE>
+
+<PRE class="detail_report_text">
+Hit(Full)  Hit(Rise)  Hit(Fall)  Signal                    
+-----------------------------------------------------------
+1          1          1          pclk                      
+0          1          0          presetn                   
+1          1          1          psel                      
+1          1          1          penable                   
+1          1          1          paddr[31]                 
+0          0          0          paddr[30]                 
+0          0          0          paddr[29]                 
+0          1          0          paddr[28]                 
+1          1          1          paddr[27]                 
+0          0          0          paddr[26]                 
+1          1          1          paddr[25]                 
+0          1          0          paddr[24]                 
+1          1          1          paddr[23]                 
+0          0          0          paddr[22]                 
+1          1          1          paddr[21]                 
+0          1          0          paddr[20]                 
+1          1          1          paddr[19]                 
+1          1          1          paddr[18]                 
+0          0          0          paddr[17]                 
+0          1          0          paddr[16]                 
+1          1          1          paddr[15]                 
+1          1          1          paddr[14]                 
+0          1          0          paddr[13]                 
+1          1          1          paddr[12]                 
+1          1          1          paddr[11]                 
+1          1          1          paddr[10]                 
+0          1          0          paddr[9]                  
+0          0          0          paddr[8]                  
+1          1          1          paddr[7]                  
+1          1          1          paddr[6]                  
+0          1          0          paddr[5]                  
+1          1          1          paddr[4]                  
+1          1          1          paddr[3]                  
+0          0          0          paddr[2]                  
+0          1          0          paddr[1]                  
+0          0          0          paddr[0]                  
+1          1          1          pwrite                    
+1          1          1          pwdata[31]                
+0          1          0          pwdata[30]                
+0          0          0          pwdata[29]                
+0          1          0          pwdata[28]                
+1          1          1          pwdata[27]                
+0          1          0          pwdata[26]                
+1          1          1          pwdata[25]                
+0          1          0          pwdata[24]                
+1          1          1          pwdata[23]                
+0          1          0          pwdata[22]                
+1          1          1          pwdata[21]                
+0          1          0          pwdata[20]                
+1          1          1          pwdata[19]                
+0          1          0          pwdata[18]                
+0          0          0          pwdata[17]                
+0          1          0          pwdata[16]                
+1          1          1          pwdata[15]                
+0          1          0          pwdata[14]                
+0          1          0          pwdata[13]                
+1          1          1          pwdata[12]                
+1          1          1          pwdata[11]                
+0          1          0          pwdata[10]                
+0          1          0          pwdata[9]                 
+0          0          0          pwdata[8]                 
+1          1          1          pwdata[7]                 
+0          1          0          pwdata[6]                 
+0          1          0          pwdata[5]                 
+1          1          1          pwdata[4]                 
+1          1          1          pwdata[3]                 
+0          1          0          pwdata[2]                 
+0          1          0          pwdata[1]                 
+0          0          0          pwdata[0]                 
+1          1          1          pready                    
+1          1          1          prdata[31]                
+0          0          0          prdata[30]                
+0          0          0          prdata[29]                
+1          1          1          prdata[28]                
+1          1          1          prdata[27]                
+0          0          0          prdata[26]                
+1          1          1          prdata[25]                
+0          0          0          prdata[24]                
+1          1          1          prdata[23]                
+0          0          0          prdata[22]                
+1          1          1          prdata[21]                
+1          1          1          prdata[20]                
+1          1          1          prdata[19]                
+1          1          1          prdata[18]                
+0          0          0          prdata[17]                
+0          0          0          prdata[16]                
+1          1          1          prdata[15]                
+1          1          1          prdata[14]                
+0          0          0          prdata[13]                
+1          1          1          prdata[12]                
+1          1          1          prdata[11]                
+1          1          1          prdata[10]                
+1          1          1          prdata[9]                 
+0          0          0          prdata[8]                 
+1          1          1          prdata[7]                 
+1          1          1          prdata[6]                 
+1          1          1          prdata[5]                 
+1          1          1          prdata[4]                 
+1          1          1          prdata[3]                 
+0          0          0          prdata[2]                 
+0          0          0          prdata[1]                 
+0          0          0          prdata[0]                 
+1          1          1          pslverr                   
+0          0          0          csr_wr_valid              
+0          0          0          csr_wr_addr[31]           
+0          0          0          csr_wr_addr[30]           
+0          0          0          csr_wr_addr[29]           
+0          0          0          csr_wr_addr[28]           
+0          0          0          csr_wr_addr[27]           
+0          0          0          csr_wr_addr[26]           
+0          0          0          csr_wr_addr[25]           
+0          0          0          csr_wr_addr[24]           
+0          0          0          csr_wr_addr[23]           
+0          0          0          csr_wr_addr[22]           
+0          0          0          csr_wr_addr[21]           
+0          0          0          csr_wr_addr[20]           
+0          0          0          csr_wr_addr[19]           
+0          0          0          csr_wr_addr[18]           
+0          0          0          csr_wr_addr[17]           
+0          0          0          csr_wr_addr[16]           
+0          0          0          csr_wr_addr[15]           
+0          0          0          csr_wr_addr[14]           
+0          0          0          csr_wr_addr[13]           
+0          0          0          csr_wr_addr[12]           
+0          0          0          csr_wr_addr[11]           
+0          0          0          csr_wr_addr[10]           
+0          0          0          csr_wr_addr[9]            
+0          0          0          csr_wr_addr[8]            
+0          0          0          csr_wr_addr[7]            
+0          0          0          csr_wr_addr[6]            
+0          0          0          csr_wr_addr[5]            
+0          0          0          csr_wr_addr[4]            
+0          0          0          csr_wr_addr[3]            
+0          0          0          csr_wr_addr[2]            
+0          0          0          csr_wr_addr[1]            
+0          0          0          csr_wr_addr[0]            
+0          0          0          csr_wr_data[31]           
+0          0          0          csr_wr_data[30]           
+0          0          0          csr_wr_data[29]           
+0          0          0          csr_wr_data[28]           
+0          0          0          csr_wr_data[27]           
+0          0          0          csr_wr_data[26]           
+0          0          0          csr_wr_data[25]           
+0          0          0          csr_wr_data[24]           
+0          0          0          csr_wr_data[23]           
+0          0          0          csr_wr_data[22]           
+0          0          0          csr_wr_data[21]           
+0          0          0          csr_wr_data[20]           
+0          0          0          csr_wr_data[19]           
+0          0          0          csr_wr_data[18]           
+0          0          0          csr_wr_data[17]           
+0          0          0          csr_wr_data[16]           
+0          0          0          csr_wr_data[15]           
+0          0          0          csr_wr_data[14]           
+0          0          0          csr_wr_data[13]           
+0          0          0          csr_wr_data[12]           
+0          0          0          csr_wr_data[11]           
+0          0          0          csr_wr_data[10]           
+0          0          0          csr_wr_data[9]            
+0          0          0          csr_wr_data[8]            
+0          0          0          csr_wr_data[7]            
+0          0          0          csr_wr_data[6]            
+0          0          0          csr_wr_data[5]            
+0          0          0          csr_wr_data[4]            
+0          0          0          csr_wr_data[3]            
+0          0          0          csr_wr_data[2]            
+0          0          0          csr_wr_data[1]            
+0          0          0          csr_wr_data[0]            
+0          0          0          csr_wr_secure             
+0          0          0          csr_wr_bit_mask[31]       
+0          0          0          csr_wr_bit_mask[30]       
+0          0          0          csr_wr_bit_mask[29]       
+0          0          0          csr_wr_bit_mask[28]       
+0          0          0          csr_wr_bit_mask[27]       
+0          0          0          csr_wr_bit_mask[26]       
+0          0          0          csr_wr_bit_mask[25]       
+0          0          0          csr_wr_bit_mask[24]       
+0          0          0          csr_wr_bit_mask[23]       
+0          0          0          csr_wr_bit_mask[22]       
+0          0          0          csr_wr_bit_mask[21]       
+0          0          0          csr_wr_bit_mask[20]       
+0          0          0          csr_wr_bit_mask[19]       
+0          0          0          csr_wr_bit_mask[18]       
+0          0          0          csr_wr_bit_mask[17]       
+0          0          0          csr_wr_bit_mask[16]       
+0          0          0          csr_wr_bit_mask[15]       
+0          0          0          csr_wr_bit_mask[14]       
+0          0          0          csr_wr_bit_mask[13]       
+0          0          0          csr_wr_bit_mask[12]       
+0          0          0          csr_wr_bit_mask[11]       
+0          0          0          csr_wr_bit_mask[10]       
+0          0          0          csr_wr_bit_mask[9]        
+0          0          0          csr_wr_bit_mask[8]        
+0          0          0          csr_wr_bit_mask[7]        
+0          0          0          csr_wr_bit_mask[6]        
+0          0          0          csr_wr_bit_mask[5]        
+0          0          0          csr_wr_bit_mask[4]        
+0          0          0          csr_wr_bit_mask[3]        
+0          0          0          csr_wr_bit_mask[2]        
+0          0          0          csr_wr_bit_mask[1]        
+0          0          0          csr_wr_bit_mask[0]        
+0          0          0          csr_wr_byte_enable[3]     
+0          0          0          csr_wr_byte_enable[2]     
+0          0          0          csr_wr_byte_enable[1]     
+0          0          0          csr_wr_byte_enable[0]     
+0          0          0          csr_rd_valid              
+0          0          0          csr_rd_addr[31]           
+0          0          0          csr_rd_addr[30]           
+0          0          0          csr_rd_addr[29]           
+0          0          0          csr_rd_addr[28]           
+0          0          0          csr_rd_addr[27]           
+0          0          0          csr_rd_addr[26]           
+0          0          0          csr_rd_addr[25]           
+0          0          0          csr_rd_addr[24]           
+0          0          0          csr_rd_addr[23]           
+0          0          0          csr_rd_addr[22]           
+0          0          0          csr_rd_addr[21]           
+0          0          0          csr_rd_addr[20]           
+0          0          0          csr_rd_addr[19]           
+0          0          0          csr_rd_addr[18]           
+0          0          0          csr_rd_addr[17]           
+0          0          0          csr_rd_addr[16]           
+0          0          0          csr_rd_addr[15]           
+0          0          0          csr_rd_addr[14]           
+0          0          0          csr_rd_addr[13]           
+0          0          0          csr_rd_addr[12]           
+0          0          0          csr_rd_addr[11]           
+0          0          0          csr_rd_addr[10]           
+0          0          0          csr_rd_addr[9]            
+0          0          0          csr_rd_addr[8]            
+0          0          0          csr_rd_addr[7]            
+0          0          0          csr_rd_addr[6]            
+0          0          0          csr_rd_addr[5]            
+0          0          0          csr_rd_addr[4]            
+0          0          0          csr_rd_addr[3]            
+0          0          0          csr_rd_addr[2]            
+0          0          0          csr_rd_addr[1]            
+0          0          0          csr_rd_addr[0]            
+0          0          0          csr_rd_data[31]           
+0          0          0          csr_rd_data[30]           
+0          0          0          csr_rd_data[29]           
+0          0          0          csr_rd_data[28]           
+0          0          0          csr_rd_data[27]           
+0          0          0          csr_rd_data[26]           
+0          0          0          csr_rd_data[25]           
+0          0          0          csr_rd_data[24]           
+0          0          0          csr_rd_data[23]           
+0          0          0          csr_rd_data[22]           
+0          0          0          csr_rd_data[21]           
+0          0          0          csr_rd_data[20]           
+0          0          0          csr_rd_data[19]           
+0          0          0          csr_rd_data[18]           
+0          0          0          csr_rd_data[17]           
+0          0          0          csr_rd_data[16]           
+0          0          0          csr_rd_data[15]           
+0          0          0          csr_rd_data[14]           
+0          0          0          csr_rd_data[13]           
+0          0          0          csr_rd_data[12]           
+0          0          0          csr_rd_data[11]           
+0          0          0          csr_rd_data[10]           
+0          0          0          csr_rd_data[9]            
+0          0          0          csr_rd_data[8]            
+0          0          0          csr_rd_data[7]            
+0          0          0          csr_rd_data[6]            
+0          0          0          csr_rd_data[5]            
+0          0          0          csr_rd_data[4]            
+0          0          0          csr_rd_data[3]            
+0          0          0          csr_rd_data[2]            
+0          0          0          csr_rd_data[1]            
+0          0          0          csr_rd_data[0]            
+0          0          0          csr_rd_secure             
+0          0          0          csr_rd_bit_mask[31]       
+0          0          0          csr_rd_bit_mask[30]       
+0          0          0          csr_rd_bit_mask[29]       
+0          0          0          csr_rd_bit_mask[28]       
+0          0          0          csr_rd_bit_mask[27]       
+0          0          0          csr_rd_bit_mask[26]       
+0          0          0          csr_rd_bit_mask[25]       
+0          0          0          csr_rd_bit_mask[24]       
+0          0          0          csr_rd_bit_mask[23]       
+0          0          0          csr_rd_bit_mask[22]       
+0          0          0          csr_rd_bit_mask[21]       
+0          0          0          csr_rd_bit_mask[20]       
+0          0          0          csr_rd_bit_mask[19]       
+0          0          0          csr_rd_bit_mask[18]       
+0          0          0          csr_rd_bit_mask[17]       
+0          0          0          csr_rd_bit_mask[16]       
+0          0          0          csr_rd_bit_mask[15]       
+0          0          0          csr_rd_bit_mask[14]       
+0          0          0          csr_rd_bit_mask[13]       
+0          0          0          csr_rd_bit_mask[12]       
+0          0          0          csr_rd_bit_mask[11]       
+0          0          0          csr_rd_bit_mask[10]       
+0          0          0          csr_rd_bit_mask[9]        
+0          0          0          csr_rd_bit_mask[8]        
+0          0          0          csr_rd_bit_mask[7]        
+0          0          0          csr_rd_bit_mask[6]        
+0          0          0          csr_rd_bit_mask[5]        
+0          0          0          csr_rd_bit_mask[4]        
+0          0          0          csr_rd_bit_mask[3]        
+0          0          0          csr_rd_bit_mask[2]        
+0          0          0          csr_rd_bit_mask[1]        
+0          0          0          csr_rd_bit_mask[0]        
+0          0          1          out_of_reset              
+1          1          1          psel_prev                 
+0          0          0          which_psel                
+1          1          1          idle_state                
+1          1          1          setup_state               
+1          1          1          access_state              
+
+</PRE>
+<A NAME="_Fsmcov"></A>
+<P class="detail_title">     Covered+Uncovered+Excluded+UNR Fsm Detail Report, Instance Based</P>
+<P class="fs"><A STYLE="float: right" class="namet" HREF="#_topcov">To Top</A></P><BR>
+
+<TABLE class="detail_header"><TR class="detail"><TD>
+<B>Instance name: </B>top.apb_checker<BR>
+<B>Type name: </B>apb3_monitor<BR>
+<B>File name: </B><A HREF="/home/grads/t/tscotti24/labs/lab-1-Ty700/examples/sim/rtl/apb3_monitor.sv" TARGET="_blank">/home/grads/t/tscotti24/labs/lab-1-Ty700/examples/sim/rtl/apb3_monitor.sv</A><BR>Include Files:<BR>
+<B>    </B><A HREF="/home/grads/t/tscotti24/labs/lab-1-Ty700/examples/sim/rtl/version.v" TARGET="_blank">/home/grads/t/tscotti24/labs/lab-1-Ty700/examples/sim/rtl/version.v</A><BR>
+
+</TD></TR></TABLE>
+
+<PRE class="detail_report_text">
+
+0 items found
+
+</PRE>
+<A NAME="_Assertioncov"></A>
+<P class="detail_title">     Covered+Uncovered+Excluded+UNR Assertion Detail Report, Instance Based</P>
+<P class="fs"><A STYLE="float: right" class="namet" HREF="#_topcov">To Top</A></P><BR>
+
+<TABLE class="detail_header"><TR class="detail"><TD>
+<B>Instance name: </B>top.apb_checker<BR>
+<B>Type name: </B>apb3_monitor<BR>
+<B>File name: </B><A HREF="/home/grads/t/tscotti24/labs/lab-1-Ty700/examples/sim/rtl/apb3_monitor.sv" TARGET="_blank">/home/grads/t/tscotti24/labs/lab-1-Ty700/examples/sim/rtl/apb3_monitor.sv</A><BR>Include Files:<BR>
+<B>    </B><A HREF="/home/grads/t/tscotti24/labs/lab-1-Ty700/examples/sim/rtl/version.v" TARGET="_blank">/home/grads/t/tscotti24/labs/lab-1-Ty700/examples/sim/rtl/version.v</A><BR><B>Number of covered assertions: </B>9 of 9<BR>
+<B>Number of uncovered assertions: </B>0 of 9<BR>
+<B>Number of excluded assertions: </B>0<BR>
+
+
+</TD></TR></TABLE>
+
+<PRE class="detail_report_text">
+Finished Failed Assertion                      Line  Source Code                    
+------------------------------------------------------------------------------------
+1        0      master_never_penable_without_psel 505   master_never_penable_without_psel: assert property ( 
+6        0      master_exit_access             498   master_exit_access: assert property ( 
+6        0      master_setup_to_access         491   master_setup_to_access: assert property ( 
+33       0      master_never_idle_to_access    483   master_never_idle_to_access: assert property ( 
+1        0      master_never_penable_first_clock 476   master_never_penable_first_clock : assert property ( 
+4        0      master_setup_pwdata_stable     445   master_setup_pwdata_stable: assert property ( 
+6        0      master_setup_pwrite_stable     442   master_setup_pwrite_stable: assert property ( 
+6        0      master_setup_paddr_stable      439   master_setup_paddr_stable: assert property ( 
+6        0      master_setup_psel_stable       436   master_setup_psel_stable: assert property ( 
+
+</PRE>
+<A NAME="_CoverGroupcov"></A>
+<P class="detail_title">     Covered+Uncovered+Excluded+UNR CoverGroup Detail Report, Instance Based</P>
+<P class="fs"><A STYLE="float: right" class="namet" HREF="#_topcov">To Top</A></P><BR>
+
+<TABLE class="detail_header"><TR class="detail"><TD>
+<B>Instance name: </B>top.apb_checker<BR>
+<B>Type name: </B>apb3_monitor<BR>
+<B>File name: </B><A HREF="/home/grads/t/tscotti24/labs/lab-1-Ty700/examples/sim/rtl/apb3_monitor.sv" TARGET="_blank">/home/grads/t/tscotti24/labs/lab-1-Ty700/examples/sim/rtl/apb3_monitor.sv</A><BR>Include Files:<BR>
+<B>    </B><A HREF="/home/grads/t/tscotti24/labs/lab-1-Ty700/examples/sim/rtl/version.v" TARGET="_blank">/home/grads/t/tscotti24/labs/lab-1-Ty700/examples/sim/rtl/version.v</A><BR><B>Number of covered cover bins: </B>0 of 0<BR>
+<B>Number of uncovered cover bins: </B>0 of 0<BR>
+<B>Number of excluded cover bins: </B>0<BR>
+
+
+</TD></TR></TABLE>
+
+</TD></TR></TABLE>
+
+<PRE class="detail_report_text">
+
+0 items found
+
+</PRE>
