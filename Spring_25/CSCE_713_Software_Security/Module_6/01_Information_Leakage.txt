@@ -1,0 +1,25 @@
+Information Leakage 
+    - occurs when user gains access to whole or partial access to information they shouldn't have access to. 
+
+Sensitive vs Insensitive Information
+    - Sensitive
+        - EEncryption keys 
+        - User passwords or creditentials 
+        - User private data 
+        - Proprietary algorithms or properties
+
+    - Insensitive Information
+        - Local variables 
+        - Global variables that are already known to the user 
+        - Open-sources program code 
+        - Insensitive data can become sensitive data 
+
+    Leaky Program Patterns 
+        - Sensitive Information 
+            - char *secrety = "This is secret";
+
+    Information Flow 
+        - The information can flow between operations, causing unexpected information leakage from benign varaibles 
+        - Example:
+            - When calling memcpy function with buffer contain a secret and a second output buffer 
+         

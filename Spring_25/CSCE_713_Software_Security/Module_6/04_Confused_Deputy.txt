@@ -1,0 +1,4 @@
+Confused Deputy 
+    - The "Confused Deputy" problem 
+        - Exploiting confusing inputs or cirucmstances 
+        - A deputy is misled into perform pr

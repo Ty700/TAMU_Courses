@@ -1,0 +1,121 @@
+Concurrency in Memory 
+    - Modern computer programs thrives on concurrency 
+        - Running multiple computations simultaneously 
+        - Allowing shared memory 
+        - Simulating interactions more naturally 
+    
+    Thread 1, Thread 2, Thread 3 are all using shared memory 
+    
+    - One of the reasons why many programs behave non-deterministically inside a system 
+
+Multi-threading vs Multi-core 
+    - Multi-threading 
+        - Using multiple logical threads at the software level to support concurrency
+            - OS Concept 
+                - Utilizing multiple logical threads within the software to execute either simultaneously or alternatively 
+
+        - Each thread represents a runnable task inside the OS and can be individually scheduled to run on the CPU 
+
+        - Doesn't mean that there is concurrency in the program 
+    
+    - Multi-core 
+        - architectural concept
+            - creating multiple units of computation to process data simultaneously. 
+            - Multicore CPU creates physical threads
+                - each has the ablity to pick up a software thread and execute it 
+            - requires CPU chip to contain an independent set of registers, memory units, ALUs, LRUs, 
+                - this is because we don't want each physical thread to compete for resources 
+    
+Memory Coherency
+    - when concurrent computation occurs in a multi-core system, it raises the issue of memory coherence. 
+    - Memory coherence requres the value for a certain memory location to stay the same across all the CPU cores. 
+        - This would be easy if the value is kept in one spot, but typically it isn't 
+        - CPU typically CACHES multiple copies of the same memory location 
+            - Thus a challenge to memory Coherency
+
+        - For example:
+            If one of the threads write a certain value to the variable X, whcih is stored at a specific location in memory. This thread, we call thread 1,
+            may keep a copy of the moery inside its cache for quick access in the future. It requires write back to the main memory or the shared cache to ensure that all 
+            other threads running in other CPU cores will see the latest value of the variable X. This protocol will ensure that the other threads will use the latest 
+            value of the variable, even if one of them had it cached as well    
+        
+    - In shared memory, all data needs to be coherent across all cores 
+    - If there are multiple concurrent writes to teh same location, the final result depends on the ordering 
+        - This requires another protoocol that is called "memory consistency model" 
+
+Memory consistency
+    - determines how memory operations from different cores, either read or write operations, are ordered. 
+    - CRUICAL because different ordering of the memory operations can lead to different outcomes 
+        - If the CPU orders a read before write operation on the same location, the read operation may not return the latest value the write operation commits 
+            to memory 
+    - important concept to know when writing a software that deals with concurrent updates to a variable 
+    - Based on this model, we can determine the right timing when a specific update of a location is visible to other cores 
+    - For example:
+        - If thread 1 is writing X - 1 then writing flag = 1
+            - Typical memory consistency model dictates the the order of writing between these two memory locations must be exactly so. 
+                - meaning that if another thread has detected the second variable flag has been updated, then the other variable X, must be updated 
+
+Distingush between the terms 
+    - coherence 
+        - determines the result of one concurrent read operation and one concurrent write operation on the same memory location 
+        - Achieving memory coherency requires a sophisticated protocol 
+        - Implementation is easier 
+
+    - Consistency 
+        - determines the results of multiple concurrent read and writes to either the same or different locations 
+            - Does this by ordering them consistently across all cores 
+        - Crucial for maintaining the reliability and correctness of multi-threaded programs
+        - Far more difficult to implement 
+
+Single-Thread Consistency 
+    - Most architecture respect the order of operations from a single thread 
+    - Typically easy 
+    - Each CPU core will maintain all outbound memory operations in a queue and ordering the writing operations within the queue is typically honored
+
+Multi-Thread Consistency 
+    - Much more complex 
+    - If we have thread 1 and thread 2 writign to the variable X at teh same time, there is no guarntee the operation of one thread will 
+        always be oredered before the other thread 
+        - How this is handled is through the architecture
+    
+    Some architectures choose a Relaxed Memory Consistency Model 
+    - Relaxed Memory Consistency   
+        - Memory operations can be ordered in any way depending on interleaving 
+        - Does not dictate how memory operations are ordered 
+        - In these architectures, it is up to the software to ensure that the concurrent operations to the same varaible are ordered properly.
+        - Hard to implement synchronization primitives like locks and barriers as well 
+        - Overall bad for software engineers 
+
+    Thus, many architectures choose the Total Sotre Ordering (TSO) Model 
+    
+    TSO 
+        - All store operations are put into order at shared cached and the order is the same across all cores 
+        - Does not determing the ordering of read operations among write operations ensuring consistent orderign between read and write operations will put 
+            read operations at the same performance of write (Reads should be MUCH faster than writes)
+        - Does not enforce certain orderings among all the write operations from all CPU cores, so ordering at the end can still be uncertain
+        - Does REQUIRE CPU cores to see the exact same total ordering of the write operations 
+            - Means that if the CPU chooses to order the write operations from two different threads arbitraily, at least we can gurantee that later 
+                the two threads will see the updates in the exact same order 
+
+Root Cauess of Concurrency  
+    - Concurrent reads/writes from multiple physical threads to the same or related data fields
+        - Read or write operations may access the same data field inside the program or related data fields 
+        - Both memory coherency and memory consistency are at play to determine what the outcome of the program is 
+
+    - Interrupted reads/writes in one logical thread by other logical threads on the same core 
+        - Caused by OS 
+        - Interrupts controled by the scheduler of the OS, whcih is triggered by a periodic alarm that will go off once every few miliseconds 
+        - Because the alarm can go off when the program executes at a random location, we can't predict the exact execution order among these logical threads 
+
+Interruption on a Single Core 
+    - CPU can interrupt one logical thread currently running on a single core at any time 
+    - Interruption can arise in three cases:
+        - Timer interrupts that trigger the scheduler 
+        - Fault interrupts that occur due to errors inside the program 
+            - Seg faults, illegal instruction, etc 
+        - Interruption by signals 
+            - can occur at any time when another thread of process sends a signal to the running thread 
+        
+    - Regardless, interruption can cause an immediate context switch to another thread, whcih may read or write the same varaible that the prev thread is accessing, and eventually 
+        switches back to the context of the first thread 
+        

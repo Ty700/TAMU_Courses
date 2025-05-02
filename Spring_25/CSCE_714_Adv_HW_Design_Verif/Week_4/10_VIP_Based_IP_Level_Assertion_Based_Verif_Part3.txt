@@ -1,0 +1,24 @@
+
+Motiviation behind Assertion Based Verification IP 
+    - modern designs are based on IP blocks that use industry standard busses and protocols like PCIE, AMBA, and USB 2.0 
+    - 3rd party IPs come individually pre-verified, but you are responsible for verifying the correct ooperation of the system assmebled 
+    - VIP blocks are well-tested simulation models of industr standard busses and protocols that generate and respond to stimulus and check protocol rule adherence 
+    - VIP reduce system verificaiton time
+
+Assertion-Based Verification IP 
+    - most verification sign-off checks mandate that standard interfaces like AHB, APB, AXI, etc to be protocol compilant by running simulation or formal tools with ABVIPs 
+    - Assertion-Based Verification IPs (ABVIPs) is a set of predefined assertions that describe expected behavior for a protocol 
+    - if written carefully using synthesizable constructs, such IPs can be useful in btoh simulation and formal environments
+    - can be reused for checking compliance and flaggin potential errors 
+
+ABVIPs consists of a set of properties and some modelling logic to model various scenarios required for properties 
+These properties can be categorized as:
+    1. Assumptions
+        - defines the constraints for the IP 
+    2. Assertions 
+        - check the design behaviro 
+    3. Constraints  
+        - properties are the stimulus filters for legitimacy as the tool generates all the possible scenarios
+    4. Cover 
+        - properties are scenario qualifies. These also aid in checking the legitimacy of the asseritons and assumptions 
+

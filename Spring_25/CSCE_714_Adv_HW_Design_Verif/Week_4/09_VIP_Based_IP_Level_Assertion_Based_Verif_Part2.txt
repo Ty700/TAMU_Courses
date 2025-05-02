@@ -1,0 +1,164 @@
+Assertion Based Verification Properties 
+    - building blocks for concurrent assertions 
+    - define the designs behavior in time 
+
+    A property can be used as:
+        - Check         (assert property())
+            - All or nothing 
+            - If assert is false, there is a bug 
+            - Mainly for checking correctness
+             
+        - Assumption    (assume property())
+            - Constrain input behavior of the design 
+            - Specifying the environmnet conditions a design is supposed to be ran in 
+            - Example:
+                sum input into design will never occur 
+            - used in formal verification to narrow down the state space 
+            - defining a valid environment 
+
+        - Coverage      (cover property())
+            - Specific behaviors are observed during simulation 
+            - Will cover some violations 
+            - Ensure desired behavior is reachable or can occur 
+            - Example:
+                - Write a cover property to ensure that the testbench will reach a particular state sequence 
+            - ensuring design completeness 
+
+Example:
+    when a APB write transfer starts (PSEL active, PENABLE low, PWRITE high), it must be followed by a setup phase (PSEL and PENABLE and PWRITE all hgih) 
+        and complete with PENABLE low and PREADY high within 16 cycles 
+
+    property abp3_write_transfer;
+        @(posedge pclk) disable iff(!present_n) //property is disabled when in reset 
+        (psel && !penable && pwrite) |=> (psel && penable && pwrite) @@[1:16] (!penable && pready); // |=> means implies next cycle 
+        // Thus when PSEL is high, PENABLE low and PWRITE HIGH (write operation) we expect the next cycle PSEL to be high, PENABLE to be high and pwrite to be HIGH 
+        // in 1 to 16 CCs, we expect PENABLE to be low and PREADY to be high 
+    endproperty
+
+    To use this property we have to explicitly state how we want to use it:
+        1. As a checker
+            assert property(abp3_write_transfer)
+
+        2. As an assumption 
+            assume property(abp3_write_transfer)
+        
+        3. As a coverage point 
+            cover property(abp3_write_transfer)
+
+Observabiltiy and Controllabiltiy
+    Observabiltiy is the ability to determine the internal state of the design by monitoring its outputs and signals 
+
+    In ABV, this means having sufficient visibility into the design's behavior to detect violations of specified properties 
+
+    Example:
+        state machine but no way to observe what state it is in from the outside 
+            - Bad observabiltiy
+
+    Controllabiltiy 
+        - ability to drive the design into specific states or conditions needed to verify particular behaviors 
+        - cruicial for comprehensive verification coverage 
+
+    FIFO Example
+        Poor observabiltiy:
+            - we can only see when the FIFO is full or empty but not how many entries are currently stored within FIFO 
+
+        Good observabiltiy 
+            - we include a fill-level counter output and flags for various threshold conditions 
+
+        Poor controllabiltiy
+            - we can only write data sequentially 
+
+        Good controllabiltiy
+            - we can write data sequentially, we flush the FIFO, directly set the read/write pointers for testing, and force specific internal states 
+        
+
+    IDLE -> Setup -> Acess Example:
+        Poor observabiltiy
+            - only seeing the final PREADY signal without insight into timing 
+            - no visibiltiy into address phase transitions 
+            - unable to monitor wait states 
+            - No way to track protocol violations 
+            - Missing information about transfer direction (read/write)
+
+        Good Observabiltiy
+            - Monitor signals showing current bus state (IDLE, STATE, ACCESS)
+            - Status flags for protocol violations (PPROCT, PSLVERR, etc)
+            - Counters for number of wait states inserted 
+            - Flags indicating when address phase starts/ends 
+            - Visibility intwo write data being accepted 
+            - Debug signals showing slave selection status 
+        
+    At the IP level, observabiltiy involves:
+        - Monitoring internal states, signals, and behaviors of the IP block through assertions and checkers 
+        - Stategically placing assertions at critical interfaces and internal points 
+        - Accessing key signals that indicatie IP behaviro and protocol compliance 
+        - Verifying protocol responses, data integrity, and state transitions
+
+    At the IP level, controllabiltiy involves:
+        - Driving the IP into specific states or conditions needed for verification
+        - Generating speific stimulus patterns to trigger desired behavior 
+        - Controlling both data and control signals to explore corner cases 
+        - Protocol initiation, error injection, and specific test scenarios 
+
+    Assertions Writing - Best Practices 
+        - Single Purpose Checks 
+            - Each assertion should verify one specific aspect of the design 
+            - makes debugging easier 
+
+            Example:
+                - verifying stablity of address 
+
+                property (apb_addr_stable)
+                    @(posedge pclk) disable iff(!present_n)
+                    (psel && !penable) |-> $stable(paddr)
+                endproperty 
+
+        - State Transitions 
+            - when verifying protocols or state machines, assertions should clearly capture each state transition 
+            - hels identify invalid sequences early and ensures the design follows its specified behavior flow 
+
+            Example - Checks clean transition from setup -> access 
+                property (apb_setup_to_access)
+                    @(posedge pclk) disable iff (!present_n)
+                    (psel && !penable) |=> (psel && penable)
+                endproperty
+
+        - Bounded Time Window 
+            - always specify reasonable timing bounds for eexpected behaviors 
+            - prevents both false failures from overly tight bounds and missed bugs from overly loose bounds 
+
+            Example - ensures slave responds wihtin specified cycles 
+                property (apb_response_time)
+                    @(posedge pclk) disable iff(!present_n)
+                    (psel && penable) |-> ##[1:16] pready;
+
+                endproperty
+                - ensure the slave is ready in 1 to 16 clock cycles 
+
+        - Signal Dependencies 
+            - many signals have Dependencies or relationships that must be maintained 
+            - assertions should capture these relationships explicityl when checking for stablity where required 
+            
+            Example - Verifies data stability during active transfer 
+
+            property(apb_write_stable)
+                @(posedge pclk) disable iff(!present_n)
+                (psel && penable && pwrite) |-> $stable(pwdata)
+            endproperty
+
+            - ensure pwdata is stable during transtition 
+
+        - Structure 
+            - well structured assertion should combine reusable components, clear timing specifications, comprehensive error reporting, and focused checking 
+
+            // A reusable sequence for setup phase 
+            sequence apb_setup_phase;
+                psel && !penable && $stable(paddr) && $stable(pwrite);
+            endsequence 
+
+            // Clear, focused assertion with good reporting 
+
+            property(apb_transfer_check)(
+                @(posedge pclk) disable iff(!present_n)
+                apb_setup_phase |-> (psel && penable && $stable(paddr) && $stable(pwrite)) ##[0:15] pready)
+ 

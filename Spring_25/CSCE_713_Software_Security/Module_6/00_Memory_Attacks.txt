@@ -1,0 +1,29 @@
+Interface attacks vs memory attacks 
+    - Memory attacks are interface attacks to the memory architecture 
+    - Targeted interfaces: Virtual memory addresses 
+    - The problem of memory attacks is that they made a wide attack surface, allowing generic attacks to all code and data in the same address space
+        - Easy to exploit and hard to defend 
+
+    Examples of Interface Attacks 
+        - GUI 
+        - 2017 Mac root example:
+            - Attackers could just type in root in username and empty password and access was granted 
+            - Complex issue 
+    
+    Program API 
+        - Machine learning model leakage attack 
+    
+    Denial of Service attack 
+        - Generally happens across network
+        - In the software, DoS attacks are not primarily the focus 
+            - Can happen when an attacker exploits a bug to suspend a service 
+
+    Buffer Overflow can be an example of software DoS attack 
+
+    Format String Attacks 
+        - Widely used in programming 
+        - Focus on sprintf, printf, and other output functions 
+        - printf like outputs can you a variable argument list via "..."
+        - These arguments are stored in the stack 
+        - Issue occurs when the number of arguements specified in format string do not match 
+        - Typically okay, but if an attacker finds this, they can fill in the empty arguemnts with rogue ones

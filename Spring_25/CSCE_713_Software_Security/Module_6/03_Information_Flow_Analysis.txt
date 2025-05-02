@@ -1,0 +1,86 @@
+Informaion Flow Analysis 
+    - AKA 
+        - Taint Trackign 
+    
+    - Taint tracking cna be done statically or dynamically, allowing us to track the information flow between data
+
+    Sources and Sinks   
+        - Sources 
+            - Variables or functions that produce sensitive information 
+                - EEncryption keys 
+                - Files that store user passwords or credentials 
+                - Fingerprint sensors 
+        
+        - Sinks 
+            - Varialbes of functions that epose information 
+                - Printing devices or functions 
+                - Ethernet devices 
+        
+    If any secret goes from source to sinks, the system should trigger an alert 
+
+Taint Tracking - Taint Propagation 
+    - If an operation uses the data from a tainted varaibles, and the result depends on the tainted varaibles 
+    - The result is also tainted 
+
+    Example: Assignment 
+        int secret = 1;
+        int x; 
+
+        x = secret; 
+            - taint propagated to x 
+
+    Example: Arithemtic 
+        int secret = 1;
+        int y = 2;
+
+        int x = secret * y; 
+            - X is still tainted 
+
+    Example: Array Index 
+        int secret = 1; - Tained 
+        int array[3] = {0,1,2}; - Not tainted 
+        int x = array[secret] - x is tainted 
+
+Dynamic Taint Tracking 
+    - All variables must be attached with a tainting field 
+    - ALl operations will be instrumented to pass taints from variables to varaibles according to the Propagation rules 
+    - If a tainted variable is given to a "sink" - a leaking funiton or device 
+        - Fro example, the variable was sent to the internet 
+        - System will warn for potential information leakage
+    - During runtime  
+
+    - Advantages:
+        - High accuracy 
+        - Low false positives 
+    
+    - Con 
+        - Costly 
+
+Static Taint Tracking 
+    - Most taint tracking can be done statically on the src code 
+    - Not running program 
+    - Catching all case 
+    - Low rate of false negatives 
+    - High rate of false positives 
+
+Explicity Information Flow 
+    - Propagated through data operations 
+
+Implicit Information Flow 
+    - Propagated through control flow  
+        - If statements 
+
+        Example:
+            int secret = 1; - Tainted 
+            int x = 0;
+
+            if(secret == 1){
+                x++;
+            }
+
+            printf("%d", x);
+
+            - Control flow diverts based on the value of the secret 
+            - Other varaibles depend on the control 
+
+        
